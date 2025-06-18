@@ -12,7 +12,8 @@ export default {
       showProgressBar: true,
       logoPosition: 'top-right',
       poweredByVariant: 'default',
-      progressBarStyle: 'default'
+      progressBarStyle: 'default',
+      disableAnimations: false
     }
   },
   colorSchema: 'both',
@@ -35,5 +36,6 @@ export default {
     Logo: './components/Logo.vue',
     PoweredBy: './components/PoweredBy.vue',
     ProgressBar: './components/ProgressBar.vue',
+    AnimationController: './components/AnimationController.vue',
   },
 }

@@ -31,11 +31,18 @@
       </div>
     </div>
     
-    <Logo v-if="$frontmatter.showLogo === true" />
-    <PoweredBy v-if="$frontmatter.showPoweredBy === true" />
-    <ProgressBar />
+    <Logo v-if="showLogo" />
+    <PoweredBy v-if="showPoweredBy" />
+    <ProgressBar v-if="showProgressBar" />
+    <AnimationController />
   </div>
 </template>
+
+<script setup lang="ts">
+import { useThemeConfig } from '../composables/useThemeConfig'
+
+const { showLogo, showPoweredBy, showProgressBar } = useThemeConfig()
+</script>
 
 <style scoped>
 .intro-layout {
@@ -65,6 +72,7 @@
   background: radial-gradient(circle, var(--daocloud-primary) 0%, transparent 70%);
   opacity: 0.1;
   animation: float 8s ease-in-out infinite;
+  animation-duration: var(--daocloud-animation-duration, 8s);
 }
 
 .circle-1 {
@@ -97,7 +105,7 @@
   max-width: 600px;
   padding: 2rem;
   z-index: 10;
-  animation: fadeInUp 1s ease-out;
+  animation: fadeInUp var(--daocloud-animation-duration) var(--daocloud-animation-timing);
 }
 
 .intro-avatar {
@@ -144,14 +152,14 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  animation: fadeInUp 1s ease-out 0.2s both;
+  animation: fadeInUp var(--daocloud-animation-duration) var(--daocloud-animation-timing) 0.2s both;
 }
 
 .intro-subtitle {
   font-size: 1.5rem;
   font-weight: 300;
   color: rgba(255, 255, 255, 0.8);
-  animation: fadeInUp 1s ease-out 0.4s both;
+  animation: fadeInUp var(--daocloud-animation-duration) var(--daocloud-animation-timing) 0.4s both;
 }
 
 .intro-body {
@@ -159,7 +167,7 @@
   line-height: 1.6;
   margin-bottom: 2rem;
   opacity: 0.9;
-  animation: fadeInUp 1s ease-out 0.6s both;
+  animation: fadeInUp var(--daocloud-animation-duration) var(--daocloud-animation-timing) 0.6s both;
 }
 
 .intro-tags {
@@ -167,7 +175,7 @@
   flex-wrap: wrap;
   gap: 0.5rem;
   justify-content: center;
-  animation: fadeInUp 1s ease-out 0.8s both;
+  animation: fadeInUp var(--daocloud-animation-duration) var(--daocloud-animation-timing) 0.8s both;
 }
 
 .tag {
@@ -178,7 +186,7 @@
   font-size: 0.9rem;
   font-weight: 500;
   border: 1px solid rgba(0, 255, 127, 0.3);
-  transition: all 0.3s ease;
+  transition: all var(--daocloud-transition-duration) var(--daocloud-transition-timing);
 }
 
 .tag:hover {

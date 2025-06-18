@@ -59,6 +59,7 @@ The theme supports a global configuration system with three levels of precedence
 - `logoPosition: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right'` - Logo placement
 - `poweredByVariant: 'default' | 'white'` - PoweredBy component style
 - `progressBarStyle: 'default' | 'thin' | 'hidden'` - Progress bar appearance
+- `disableAnimations: boolean` - Disable all animations and transitions for serious presentations
 
 #### Configuration Examples
 
@@ -84,6 +85,15 @@ export default {
 layout: cover
 showLogo: true        # Override theme config to show logo
 poweredByVariant: white
+disableAnimations: true  # Disable animations for this slide
+---
+```
+
+**Serious presentation mode** (全局禁用动画):
+```yaml
+---
+theme: daocloud
+disableAnimations: true  # 禁用所有动画，适合严肃场景
 ---
 ```
 

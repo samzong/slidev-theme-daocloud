@@ -10,6 +10,7 @@
       <slot />
     </div>
     <ProgressBar v-if="showProgressBar" />
+    <AnimationController />
   </div>
 </template>
 

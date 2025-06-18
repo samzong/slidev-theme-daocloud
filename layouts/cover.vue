@@ -20,13 +20,14 @@
     <Logo v-if="showLogo" />
     <PoweredBy v-if="showPoweredBy" />
     <ProgressBar v-if="showProgressBar" />
+    <AnimationController />
   </div>
 </template>
 
 <script setup lang="ts">
 import { useThemeConfig } from '../composables/useThemeConfig'
 
-const { showLogo, showPoweredBy, showProgressBar } = useThemeConfig()
+const { showLogo, showPoweredBy, showProgressBar, disableAnimations } = useThemeConfig()
 </script>
 
 <style scoped>
@@ -58,7 +59,7 @@ const { showLogo, showPoweredBy, showProgressBar } = useThemeConfig()
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  animation: fadeInUp 1s ease-out;
+  animation: fadeInUp var(--daocloud-animation-duration) var(--daocloud-animation-timing);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -70,11 +71,11 @@ const { showLogo, showPoweredBy, showProgressBar } = useThemeConfig()
   margin-bottom: 3rem;
   opacity: 0.9;
   line-height: 1.4;
-  animation: fadeInUp 1s ease-out 0.3s both;
+  animation: fadeInUp var(--daocloud-animation-duration) var(--daocloud-animation-timing) 0.3s both;
 }
 
 .cover-meta {
-  animation: fadeInUp 1s ease-out 0.6s both;
+  animation: fadeInUp var(--daocloud-animation-duration) var(--daocloud-animation-timing) 0.6s both;
 }
 
 .cover-author {

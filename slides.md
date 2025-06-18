@@ -1,5 +1,6 @@
 ---
 theme: ./
+disableAnimations: true
 layout: cover
 title: 'Kueue & Volcano 调度实战'
 subtitle: '深入对比与应用'
@@ -8,6 +9,7 @@ author: "船长"
 showLogo: false
 showPoweredBy: false
 ---
+
 ---
 layout: intro
 avatar: https://avatars.githubusercontent.com/u/13782141?v=4

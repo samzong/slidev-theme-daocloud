@@ -9,6 +9,7 @@ export interface ThemeGlobalConfig {
   logoPosition?: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right'
   poweredByVariant?: 'default' | 'white'
   progressBarStyle?: 'default' | 'thin' | 'hidden'
+  disableAnimations?: boolean
 }
 
 /**
@@ -21,7 +22,8 @@ const DEFAULT_CONFIG: Required<ThemeGlobalConfig> = {
   showProgressBar: true,
   logoPosition: 'top-right',
   poweredByVariant: 'default',
-  progressBarStyle: 'default'
+  progressBarStyle: 'default',
+  disableAnimations: true
 }
 
 /**
@@ -42,6 +44,7 @@ export function useThemeConfig() {
     logoPosition: frontmatter.logoPosition,
     poweredByVariant: frontmatter.poweredByVariant,
     progressBarStyle: frontmatter.progressBarStyle,
+    disableAnimations: frontmatter.disableAnimations,
   }
 
   // 过滤掉 undefined 值
@@ -66,5 +69,6 @@ export function useThemeConfig() {
     logoPosition: config.logoPosition,
     poweredByVariant: config.poweredByVariant,
     progressBarStyle: config.progressBarStyle,
+    disableAnimations: config.disableAnimations,
   }
 }

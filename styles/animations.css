@@ -1,0 +1,72 @@
+/* 动画相关样式 */
+
+/* 默认动画配置 */
+:root {
+  --daocloud-animation-duration: 1s;
+  --daocloud-animation-timing: ease-out;
+  --daocloud-transition-duration: 0.3s;
+  --daocloud-transition-timing: ease;
+}
+
+/* 禁用动画时的配置 */
+:root[data-disable-animations="true"] {
+  --daocloud-animation-duration: 0s;
+  --daocloud-animation-timing: linear;
+  --daocloud-transition-duration: 0s;
+  --daocloud-transition-timing: linear;
+}
+
+/* 禁用所有动画和过渡 */
+[data-disable-animations="true"] *,
+[data-disable-animations="true"] *::before,
+[data-disable-animations="true"] *::after {
+  animation-duration: 0s !important;
+  animation-delay: 0s !important;
+  animation-iteration-count: 1 !important;
+  animation-name: none !important;
+  animation: none !important;
+  transition-duration: 0s !important;
+  transition-delay: 0s !important;
+  transition: none !important;
+}
+
+/* 禁用 Slidev 内置动画 */
+[data-disable-animations="true"] .slidev-layout {
+  animation: none !important;
+  transition: none !important;
+}
+
+/* 禁用页面切换动画 */
+[data-disable-animations="true"] .slidev-page {
+  animation: none !important;
+  transition: none !important;
+}
+
+/* 禁用滚动行为 */
+[data-disable-animations="true"] {
+  scroll-behavior: auto !important;
+}
+
+/* 禁用 CSS 变换 */
+[data-disable-animations="true"] * {
+  will-change: auto !important;
+}
+
+/* 特别针对主题自定义动画 */
+[data-disable-animations="true"] .cover-title,
+[data-disable-animations="true"] .cover-subtitle,
+[data-disable-animations="true"] .cover-meta,
+[data-disable-animations="true"] .intro-content,
+[data-disable-animations="true"] .intro-title,
+[data-disable-animations="true"] .intro-subtitle,
+[data-disable-animations="true"] .intro-body,
+[data-disable-animations="true"] .intro-tags,
+[data-disable-animations="true"] .floating-circle {
+  animation: none !important;
+  transition: none !important;
+}
+
+/* 禁用悬停效果 */
+[data-disable-animations="true"] .tag:hover {
+  transition: none !important;
+}
