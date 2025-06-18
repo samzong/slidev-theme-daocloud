@@ -1,5 +1,11 @@
 <template>
   <div class="image-left-layout">
+    <!-- 页面标题区域 - 与 default.vue 保持一致 -->
+    <div class="page-header" v-if="$frontmatter.title">
+      <div class="title-decorator"></div>
+      <h1 class="page-title">{{ $frontmatter.title }}</h1>
+    </div>
+    
     <!-- 内容容器 -->
     <div class="image-left-container">
       <!-- 图片区域 -->
@@ -24,31 +30,13 @@
       
       <!-- 文字内容区域 -->
       <div class="content-section">
-        <!-- 标题区域 -->
-        <div class="content-header">
-          <h1 v-if="$frontmatter.title" class="content-title">{{ $frontmatter.title }}</h1>
-          <h2 v-if="$frontmatter.subtitle" class="content-subtitle">{{ $frontmatter.subtitle }}</h2>
-        </div>
-        
         <!-- 内容区域 -->
         <div class="content-body">
           <slot />
         </div>
-        
-        <!-- 标签或按钮区域 -->
-        <div class="content-footer" v-if="$frontmatter.tags || $frontmatter.action">
-          <div class="tags" v-if="$frontmatter.tags">
-            <span v-for="tag in $frontmatter.tags" :key="tag" class="tag">{{ tag }}</span>
-          </div>
-          <div v-if="$frontmatter.action" class="action-button">
-            {{ $frontmatter.action }}
-          </div>
-        </div>
       </div>
     </div>
     
-    <Logo v-if="$frontmatter.showLogo !== false" />
-    <PoweredBy v-if="$frontmatter.showPoweredBy !== false" />
     <ProgressBar />
   </div>
 </template>
@@ -61,15 +49,42 @@
   overflow: hidden;
   width: 100%;
   height: 100%;
-  padding: 40px 60px;
+}
+
+/* 页面标题 - 与 default.vue 保持一致 */
+.page-header {
+  position: absolute;
+  top: 32px;
+  left: 32px;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  z-index: 20;
+}
+
+.title-decorator {
+  width: 24px;
+  height: 24px;
+  background: var(--daocloud-primary);
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.page-title {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: var(--daocloud-text-light);
+  margin: 0;
+  line-height: 1.2;
 }
 
 .image-left-container {
   display: grid;
   grid-template-columns: 45% 55%;
-  gap: 4rem;
+  gap: 3rem;
   height: 100%;
   align-items: center;
+  padding: 120px 60px 60px 60px;
 }
 
 .image-section {
@@ -78,6 +93,7 @@
   height: 100%;
   justify-content: center;
   animation: slideInLeft 0.8s ease-out;
+  padding-left: 2rem;
 }
 
 .image-wrapper {
@@ -86,6 +102,7 @@
   overflow: hidden;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
   transition: transform 0.3s ease;
+  max-width: 100%;
 }
 
 .image-wrapper:hover {
@@ -137,90 +154,67 @@
   justify-content: center;
   height: 100%;
   animation: slideInRight 0.8s ease-out;
-}
-
-.content-header {
-  margin-bottom: 2rem;
-}
-
-.content-title {
-  font-size: 2.8rem;
-  font-weight: 700;
-  margin-bottom: 1rem;
-  background: linear-gradient(45deg, var(--daocloud-primary), #ffffff);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  line-height: 1.2;
-}
-
-.content-subtitle {
-  font-size: 1.4rem;
-  font-weight: 300;
-  color: rgba(255, 255, 255, 0.8);
-  line-height: 1.4;
+  padding-left: 2rem;
 }
 
 .content-body {
-  flex: 1;
   font-size: 1.2rem;
-  line-height: 1.6;
-  margin-bottom: 2rem;
+  line-height: 1.8;
 }
 
-.content-body h1,
-.content-body h2,
-.content-body h3 {
+.content-body h1 {
+  font-size: 2.2rem;
+  font-weight: 600;
+  margin-bottom: 2rem;
   color: var(--daocloud-primary);
-  margin-bottom: 1rem;
+  line-height: 1.3;
+}
+
+.content-body h2 {
+  font-size: 1.8rem;
+  font-weight: 500;
+  margin-bottom: 1.5rem;
+  color: var(--daocloud-text-light);
+  line-height: 1.4;
+}
+
+.content-body p {
+  font-size: 1.2rem;
+  line-height: 1.8;
+  margin-bottom: 2rem;
+  color: var(--daocloud-text-light);
+  letter-spacing: 0.02em;
 }
 
 .content-body ul {
-  padding-left: 1.5rem;
+  font-size: 1.2rem;
+  line-height: 1.9;
+  padding-left: 0;
+  margin-bottom: 2rem;
+  list-style: none;
 }
 
 .content-body li {
-  margin-bottom: 0.8rem;
+  margin-bottom: 1.2rem;
+  position: relative;
+  padding-left: 2rem;
+  line-height: 1.9;
+  color: var(--daocloud-text-light);
+  letter-spacing: 0.02em;
 }
 
-.content-footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 1rem;
-}
-
-.tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-}
-
-.tag {
-  background: rgba(0, 255, 127, 0.1);
+.content-body li::before {
+  content: '—';
+  position: absolute;
+  left: 0;
   color: var(--daocloud-primary);
-  padding: 0.4rem 0.8rem;
-  border-radius: 16px;
-  font-size: 0.85rem;
-  font-weight: 500;
-  border: 1px solid rgba(0, 255, 127, 0.3);
-}
-
-.action-button {
-  background: linear-gradient(135deg, var(--daocloud-primary) 0%, var(--daocloud-primary-dark) 100%);
-  color: white;
-  padding: 0.8rem 1.5rem;
-  border-radius: 8px;
   font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(0, 255, 127, 0.3);
+  font-size: 1.2rem;
 }
 
-.action-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(0, 255, 127, 0.4);
+.content-body li strong {
+  color: var(--daocloud-primary);
+  font-weight: 600;
 }
 
 @keyframes slideInLeft {
@@ -246,18 +240,52 @@
 }
 
 /* 响应式设计 */
+@media (max-width: 1024px) {
+  .page-header {
+    top: 40px;
+    left: 40px;
+  }
+  
+  .page-title {
+    font-size: 2rem;
+  }
+  
+  .image-left-container {
+    padding: 100px 40px 40px 40px;
+  }
+}
+
 @media (max-width: 768px) {
+  .page-header {
+    top: 30px;
+    left: 30px;
+  }
+  
+  .title-decorator {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .page-title {
+    font-size: 1.8rem;
+  }
+  
   .image-left-container {
     grid-template-columns: 1fr;
     gap: 2rem;
-  }
-  
-  .content-title {
-    font-size: 2.2rem;
+    padding: 90px 30px 30px 30px;
   }
   
   .content-body {
     font-size: 1.1rem;
+  }
+  
+  .image-section {
+    padding-left: 0;
+  }
+  
+  .content-section {
+    padding-left: 0;
   }
 }
 </style> 

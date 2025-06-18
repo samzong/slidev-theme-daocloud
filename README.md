@@ -51,7 +51,7 @@ date: "2025-01-01"
 ---
 ```
 
-#### 2. intro - 介绍页
+#### 2. intro - 介绍页（已优化）
 ```yaml
 ---
 layout: intro
@@ -59,8 +59,31 @@ avatar: https://example.com/avatar.jpg
 title: 姓名
 subtitle: 职位
 tags: ["标签1", "标签2"]
+# 新功能：技术栈可视化
+techStack:
+  - name: Kubernetes
+    icon: https://example.com/k8s-icon.svg  # 可选，没有图标会显示文字缩写
+  - name: Docker
+    icon: https://example.com/docker-icon.svg
+  - name: Python
+# 新功能：GitHub 贡献图
+github: username  # 你的 GitHub 用户名
+# 新功能：认证徽章
+certifications:
+  - name: CKA
+    badge: https://example.com/cka-badge.png  # 可选，没有徽章会显示文字
+  - name: AWS Solutions Architect
 ---
+
+你的自我介绍内容...
 ```
+
+**新布局特性**：
+- 左侧保留原有内容（头像、标题、副标题、标签和介绍）
+- 右侧上方显示技术栈网格，支持图标或文字显示
+- 右侧下方显示 GitHub 贡献图（使用 ghchart.rshah.org 服务）
+- 支持展示专业认证徽章
+- 响应式设计，移动端自动切换为单栏布局
 
 #### 3. chapter - 章节页
 ```yaml
@@ -94,11 +117,30 @@ layout: two-cols
 #### 6. image-left / image-right - 图文布局
 ```yaml
 ---
-layout: image-left
-image: ./image.jpg
+layout: image-right
+title: 页面标题
+image: ./path/to/your/image.jpg  # 支持本地路径或网络图片URL
+imageAlt: 图片描述  # 可选：用于无障碍访问
+imageCaption: 图片说明文字  # 可选：显示在图片下方
+tags: ["标签1", "标签2"]  # 可选：显示标签
+action: 了解更多  # 可选：显示操作按钮
 ---
-文本内容
+
+## 主要内容标题
+
+这里是你的文本内容，支持 Markdown 格式。
+
+- 列表项 1
+- 列表项 2
+- 列表项 3
 ```
+
+**图片使用说明**：
+- **本地图片**：将图片放在项目目录中，使用相对路径引用，如 `./images/demo.jpg`
+- **网络图片**：直接使用完整的 URL，如 `https://example.com/image.jpg`
+- **支持格式**：JPG、PNG、SVG、WebP 等常见格式
+- **推荐尺寸**：宽度 600-800px，高度不限（会自动适应）
+- **图片优化**：建议使用压缩后的图片以提升加载速度
 
 #### 7. comparison - 对比布局
 ```yaml

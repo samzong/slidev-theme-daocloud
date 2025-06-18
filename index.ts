@@ -31,6 +31,7 @@ export default {
     'image-right': './layouts/image-right.vue',
     center: './layouts/center.vue',
     quote: './layouts/quote.vue',
+    timeline: './layouts/timeline.vue',
   },
   components: {
     Logo: './components/Logo.vue',
