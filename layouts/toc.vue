@@ -118,9 +118,13 @@ import PoweredBy from '../components/PoweredBy.vue'
   top: 0;
   color: var(--daocloud-primary);
   font-weight: 600;
-  font-size: 1.8rem;
+  font-size: 1.6rem;
   width: 2.5rem;
   text-align: left;
+  line-height: 1.8;
+  display: flex;
+  align-items: baseline;
+  height: 1.8rem;
 }
 
 .toc-list :deep(li:hover) {
@@ -164,7 +168,7 @@ import PoweredBy from '../components/PoweredBy.vue'
   }
   
   .toc-list {
-    font-size: 1.3rem;
+    font-size: 1.1rem;
   }
 }
 
@@ -182,7 +186,7 @@ import PoweredBy from '../components/PoweredBy.vue'
   }
   
   .toc-list {
-    font-size: 1.2rem;
+    font-size: 1rem;
   }
   
   .toc-list :deep(li) {
@@ -190,8 +194,9 @@ import PoweredBy from '../components/PoweredBy.vue'
   }
   
   .toc-list :deep(li::before) {
-    font-size: 1.5rem;
+    font-size: 1.3rem;
     width: 2rem;
+    height: 1.6rem;
   }
 }
 </style> 
