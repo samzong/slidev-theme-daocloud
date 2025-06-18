@@ -1,0 +1,257 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Slidev Theme DaoCloud - Cursor Rules
+
+## 项目概述
+
+这是一个为 DaoCloud 公司定制的 Slidev 演示主题。Slidev 是基于 Markdown 和 Vue.js 的现代演示框架。
+
+## 主题架构
+
+### 核心文件结构
+
+- **入口点**: [index.ts](mdc:index.ts) - 定义主题配置、颜色方案和注册所有布局/组件
+- **布局目录**: [layouts/](mdc:layouts/) - 包含 12 个专用布局组件
+- **组件目录**: [components/](mdc:components/) - 包含 3 个可复用组件
+- **样式目录**: [styles/](mdc:styles/) - 模块化 CSS 架构
+
+### 布局组件说明
+
+#### 封面和介绍
+- [cover.vue](mdc:layouts/cover.vue) - 标题页，带流体光晕效果
+- [intro.vue](mdc:layouts/intro.vue) - 介绍/个人资料页面
+- [chapter.vue](mdc:layouts/chapter.vue) - 章节分隔页
+
+#### 内容布局
+- [default.vue](mdc:layouts/default.vue) - 深色内容页面
+- [white.vue](mdc:layouts/white.vue) - 浅色内容页面
+- [center.vue](mdc:layouts/center.vue) - 居中内容
+
+#### 多列和图文布局
+- [two-cols.vue](mdc:layouts/two-cols.vue) - 双栏布局
+- [comparison.vue](mdc:layouts/comparison.vue) - 对比展示
+- [image-left.vue](mdc:layouts/image-left.vue) - 左图右文
+- [image-right.vue](mdc:layouts/image-right.vue) - 右图左文
+
+#### 特殊布局
+- [quote.vue](mdc:layouts/quote.vue) - 引用/证言页面
+- [toc.vue](mdc:layouts/toc.vue) - 目录页（开发中）
+
+### 可复用组件
+
+- [Logo.vue](mdc:components/Logo.vue) - 可配置的 Logo 组件
+- [PoweredBy.vue](mdc:components/PoweredBy.vue) - 品牌归属组件（支持深色/浅色）
+- [ProgressBar.vue](mdc:components/ProgressBar.vue) - 演示进度条
+
+### 样式系统
+
+- [styles/index.ts](mdc:styles/index.ts) - 样式入口文件
+- [styles/layout.css](mdc:styles/layout.css) - 全局布局样式
+- [styles/components.css](mdc:styles/components.css) - 组件样式
+- [styles/code.css](mdc:styles/code.css) - 代码高亮样式
+
+## 颜色系统
+
+```css
+--slidev-theme-primary: #00ff7f;      /* 亮绿色 */
+--slidev-theme-primary-dark: #00cc66; /* 深绿色 */
+--dc-secondary: #1a1a2e;              /* 深蓝色 */
+```
+
+## 使用指南
+
+### 主题配置
+
+在演示文稿的 frontmatter 中配置：
+
+```yaml
+---
+theme: ./path-to-theme
+showLogo: true          # 显示 Logo
+showPoweredBy: true     # 显示品牌归属
+---
+```
+
+### 布局使用示例
+
+#### 封面页
+```yaml
+---
+layout: cover
+title: "演示标题"
+subtitle: "副标题"
+author: "作者名"
+date: "2025-01-01"
+---
+```
+
+#### 介绍页
+```yaml
+---
+layout: intro
+avatar: https://example.com/avatar.jpg
+title: 姓名
+subtitle: 职位描述
+tags: 
+  - "标签1"
+  - "标签2"
+---
+```
+
+#### 章节页
+```yaml
+---
+layout: chapter
+part: 1
+title: 章节标题
+---
+```
+
+#### 双栏布局
+```yaml
+---
+layout: two-cols
+---
+
+::left::
+左侧内容
+
+::right::
+右侧内容
+```
+
+#### 图文布局
+```yaml
+---
+layout: image-left
+image: ./path/to/image.jpg
+---
+右侧文本内容
+```
+
+### 组件属性
+
+#### Logo 组件
+- 路径可通过主题配置自定义
+- 根据 `showLogo` frontmatter 控制显示
+
+#### PoweredBy 组件
+- 有 `white` 和 `default` 两种变体
+- 根据 `showPoweredBy` frontmatter 控制显示
+
+#### ProgressBar 组件
+- 自动显示在页面底部
+- 显示当前页码和总页数
+
+## 开发指南
+
+### 创建新布局
+
+1. 在 [layouts/](mdc:layouts/) 目录创建新的 Vue 组件
+2. 在 [index.ts](mdc:index.ts) 中注册布局：
+   ```typescript
+   layouts: {
+     'your-layout': './layouts/your-layout.vue',
+   }
+   ```
+3. 添加相应的样式到 [styles/layout.css](mdc:styles/layout.css)
+
+### 添加新组件
+
+1. 在 [components/](mdc:components/) 目录创建组件
+2. 在 [index.ts](mdc:index.ts) 中注册：
+   ```typescript
+   components: {
+     YourComponent: './components/YourComponent.vue',
+   }
+   ```
+
+### 样式开发规范
+
+- 使用 CSS 变量保持主题一致性
+- 遵循 BEM 命名规范
+- 响应式设计优先
+- 支持深色/浅色主题切换
+
+### 动画效果
+
+- 封面页使用流体光晕动画
+- 支持页面切换过渡效果
+- 使用 `@keyframes` 定义动画
+
+## 技术要求
+
+- Slidev >= 0.48.0
+- Vue 3 Composition API
+- Inter 字体家族
+- Shiki 代码高亮器
+
+## 最佳实践
+
+### 演示文稿结构
+- 使用 [slides.md](mdc:slides.md) 作为参考示例
+- 合理使用不同布局组合
+- 保持视觉一致性
+
+### 性能优化
+- 图片使用合适的格式和尺寸
+- 避免过度使用动画效果
+- 保持组件轻量化
+
+### 可访问性
+- 确保足够的颜色对比度
+- 提供适当的语义标记
+- 支持键盘导航
+
+## 调试技巧
+
+### 常见问题
+1. 布局不显示：检查 frontmatter 中的 layout 名称
+2. 样式未生效：确认样式文件已在 [styles/index.ts](mdc:styles/index.ts) 中导入
+3. 组件未找到：验证组件已在 [index.ts](mdc:index.ts) 中注册
+
+### 开发命令
+```bash
+# 开发模式
+npm run dev
+
+# 构建
+npm run build
+
+# 预览
+npm run preview
+```
+
+## 扩展主题
+
+### 添加新的颜色方案
+在 [index.ts](mdc:index.ts) 中修改 `themeConfig`：
+```typescript
+themeConfig: {
+  primary: '#your-color',
+  primaryDark: '#your-dark-color',
+  secondary: '#your-secondary'
+}
+```
+
+### 自定义字体
+在 [styles/layout.css](mdc:styles/layout.css) 中添加：
+```css
+@import url('your-font-url');
+```
+
+### 集成第三方库
+1. 添加依赖到 [package.json](mdc:package.json)
+2. 在需要的组件中导入使用
+3. 确保与 Slidev 兼容
+
+## 文件引用快速导航
+
+- 主题配置: [index.ts](mdc:index.ts)
+- 示例演示: [slides.md](mdc:slides.md)
+- 布局示例: [layout-examples.md](mdc:layout-examples.md)
+- 项目文档: [CLAUDE.md](mdc:CLAUDE.md)
+- 包配置: [package.json](mdc:package.json)
