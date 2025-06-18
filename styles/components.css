@@ -1,0 +1,254 @@
+/* Logo 组件样式 */
+.logo-container {
+    position: fixed;
+    top: 20px;
+    left: 40px;
+    z-index: 100;
+  }
+  
+  .logo {
+    width: 120px;
+    height: auto;
+    opacity: 0.9;
+    transition: opacity 0.3s ease;
+  }
+  
+  .logo:hover {
+    opacity: 1;
+  }
+  
+  /* Powered By 组件样式 */
+  .powered-by {
+    position: fixed;
+    bottom: 20px;
+    right: 40px;
+    z-index: 100;
+  }
+  
+  .powered-by-img {
+    height: 24px;
+    width: auto;
+    opacity: 0.8;
+    transition: opacity 0.3s ease;
+  }
+  
+  .powered-by-img:hover {
+    opacity: 1;
+  }
+
+/* 专业对比表格样式 */
+.slidev-layout table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 2rem 0;
+  font-size: 0.95rem;
+  box-shadow: 0 4px 12px rgba(0, 255, 127, 0.1);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.slidev-layout table th {
+  background: linear-gradient(135deg, var(--daocloud-primary) 0%, var(--daocloud-primary-dark) 100%);
+  color: white;
+  font-weight: 600;
+  padding: 1rem;
+  text-align: left;
+  border: none;
+}
+
+.slidev-layout table td {
+  padding: 0.8rem 1rem;
+  border: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.slidev-layout table tr:nth-child(even) {
+  background: rgba(0, 255, 127, 0.05);
+}
+
+.slidev-layout table tr:hover {
+  background: rgba(0, 255, 127, 0.1);
+  transform: translateX(2px);
+  transition: all 0.2s ease;
+}
+
+/* 对比表格中的重要标记 */
+.slidev-layout table td strong {
+  color: var(--daocloud-primary);
+  font-weight: 600;
+}
+
+/* 推荐度样式 */
+.slidev-layout table td:contains("高") {
+  color: #00ff7f;
+}
+
+.slidev-layout table td:contains("中等") {
+  color: #ffa500;
+}
+
+.slidev-layout table td:contains("低") {
+  color: #ff6b6b;
+}
+
+/* 技术要点列表美化 */
+.slidev-layout ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.slidev-layout li {
+  position: relative;
+  padding-left: 2rem;
+  margin-bottom: 1rem;
+  line-height: 1.6;
+}
+
+.slidev-layout li::before {
+  content: '▶';
+  position: absolute;
+  left: 0;
+  color: var(--daocloud-primary);
+  font-weight: bold;
+  transition: transform 0.2s ease;
+}
+
+.slidev-layout li:hover::before {
+  transform: translateX(3px);
+}
+
+/* 特殊技术标记 */
+.slidev-layout li strong {
+  background: linear-gradient(90deg, var(--daocloud-primary), transparent);
+  background-size: 100% 2px;
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  padding-bottom: 2px;
+}
+
+/* 章节标题增强 */
+.slidev-layout h1 {
+  position: relative;
+  margin-bottom: 2.5rem;
+}
+
+.slidev-layout h1::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 0;
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--daocloud-primary) 0%, transparent 100%);
+  border-radius: 2px;
+}
+
+/* 二级标题样式 */
+.slidev-layout h2 {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.slidev-layout h2::before {
+  content: '';
+  width: 4px;
+  height: 24px;
+  background: var(--daocloud-primary);
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+/* 重要提示框 */
+.slidev-layout blockquote {
+  background: rgba(0, 255, 127, 0.1);
+  border-left: 4px solid var(--daocloud-primary);
+  padding: 1rem 1.5rem;
+  margin: 1.5rem 0;
+  border-radius: 0 8px 8px 0;
+  font-style: italic;
+}
+
+/* 技术规格标签 */
+.tech-spec {
+  display: inline-block;
+  background: rgba(0, 255, 127, 0.1);
+  color: var(--daocloud-primary);
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  margin: 0 4px;
+}
+
+/* Mermaid 图表样式优化 */
+.mermaid {
+  background: rgba(15, 15, 15, 0.5) !important;
+  border-radius: 12px;
+  padding: 2rem;
+  margin: 2rem 0;
+  border: 1px solid rgba(0, 255, 127, 0.2);
+}
+
+/* Mermaid 节点样式 */
+.mermaid .node rect {
+  fill: rgba(0, 255, 127, 0.1) !important;
+  stroke: var(--daocloud-primary) !important;
+  stroke-width: 2px !important;
+}
+
+.mermaid .node .label {
+  color: var(--daocloud-text-light) !important;
+  font-family: 'Inter', sans-serif !important;
+  font-weight: 500 !important;
+}
+
+/* Mermaid 箭头样式 */
+.mermaid .edgePath .path {
+  stroke: var(--daocloud-primary) !important;
+  stroke-width: 2px !important;
+}
+
+.mermaid .arrowheadPath {
+  fill: var(--daocloud-primary) !important;
+}
+
+/* 时间轴样式 */
+.timeline {
+  position: relative;
+  padding: 2rem 0;
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 30px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(180deg, var(--daocloud-primary) 0%, transparent 100%);
+}
+
+.timeline-item {
+  position: relative;
+  padding-left: 4rem;
+  margin-bottom: 2rem;
+}
+
+.timeline-item::before {
+  content: '';
+  position: absolute;
+  left: 22px;
+  top: 0.5rem;
+  width: 16px;
+  height: 16px;
+  background: var(--daocloud-primary);
+  border-radius: 50%;
+  box-shadow: 0 0 0 4px rgba(0, 255, 127, 0.2);
+}
+
+.timeline-item strong {
+  color: var(--daocloud-primary);
+  font-size: 1.1rem;
+}

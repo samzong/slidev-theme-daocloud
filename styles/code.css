@@ -1,0 +1,77 @@
+/* 增强代码块样式 */
+.slidev-layout pre {
+  background: rgba(15, 15, 15, 0.95) !important;
+  border: 1px solid rgba(0, 255, 127, 0.2);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+  position: relative;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  overflow-x: auto;
+}
+
+/* 代码块顶部装饰 */
+.slidev-layout pre::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--daocloud-primary) 0%, var(--daocloud-primary-dark) 100%);
+  border-radius: 12px 12px 0 0;
+}
+
+/* 代码块标题 */
+.slidev-layout pre[class*="language-yaml"]::after {
+  content: 'YAML配置';
+  position: absolute;
+  top: 8px;
+  right: 12px;
+  background: rgba(0, 255, 127, 0.1);
+  color: var(--daocloud-primary);
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  font-weight: 500;
+}
+
+.slidev-layout pre[class*="language-bash"]::after {
+  content: 'Shell命令';
+  position: absolute;
+  top: 8px;
+  right: 12px;
+  background: rgba(255, 165, 0, 0.1);
+  color: #ffa500;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  font-weight: 500;
+}
+
+/* 内联代码样式 */
+.slidev-layout code:not(pre code) {
+  background: rgba(0, 255, 127, 0.1);
+  color: var(--daocloud-primary);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.9em;
+  font-weight: 500;
+}
+
+/* 代码语法高亮增强 */
+.slidev-layout .token.key {
+  color: #79c0ff;
+}
+
+.slidev-layout .token.string {
+  color: #a5d6ff;
+}
+
+.slidev-layout .token.number {
+  color: #ffa657;
+}
+
+.slidev-layout .token.boolean {
+  color: #ff7b72;
+}

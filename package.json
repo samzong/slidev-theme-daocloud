@@ -1,0 +1,42 @@
+{
+  "name": "slidev-theme-daocloud",
+  "version": "1.0.0",
+  "description": "DaoCloud themed Slidev presentation",
+  "main": "index.ts",
+  "keywords": [
+    "slidev-theme",
+    "slidev",
+    "daocloud",
+    "presentation"
+  ],
+  "author": "DaoCloud",
+  "license": "MIT",
+  "engines": {
+    "slidev": ">=0.48.0"
+  },
+  "slidev": {
+    "colorSchema": "both",
+    "highlighter": "shiki",
+    "defaults": {
+      "showLogo": false,
+      "showPoweredBy": false,
+      "themeConfig": {
+        "primary": "#00ff7f"
+      }
+    }
+  },
+  "files": [
+    "layouts",
+    "components",
+    "styles",
+    "setup",
+    "index.ts"
+  ],
+  "devDependencies": {
+    "@slidev/cli": "^0.48.0",
+    "@slidev/types": "^0.48.0"
+  },
+  "peerDependencies": {
+    "@slidev/cli": "*"
+  }
+}
