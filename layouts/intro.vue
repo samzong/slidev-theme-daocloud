@@ -31,8 +31,8 @@
       </div>
     </div>
     
-    <Logo v-if="$frontmatter.showLogo !== false" />
-    <PoweredBy v-if="$frontmatter.showPoweredBy !== false" />
+    <Logo v-if="$frontmatter.showLogo === true" />
+    <PoweredBy v-if="$frontmatter.showPoweredBy === true" />
     <ProgressBar />
   </div>
 </template>

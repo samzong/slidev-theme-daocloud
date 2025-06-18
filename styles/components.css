@@ -186,9 +186,53 @@
 .mermaid {
   background: rgba(15, 15, 15, 0.5) !important;
   border-radius: 12px;
-  padding: 2rem;
+  padding: 1.5rem;
   margin: 2rem 0;
   border: 1px solid rgba(0, 255, 127, 0.2);
+  
+  /* 新增：尺寸和溢出处理 */
+  width: 100% !important;
+  max-width: 100% !important;
+  overflow: visible !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+}
+
+/* 新增：Mermaid SVG 容器样式 */
+.mermaid svg {
+  max-width: 100% !important;
+  height: auto !important;
+  transform-origin: center center !important;
+}
+
+/* 新增：响应式缩放 */
+@media (max-width: 1024px) {
+  .mermaid {
+    padding: 1rem;
+    margin: 1.5rem 0;
+  }
+  
+  .mermaid svg {
+    transform: scale(0.9) !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .mermaid {
+    padding: 0.8rem;
+    margin: 1rem 0;
+  }
+  
+  .mermaid svg {
+    transform: scale(0.8) !important;
+  }
+}
+
+/* 新增：大图表处理 */
+.mermaid.large-diagram {
+  transform: scale(0.85);
+  transform-origin: left top;
 }
 
 /* Mermaid 节点样式 */
@@ -202,6 +246,7 @@
   color: var(--daocloud-text-light) !important;
   font-family: 'Inter', sans-serif !important;
   font-weight: 500 !important;
+  font-size: 14px !important; /* 新增：确保字体大小 */
 }
 
 /* Mermaid 箭头样式 */
@@ -212,6 +257,16 @@
 
 .mermaid .arrowheadPath {
   fill: var(--daocloud-primary) !important;
+}
+
+/* 新增：Mermaid 文本样式 */
+.mermaid .edgeLabel {
+  color: var(--daocloud-text-light) !important;
+  background: rgba(15, 15, 15, 0.8) !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 12px !important;
+  border-radius: 4px !important;
+  padding: 2px 6px !important;
 }
 
 /* 时间轴样式 */
