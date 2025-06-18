@@ -74,7 +74,6 @@ title: Kubernetes 原生调度
 layout: image-right
 title: Kubernetes 原生调度的局限性
 image: resources/scheduling-framework-extensions.png
-imageAlt: 图片描述
 ---
 
 `default-scheduler` 为通用场景设计，但在批处理领域力不从心
@@ -222,6 +221,7 @@ title: Kueue 设计理念
 ---
 layout: image-right
 title: Kueue 核心架构
+image: resources/kueue.png
 ---
 
 - **LocalQueue**: 租户级队列，组织作业
@@ -229,14 +229,25 @@ title: Kueue 核心架构
 - **Workload**: 作业抽象，统一表示批处理任务
 
 ---
-layout: default
+layout: boxes
 title: Kueue 核心组件
 ---
 
-- **Controller**: 协调作业生命周期
-- **Admission Controller**: 决定作业是否进入执行
-- **Scheduler**: 与 K8s 调度器协作分配资源
-- **ResourceFlavor**: 定义异构资源类型
+## Controller
+
+协调作业生命周期
+
+## Admission Controller
+
+决定作业是否进入执行
+
+## Scheduler
+
+与 K8s 调度器协作分配资源
+
+## ResourceFlavor
+
+定义异构资源类型
 
 ---
 layout: default
@@ -329,9 +340,15 @@ spec:
     gpu-type: nvidia-a100
 ```
 
-<!--
-建议：添加TAS拓扑感知特性
-新增示例：
+---
+layout: default
+title: Kueue 核心概念：TAS
+---
+
+- **作用**: 拓扑感知调度
+- **场景**: 在同一组织单位中运行的 Pod 比不同单位上的 Pod 具有更好的网络带宽
+- **配置**: 使用节点标签来表示数据中心内节点的层次结构
+
 ```yaml
 apiVersion: kueue.x-k8s.io/v1beta1
 kind: ResourceFlavor
@@ -342,7 +359,6 @@ spec:
     cloud.provider.com/node-group: tas
   topologyName: default  # 新特性：关联拓扑
 ```
--->
 
 ---
 layout: default
@@ -420,13 +436,42 @@ graph TD
 
 ---
 layout: default
+title: Kueue 特性： TAS（拓扑感知调度） (新)
+---
+
+- 展示TopologySchedulingGate工作原理
+- ResourceFlavor与拓扑的关系图
+- YAML配置示例
+
+---
+layout: default
+title: Kueue 特性：重新入队策略  (新)
+---
+
+- 指数退避算法可视化
+- RequeueState生命周期图
+- 配置示例和最佳实践
+
+---
+layout: boxes
 title: Kueue 优势
 ---
 
-- **原生集成**: 与 Kubernetes API 无缝协作
-- **轻量级**: 仅增强调度，不替代核心组件
-- **灵活性**: 支持多种资源类型和策略
-- **社区支持**: Kubernetes 官方项目
+## **原生集成**
+
+与 Kubernetes API 无缝协作
+
+## **轻量级**
+
+仅增强调度，不替代核心组件
+
+## **灵活性**
+
+支持多种资源类型和策略
+
+## **社区支持**
+
+Kubernetes 官方项目
 
 <!--
 建议新增页面 - Kueue TAS（拓扑感知调度）特性：
@@ -441,39 +486,54 @@ title: Kueue 优势
 -->
 
 ---
-layout: default
+layout: boxes
 title: Kueue 适用场景
 ---
 
-- **AI/ML 训练**: 动态分配 GPU 资源
-- **大数据处理**: 批量作业管理
-- **CI/CD 流水线**: 资源受限环境下的任务排队
-- **多租户集群**: 资源公平分配
+## **AI/ML 训练**
+
+动态分配 GPU 资源
+
+## **大数据处理**
+
+批量作业管理
+
+## **CI/CD 流水线**
+
+资源受限环境下的任务排队
+
+## **多租户集群**
+
+资源公平分配
 
 ---
 layout: chapter
 part: 3
 title: Volcano 深度解析
 ---
-<!--
-这里介绍下基础的 Kubernetes 的编排和调度的现状
--->
 
 ---
-layout: default
+layout: timeline
 title: Volcano 起源
 ---
 
-- **发起**: 华为，2019年开源
-- **目标**: 高性能计算(HPC)和批处理调度
-- **时间线**:
-  - 2019: 初始版本发布
-  - 2021: v1.0，功能成熟
-  - 2024: v1.8+，支持更多场景
+## 2019
+
+华为2019年发起，开源项目： 高性能计算(HPC)和批处理调度
+
+## 2021
+
+v1.0，功能成熟
+
+## 2024
+
+v1.8+，支持更多场景
 
 ---
-layout: default
+layout: image-right
 title: Volcano 设计理念
+image: resources/volcano.png
+
 ---
 
 - **HPC 优先**: 借鉴传统高性能计算调度

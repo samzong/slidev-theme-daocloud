@@ -83,14 +83,14 @@
   grid-template-columns: 55% 45%;
   gap: 3rem;
   height: 100%;
-  align-items: center;
+  align-items: start;
   padding: 120px 60px 60px 60px;
 }
 
 .content-section {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   height: 100%;
   animation: slideInLeft 0.8s ease-out;
   padding-right: 2rem;
@@ -160,9 +160,10 @@
   display: flex;
   flex-direction: column;
   height: 100%;
-  justify-content: center;
+  justify-content: flex-start;
   animation: slideInRight 0.8s ease-out;
   padding-right: 2rem;
+  padding-top: 2rem;
 }
 
 .image-wrapper {
@@ -292,6 +293,7 @@
   .image-section {
     order: 2;
     padding-right: 0;
+    padding-top: 0;
   }
   
   .content-section {
