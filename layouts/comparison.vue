@@ -6,8 +6,10 @@
       <h1 class="page-title">{{ $frontmatter.title }}</h1>
     </div>
     
-    <div class="comparison-content">
-      <slot />
+    <div class="comparison-container">
+      <div class="comparison-content">
+        <slot />
+      </div>
     </div>
     
     <ProgressBar />
@@ -19,9 +21,11 @@
   background: var(--daocloud-bg-dark);
   color: var(--daocloud-text-light);
   position: relative;
-  overflow: hidden;
   width: 100%;
   height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
 /* 页面标题 - 与 default.vue 保持一致 */
@@ -51,89 +55,115 @@
   line-height: 1.2;
 }
 
-.comparison-content {
-  padding: 120px 60px 60px 60px;
-  z-index: 10;
-  position: relative;
-  height: 100%;
-  overflow-y: auto;
+/* 主容器 - 调整为顶部对齐 */
+.comparison-container {
+  flex: 1;
+  display: flex;
+  align-items: flex-start; /* 改为顶部对齐 */
+  justify-content: center;
+  padding: 120px 80px 80px 80px; /* 增加顶部间距，确保不被标题遮挡 */
+  overflow: hidden;
+  min-height: 0;
 }
 
-/* 对比内容样式增强 */
+.comparison-content {
+  width: 100%;
+  max-width: 1400px; /* 限制最大宽度 */
+  display: flex;
+  flex-direction: column;
+  gap: 2rem; /* 元素间距 */
+  overflow: auto;
+  position: relative;
+}
+
+/* 标题样式 - 紧凑布局 */
 .comparison-content h1 {
-  font-size: 2.2rem;
+  font-size: 2rem;
   font-weight: 600;
-  margin-bottom: 2rem;
+  margin: 0;
   color: var(--daocloud-primary);
-  line-height: 1.3;
+  line-height: 1.2;
 }
 
 .comparison-content h2 {
-  font-size: 1.8rem;
+  font-size: 1.6rem;
   font-weight: 500;
-  margin-bottom: 1.5rem;
+  margin: 0;
   border-bottom: 2px solid rgba(0, 255, 127, 0.2);
-  padding-bottom: 0.5rem;
+  padding-bottom: 0.4rem;
   color: var(--daocloud-text-light);
-  line-height: 1.4;
+  line-height: 1.3;
 }
 
 .comparison-content p {
-  font-size: 1.2rem;
-  line-height: 1.8;
-  margin-bottom: 2rem;
+  font-size: 1.15rem;
+  line-height: 1.6;
+  margin: 0;
   color: var(--daocloud-text-light);
-  letter-spacing: 0.02em;
+  opacity: 0.9;
 }
 
-/* 表格样式优化 - 适配黑色背景 */
+/* 表格样式 - 增强视觉效果 */
 .comparison-layout .comparison-content table {
   width: 100%;
+  margin: 0;
+  table-layout: fixed;
   border-collapse: separate !important;
   border-spacing: 0;
-  margin: 2rem 0;
-  background: rgba(26, 26, 46, 0.5);
-  border: 2px solid rgba(255, 255, 255, 0.4) !important;
-  border-radius: 8px;
+  background: rgba(26, 26, 46, 0.6);
+  border: 2px solid rgba(255, 255, 255, 0.5) !important;
+  border-radius: 12px;
   overflow: hidden;
   box-shadow: 
     0 0 0 1px rgba(255, 255, 255, 0.1),
-    0 8px 24px rgba(0, 0, 0, 0.4);
+    0 10px 32px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
+/* 表头样式 - 更突出 */
 .comparison-layout .comparison-content thead {
-  background: linear-gradient(135deg, rgba(0, 255, 127, 0.2) 0%, rgba(0, 255, 127, 0.1) 100%);
+  background: linear-gradient(135deg, rgba(0, 255, 127, 0.25) 0%, rgba(0, 255, 127, 0.15) 100%);
 }
 
 .comparison-layout .comparison-content th {
-  padding: 1rem 1.5rem;
+  padding: 1.2rem 1.5rem;
   text-align: left;
-  font-weight: 600;
-  font-size: 1.1rem;
+  font-weight: 700;
+  font-size: 1.15rem;
   color: var(--daocloud-primary);
-  border-bottom: 2px solid rgba(255, 255, 255, 0.4) !important;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.5) !important;
   border-right: 1px solid rgba(255, 255, 255, 0.3) !important;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  background: rgba(0, 255, 127, 0.05);
+  letter-spacing: 0.08em;
+  background: rgba(0, 255, 127, 0.08);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.comparison-layout .comparison-content th:first-child {
+  width: 20%; /* 固定第一列宽度 */
 }
 
 .comparison-layout .comparison-content th:last-child {
   border-right: none !important;
 }
 
+/* 表格主体 */
 .comparison-layout .comparison-content tbody {
   background: transparent;
 }
 
 .comparison-layout .comparison-content td {
-  padding: 1rem 1.5rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.3) !important;
-  border-right: 1px solid rgba(255, 255, 255, 0.3) !important;
+  padding: 1.2rem 1.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2) !important;
+  border-right: 1px solid rgba(255, 255, 255, 0.2) !important;
   font-size: 1.1rem;
   line-height: 1.6;
   color: var(--daocloud-text-light);
   background: transparent;
+  vertical-align: top;
+  transition: all 0.2s ease;
 }
 
 .comparison-layout .comparison-content td:last-child {
@@ -144,71 +174,129 @@
   border-bottom: none !important;
 }
 
-.comparison-layout .comparison-content tbody tr:hover {
-  background: rgba(0, 255, 127, 0.1) !important;
-  transition: background 0.3s ease;
+/* 悬停效果 - 增强交互感 */
+.comparison-layout .comparison-content tbody tr {
+  transition: all 0.3s ease;
 }
 
-/* 斑马纹效果 - 增强可读性 */
+.comparison-layout .comparison-content tbody tr:hover {
+  background: rgba(0, 255, 127, 0.12) !important;
+  transform: translateX(4px);
+}
+
+.comparison-layout .comparison-content tbody tr:hover td {
+  color: #ffffff;
+}
+
+/* 斑马纹效果 */
 .comparison-layout .comparison-content tbody tr:nth-child(even) {
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(255, 255, 255, 0.02);
 }
 
 /* 第一列加强样式 */
 .comparison-layout .comparison-content td:first-child {
-  font-weight: 600;
-  color: rgba(0, 255, 127, 0.9);
-  background: rgba(0, 255, 127, 0.05);
-  border-left: 3px solid rgba(255, 255, 255, 0.5);
+  font-weight: 700;
+  color: rgba(0, 255, 127, 1);
+  background: rgba(0, 255, 127, 0.08);
+  border-left: 4px solid var(--daocloud-primary);
+  white-space: nowrap;
+  font-size: 1.05rem;
+  letter-spacing: 0.02em;
 }
 
 /* 表格内的代码样式 */
-.comparison-layout .comparison-content td code {
-  background: rgba(0, 255, 127, 0.15);
-  color: var(--daocloud-primary);
-  padding: 0.2rem 0.4rem;
+.comparison-layout .comparison-content td code,
+.comparison-layout .comparison-content th code {
+  background: rgba(0, 255, 127, 0.2);
+  color: #00ff7f;
+  padding: 0.2rem 0.5rem;
   border-radius: 4px;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   font-family: 'Fira Code', monospace;
-  border: 1px solid rgba(0, 255, 127, 0.3);
+  border: 1px solid rgba(0, 255, 127, 0.4);
+  white-space: nowrap;
+  font-weight: 500;
 }
 
 /* 表格内的强调文本 */
-.comparison-layout .comparison-content td strong {
+.comparison-layout .comparison-content td strong,
+.comparison-layout .comparison-content th strong {
   color: var(--daocloud-primary);
-  font-weight: 600;
+  font-weight: 700;
 }
 
-/* 响应式设计 */
+/* 表格内的换行处理 - 使用 <br/> 标签 */
+.comparison-layout .comparison-content td br {
+  display: block;
+  content: "";
+  margin: 0.3rem 0;
+}
+
+/* 针对内容较多的单元格优化 */
+.comparison-layout .comparison-content td {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  hyphens: auto;
+}
+
+/* 装饰性元素 - 增加视觉趣味 */
+.comparison-layout::before {
+  content: '';
+  position: absolute;
+  top: -20%;
+  right: -10%;
+  width: 40%;
+  height: 40%;
+  background: radial-gradient(circle, rgba(0, 255, 127, 0.1) 0%, transparent 70%);
+  filter: blur(60px);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* 大屏幕优化 - 充分利用空间 */
+@media (min-width: 1440px) {
+  .comparison-container {
+    padding: 140px 100px 100px 100px;
+  }
+  
+  .comparison-layout .comparison-content th {
+    padding: 1.3rem 1.8rem;
+    font-size: 1.2rem;
+  }
+  
+  .comparison-layout .comparison-content td {
+    padding: 1.3rem 1.8rem;
+    font-size: 1.15rem;
+  }
+}
+
+/* 中等屏幕 */
 @media (max-width: 1024px) {
   .page-header {
-    top: 40px;
-    left: 40px;
+    top: 30px;
+    left: 30px;
   }
   
   .page-title {
-    font-size: 2rem;
+    font-size: 1.6rem;
   }
   
-  .comparison-content {
-    padding: 100px 40px 40px 40px;
-  }
-  
-  /* 响应式表格 */
-  .comparison-layout .comparison-content table {
-    font-size: 1rem;
+  .comparison-container {
+    padding: 100px 50px 50px 50px;
   }
   
   .comparison-layout .comparison-content th,
   .comparison-layout .comparison-content td {
-    padding: 0.8rem 1rem;
+    padding: 1rem 1.2rem;
+    font-size: 1rem;
   }
 }
 
+/* 小屏幕优化 */
 @media (max-width: 768px) {
   .page-header {
-    top: 30px;
-    left: 30px;
+    top: 20px;
+    left: 20px;
   }
   
   .title-decorator {
@@ -217,21 +305,61 @@
   }
   
   .page-title {
-    font-size: 1.8rem;
+    font-size: 1.4rem;
   }
   
-  .comparison-content {
-    padding: 90px 30px 30px 30px;
+  .comparison-container {
+    padding: 80px 20px 20px 20px;
   }
   
   /* 移动端表格优化 */
   .comparison-layout .comparison-content table {
     font-size: 0.9rem;
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
   }
   
   .comparison-layout .comparison-content th,
   .comparison-layout .comparison-content td {
-    padding: 0.6rem 0.8rem;
+    padding: 0.8rem 1rem;
+    font-size: 0.9rem;
   }
+  
+  /* 移动端隐藏第一列的 nowrap */
+  .comparison-layout .comparison-content td:first-child {
+    white-space: normal;
+  }
+  
+  /* 移动端取消悬停位移效果 */
+  .comparison-layout .comparison-content tbody tr:hover {
+    transform: none;
+  }
+}
+
+/* 针对超宽表格的滚动条样式 */
+.comparison-content::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+.comparison-content::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 5px;
+}
+
+.comparison-content::-webkit-scrollbar-thumb {
+  background: rgba(0, 255, 127, 0.4);
+  border-radius: 5px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.comparison-content::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 255, 127, 0.6);
+}
+
+/* 确保内容不会太拥挤 */
+.comparison-layout .comparison-content > *:not(table) {
+  max-width: 1200px;
 }
 </style> 
