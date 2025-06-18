@@ -10,6 +10,13 @@ showLogo: false
 showPoweredBy: false
 ---
 
+<!--
+建议：
+- 增加渐变背景或云原生主题背景图
+- 添加K8s和CNCF logo增强专业性
+- 考虑加入二维码链接到演示资源
+-->
+
 ---
 layout: intro
 avatar: https://avatars.githubusercontent.com/u/13782141?v=4
@@ -22,6 +29,13 @@ tags:
   - "LLMOps"
   - "AI Infra"
 ---
+
+<!--
+建议：
+- 左侧：头像+姓名+职位
+- 右侧：技术栈可视化（图标网格）
+- 底部：添加GitHub贡献图或技术认证徽章
+-->
 
 ---
 layout: toc
@@ -36,6 +50,13 @@ layout: toc
 7.  **实战演示**: 任务入队、调度、执行全过程
 8.  **总结与展望**
 
+<!--
+建议：
+- 拆分为两页，每页4个章节
+- 每个章节配置相关icon
+- 使用时间轴或流程图形式展示章节关系
+-->
+
 ---
 layout: chapter
 part: 1
@@ -44,6 +65,13 @@ title: Kubernetes 原生调度
 <!--
 这里介绍下基础的 Kubernetes 的编排和调度的现状
 -->
+
+<!--
+建议：
+- 背景使用半透明的 K8s scheduler 架构图
+- 添加关键痛点的可视化表示
+-->
+
 ---
 layout: default
 title: Kubernetes 原生调度的局限性
@@ -55,6 +83,13 @@ title: Kubernetes 原生调度的局限性
 - **缺乏公平性**: 无法在多租户间实现公平的资源共享。
 - **无队列概念**: 作业提交后立即竞争资源，高负载下导致集群混乱。
 - **资源碎片化**: 频繁创建和销毁 Pod 导致资源利用率低下。
+
+<!--
+建议：
+- 使用问题-影响的对比布局
+- 每个局限性配图标说明
+- 添加实际案例数据支撑
+-->
 
 ---
 layout: default
@@ -69,6 +104,13 @@ title: 批处理调度的核心挑战
 - **复杂依赖**: 如何处理作业间的依赖关系？
 - **异构资源**: 如何支持 GPU、TPU 等特殊硬件？
 
+<!--
+建议：
+- 中心为"批处理调度"，周围辐射各个挑战
+- 使用不同颜色表示挑战严重程度
+- 添加业界解决方案对比
+-->
+
 ---
 layout: default
 title: 批处理调度器的演进
@@ -78,6 +120,13 @@ title: 批处理调度器的演进
 - **2015-2017**: Kubernetes 初创，专注容器编排
 - **2018-2020**: 批处理需求增加，社区探索解决方案
 - **2021至今**: Kueue 和 Volcano 成为主流方案
+
+<!--
+建议：
+- 添加Kueue v1.0 GA (预计2024)
+- 添加Volcano v1.9+ 特性
+- 标注CNCF项目成熟度变化
+-->
 
 
 ---
@@ -91,6 +140,13 @@ AI/ML 工作负载的需求
 - **长周期作业**: 训练可能持续数周，需要稳定调度
 - **资源弹性**: 需动态调整资源以应对峰值需求
 - **故障恢复**: 需支持检查点和作业恢复
+
+<!--
+建议：
+- 横轴：计算密集度，纵轴：作业时长
+- 添加典型AI模型的资源需求对比表
+- 增加2024年大模型训练的新需求
+-->
 
 ---
 layout: chapter
@@ -233,6 +289,21 @@ spec:
     gpu-type: nvidia-a100
 ```
 
+<!--
+建议：添加TAS拓扑感知特性
+新增示例：
+```yaml
+apiVersion: kueue.x-k8s.io/v1beta1
+kind: ResourceFlavor
+metadata:
+  name: tas-flavor
+spec:
+  nodeLabels:
+    cloud.provider.com/node-group: tas
+  topologyName: default  # 新特性：关联拓扑
+```
+-->
+
 ---
 layout: default
 title: Kueue 调度流程
@@ -316,6 +387,18 @@ title: Kueue 优势
 - **轻量级**: 仅增强调度，不替代核心组件
 - **灵活性**: 支持多种资源类型和策略
 - **社区支持**: Kubernetes 官方项目
+
+<!--
+建议新增页面 - Kueue TAS（拓扑感知调度）特性：
+- 展示TopologySchedulingGate工作原理
+- ResourceFlavor与拓扑的关系图
+- YAML配置示例
+
+建议新增页面 - Kueue重新入队策略：
+- 指数退避算法可视化
+- RequeueState生命周期图
+- 配置示例和最佳实践
+-->
 
 ---
 layout: default
@@ -447,6 +530,23 @@ spec:
   weight: 10
 ```
 
+<!--
+建议：添加资源保证特性
+新增示例：
+```yaml
+apiVersion: scheduling.volcano.sh/v1beta1
+kind: Queue
+metadata:
+  name: guaranteed-queue
+spec:
+  weight: 10
+  guarantee:  # 新特性：资源预留
+    resource:
+      cpu: 2
+      memory: 4Gi
+```
+-->
+
 ---
 layout: default
 title: Volcano 调度流程
@@ -532,6 +632,21 @@ title: Volcano 适用场景
 - **复杂批处理**: 作业依赖管理
 - **资源密集型应用**: 高资源利用率
 
+<!--
+建议新增页面 - Volcano网络拓扑调度：
+- HyperJob API结构图
+- 多层拓扑示例
+- 与Kueue TAS的对比
+
+建议新增页面 - Volcano弹性调度：
+- 弹性伸缩决策流程图
+- 资源利用率优化案例
+
+建议新增页面 - Volcano队列资源保证：
+- guarantee字段详细说明
+- 资源预留机制图解
+-->
+
 
 ---
 layout: chapter
@@ -552,6 +667,14 @@ title:  设计理念对比
 | **设计目标**  | 增强 K8s 原生调度             | 替代默认调度器，HPC 优先     |
 | **集成方式**  | 与默认调度器协作              | 独立调度器                   |
 | **核心关注**  | Job 级队列管理               | 复杂批处理和高性能计算        |
+
+<!--
+建议页面布局改进：
+考虑使用two-cols布局展示对比
+左侧：Kueue架构图
+右侧：Volcano架构图
+底部：关键差异总结
+-->
 
 ---
 layout: default
@@ -608,6 +731,17 @@ title: 选型建议
   - 作业依赖复杂
   - 需要完全控制调度逻辑
 
+<!--
+建议：
+使用多维雷达图对比：
+- 调度性能
+- 功能丰富度
+- 易用性
+- 生态成熟度
+- 社区活跃度
+- 企业采用率
+-->
+
 ---
 layout: chapter
 part: 5
@@ -651,6 +785,14 @@ title: 混部调度策略
   - **Gang Scheduling**: 确保分布式训练任务同时启动
   - **Dynamic Resource Oversubscription**: 动态资源超卖
   - **Heterogeneous Device Scheduling**: 支持GPU和NPU等异构设备
+
+<!--
+建议：
+- Before/After对比图
+- 具体配置YAML
+- 性能提升数据
+- 风险评估矩阵
+-->
 
 ---
 layout: default
@@ -706,6 +848,14 @@ title: 训练与推理协同调度的挑战
   - 资源竞争可能影响推理性能
   - 如何保证推理任务的SLA
   - 动态负载下的资源分配策略
+
+<!--
+建议：
+增加协同调度架构图：
+- 训练/推理资源池划分
+- 动态资源流转示意图
+- 监控指标展示
+-->
 
 ---
 layout: default
@@ -812,6 +962,21 @@ spec:
 - **优先级管理**: 使用PriorityClass确保推理任务优先级
 - **资源配额**: 合理设置CPU和GPU请求/限制
 
+<!--
+建议：添加Kueue waitForPodsReady配置
+```yaml
+waitForPodsReady:
+  enable: true
+  timeout: 10m
+  recoveryTimeout: 3m
+  blockAdmission: true
+  requeuingStrategy:
+    timestamp: Eviction
+    backoffLimitCount: 5
+    backoffBaseSeconds: 60
+```
+-->
+
 ---
 layout: chapter
 part: 7
@@ -837,6 +1002,20 @@ title: 环境准备
   ```bash
   kubectl apply -f https://github.com/volcano-sh/volcano/releases/download/v1.8.0/volcano.yaml
   ```
+
+<!--
+建议：
+- 更新安装命令到最新版本
+- 增加Helm安装方式
+- 添加生产环境配置最佳实践
+- 增加故障排查决策树
+
+每个实战页面需要：
+- 前置条件检查清单
+- 分步骤截图
+- 常见错误和解决方案
+- 性能调优建议
+-->
 
 ---
 layout: default
@@ -1070,6 +1249,14 @@ title: 未来展望：技术演进
 - **量子计算集成**: 支持量子-经典混合计算调度
 - **碳中和优化**: 基于能耗和碳排放的绿色调度算法
 
+<!--
+建议更新：
+- KEP-4692: JobSet API进入Beta
+- Kueue准备GA的路线图
+- 与Knative、Argo的深度集成
+- LLM训练的特殊调度需求
+-->
+
 ---
 layout: default
 title: 未来展望：架构演进
@@ -1167,6 +1354,21 @@ title: 案例分享
 监控与日志（Prometheus）
 生产环境调试
 
+<!--
+建议：
+添加3-4个实际案例：
+- 案例背景和挑战
+- 解决方案架构图
+- 关键配置
+- 效果数据
+
+具体案例建议：
+1. 大厂实践案例（字节、阿里、华为）
+2. 性能基准测试结果
+3. ROI分析
+4. 故障恢复案例
+-->
+
 ---
 layout: intro
 title: Q&A 与讨论
@@ -1186,3 +1388,20 @@ layout: intro
 <p style="font-size: 32px !important">
 https://github.com/samzong
 </p>
+
+<!--
+整体建议总结：
+
+1. 技术深度不足：增加源码分析、性能优化、故障排查等深度内容
+2. 缺少最新特性：补充2024年的重要更新，特别是拓扑感知调度
+3. 可视化不足：每页至少30%应该是图表，减少纯文字和代码
+4. 缺少实战数据：添加基准测试、性能对比、实际案例数据
+5. 交互性差：考虑添加Demo视频链接或实时演示环节
+
+建议新增内容结构：
+- 性能基准测试专题（2-3页）
+- 生产环境最佳实践（3-4页）  
+- 与CNCF生态集成（2页）
+- FinOps成本优化（2页）
+- 未来路线图对比（1页）
+-->
