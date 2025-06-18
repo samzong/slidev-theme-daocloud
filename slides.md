@@ -418,39 +418,31 @@ value: 1000
 ```
 
 ---
-layout: default
+layout: image-right
 title: Kueue 特性：MultiKueue (新)
+image: resources/kueue-multikueue.png
 ---
-
 
 - **目标**: 跨集群作业调度
 - **架构**: 中心化管理集群 + 多个执行集群
 - **场景**: 大规模分布式训练
 
-```mermaid
-graph TD
-    A[管理集群] --> B[执行集群1]
-    A --> C[执行集群2]
-    A --> D[执行集群3]
-```
-
 ---
-layout: default
+layout: image-right
 title: Kueue 特性： TAS（拓扑感知调度） (新)
+image: resources/kueue-tas.png
 ---
 
-- 展示TopologySchedulingGate工作原理
-- ResourceFlavor与拓扑的关系图
-- YAML配置示例
+TAS 调度算法分两个主要阶段运行：
 
----
-layout: default
-title: Kueue 特性：重新入队策略  (新)
----
+<br />
 
-- 指数退避算法可视化
-- RequeueState生命周期图
-- 配置示例和最佳实践
+自下而上遍历： 从枝叶域开始，确定每个级别的哪些域具有足够的资源来适应工作负载
+自上而下的遍历： 从最高拟合域级别开始，将特定域分配给工作负载
+
+<br />
+
+这种两阶段方法可确保最佳放置，同时尊重拓扑约束，同时最大限度地提高资源利用率。
 
 ---
 layout: boxes
@@ -472,18 +464,6 @@ title: Kueue 优势
 ## **社区支持**
 
 Kubernetes 官方项目
-
-<!--
-建议新增页面 - Kueue TAS（拓扑感知调度）特性：
-- 展示TopologySchedulingGate工作原理
-- ResourceFlavor与拓扑的关系图
-- YAML配置示例
-
-建议新增页面 - Kueue重新入队策略：
-- 指数退避算法可视化
-- RequeueState生命周期图
-- 配置示例和最佳实践
--->
 
 ---
 layout: boxes
@@ -542,33 +522,41 @@ image: resources/volcano.png
 - **插件化**: 易于扩展功能
 
 ---
-layout: default
-title: Volcano 核心架构
----
-
-```mermaid
-graph TD
-    A[用户] --> B[提交 VolcanoJob]
-    B --> C[Queue]
-    C --> D[Scheduler]
-    D --> E[PodGroup]
-    E --> F[Pod 调度]
-    F --> G[执行]
-```
-
-- **VolcanoJob**: 自定义作业类型
-- **Queue**: 作业队列
-- **PodGroup**: 作业内 Pod 集合
-
----
-layout: default
+layout: boxes
 title: Volcano 核心组件
+image: resources/volcano-arch.png
 ---
 
-- **vc-scheduler**: 核心调度器
-- **vc-controller**: 管理作业生命周期
-- **vc-gang**: 实现组调度
-- **插件**: 支持扩展功能
+## **VolcanoJob**
+
+自定义作业类型
+
+## **Queue**
+
+作业队列
+
+## **PodGroup**
+
+作业内 Pod 集合
+
+## **vc-scheduler**
+
+核心调度器
+
+## **vc-controller**
+
+管理作业生命周期
+
+## **vc-gang**
+
+实现组调度
+
+## **插件**
+
+支持扩展功能
+
+## ...
+
 
 ---
 layout: default
@@ -630,9 +618,12 @@ spec:
   weight: 10
 ```
 
-<!--
-建议：添加资源保证特性
-新增示例：
+---
+layout: default
+title: Volcano 核心概念：Queue （资源预留）
+---
+
+
 ```yaml
 apiVersion: scheduling.volcano.sh/v1beta1
 kind: Queue
@@ -645,7 +636,6 @@ spec:
       cpu: 2
       memory: 4Gi
 ```
--->
 
 ---
 layout: default
@@ -674,9 +664,29 @@ title: Volcano 特性：Gang Scheduling
 - **定义**: 组调度，确保作业满足最小 Pod 数才执行
 - **优势**: 避免资源死锁
 
+<br />
+
 ```yaml
 spec:
   minAvailable: 5
+```
+
+<br />
+
+https://github.com/volcano-sh/volcano/blob/6e2959db/pkg/scheduler/plugins/gang/gang.go#L83-L106
+
+```go
+validJobFn := func(obj interface{}) *api.ValidateResult {
+    job := obj.(*api.JobInfo)
+    if vtn := job.ValidTaskNum(); vtn < job.MinAvailable {
+        return &api.ValidateResult{
+            Pass:   false,
+            Reason: v1beta1.NotEnoughPodsReason,
+            Message: fmt.Sprintf("gang job valid task number %d less than minAvailable %d", vtn, job.MinAvailable),
+        }
+    }
+    return nil
+}
 ```
 
 ---
@@ -686,6 +696,8 @@ title: Volcano 特性：作业依赖
 
 - **作用**: 定义作业间依赖关系
 - **场景**: 数据处理流水线
+
+<br />
 
 ```yaml
 spec:
@@ -713,24 +725,47 @@ graph TD
 ```
 
 ---
-layout: default
+layout: boxes
 title: Volcano 优势
 ---
 
-- **高性能**: 针对 HPC 和 AI 优化
-- **功能丰富**: 支持复杂作业依赖
-- **自定义性**: 可完全替代默认调度器
-- **生态集成**: 与 AI 框架深度结合
+## **高性能**
+
+针对 HPC 和 AI 优化
+
+
+## **功能丰富**
+
+支持复杂作业依赖
+
+
+## **自定义性**
+
+可完全替代默认调度器
+
+## **生态集成**
+
+与 AI 框架深度结合
 
 ---
-layout: default
+layout: boxes
 title: Volcano 适用场景
 ---
 
-- **大规模 AI 训练**: 分布式训练优化
-- **HPC 工作负载**: 科学计算
-- **复杂批处理**: 作业依赖管理
-- **资源密集型应用**: 高资源利用率
+## *大规模 AI 训练**
+
+分布式训练优化
+
+## **HPC 工作负载**
+
+科学计算
+## **复杂批处理**
+
+作业依赖管理
+
+## **资源密集型应用**
+
+高资源利用率
 
 <!--
 建议新增页面 - Volcano网络拓扑调度：
@@ -758,7 +793,7 @@ title: Kueue vs. Volcano
 -->
 
 ---
-layout: default
+layout: comparison
 title:  设计理念对比
 ---
 
