@@ -21,21 +21,29 @@ showPoweredBy: false
 layout: intro
 avatar: https://avatars.githubusercontent.com/u/13782141?v=4
 title: 船长 @samzong
-subtitle: 资深的云原生 及 AI 平台产品架构师与布道师
+subtitle: 资深云原生 及 AI 平台产品架构与布道师
 tags: 
   - "Cloud-Native"
   - "Kubernetes" 
-  - "DevOps"
-  - "LLMOps"
-  - "AI Infra"
+  - "LLM Infra"
+github: samzong
+techStack:
+  - name: Kubernetes
+    icon: https://raw.githubusercontent.com/kubernetes/kubernetes/master/logo/logo.svg
+  - name: Docker
+    icon: https://www.docker.com/wp-content/uploads/2022/03/Moby-logo.png
+  - name: Go
+    icon: https://go.dev/images/go-logo-blue.svg
+  - name: Python
+    icon: https://www.python.org/static/community_logos/python-logo-master-v3-TM.png
+certifications:
+  - name: CKA
+    badge: https://images.credly.com/size/680x680/images/8b8ed108-e77d-4396-ac59-2504583b9d54/cka_from_cncfsite__281_29.png
+  - name: CKAD
+    badge: https://images.credly.com/size/680x680/images/cc8adc83-1dc6-4d57-8e20-22171247e052/blob
 ---
 
-<!--
-建议：
-- 左侧：头像+姓名+职位
-- 右侧：技术栈可视化（图标网格）
-- 底部：添加GitHub贡献图或技术认证徽章
--->
+精通云原生技术栈，专注于 Kubernetes 生态系统和 AI 基础设施建设；拥有丰富的大规模分布式系统架构经验，在容器化、微服务、DevOps 和 MLOps 领域有深入研究。
 
 ---
 layout: toc
@@ -1370,7 +1378,7 @@ title: 案例分享
 -->
 
 ---
-layout: intro
+layout: center
 title: Q&A 与讨论
 ---
 
@@ -1379,11 +1387,9 @@ title: Q&A 与讨论
 - 实战中遇到过哪些调度问题？
 
 ---
-layout: intro
+layout: center
+title: 感谢聆听
 ---
-<h1 style="font-size: 64px !important" >
-感谢聆听！
-</h1>
 
 <p style="font-size: 32px !important">
 https://github.com/samzong
