@@ -10,7 +10,8 @@ export default {
   layouts: {
     cover: './layouts/cover.vue',
     default: './layouts/default.vue',
-    section: './layouts/section.vue',
+    chapter: './layouts/chapter.vue',
+    toc: './layouts/toc.vue',
     white: './layouts/white.vue',
     comparison: './layouts/comparison.vue',
     intro: './layouts/intro.vue',

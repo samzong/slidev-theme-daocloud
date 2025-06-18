@@ -38,7 +38,7 @@ alwaysApply: false
 
 #### 特殊布局
 - [quote.vue](mdc:layouts/quote.vue) - 引用/证言页面
-- [toc.vue](mdc:layouts/toc.vue) - 目录页（开发中）
+- [toc.vue](mdc:layouts/toc.vue) - 目录页
 
 ### 可复用组件
 
@@ -255,3 +255,13 @@ themeConfig: {
 - 布局示例: [layout-examples.md](mdc:layout-examples.md)
 - 项目文档: [CLAUDE.md](mdc:CLAUDE.md)
 - 包配置: [package.json](mdc:package.json)
+
+## 注意事项
+
+### 布局注册
+所有布局组件都已在 [index.ts](mdc:index.ts) 中正确注册：
+- `chapter` - 章节分隔页（对应 chapter.vue）
+- `toc` - 目录页（对应 toc.vue）
+- 其他 10 个布局组件
+
+确保使用正确的布局名称，避免使用未注册的布局。
