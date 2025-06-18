@@ -10,13 +10,6 @@ showLogo: false
 showPoweredBy: false
 ---
 
-<!--
-建议：
-- 增加渐变背景或云原生主题背景图
-- 添加K8s和CNCF logo增强专业性
-- 考虑加入二维码链接到演示资源
--->
-
 ---
 layout: intro
 avatar: https://avatars.githubusercontent.com/u/13782141?v=4
@@ -1106,10 +1099,6 @@ part: 7
 title: 实战演练
 ---
 
-<!--
-这里介绍下基础的 Kubernetes 的编排和调度的现状
--->
-
 ---
 layout: default
 title: 环境准备
@@ -1295,16 +1284,19 @@ title: Volcano 实战：故障排查
   - 检查是否有更高优先级作业
 
 ---
-layout: default
+layout: boxes
 title: 性能优化案例
 ---
 
-- **Kueue**:
-  - 调整 lendingLimit 提高资源利用率
-  - 使用 WorkloadPriorityClass 优化关键作业
-- **Volcano**:
-  - 调整 Queue 权重平衡多团队需求
-  - 使用 Gang Scheduling 减少资源死锁
+## **Kueue**
+
+- 调整 lendingLimit 提高资源利用率
+- 使用 WorkloadPriorityClass 优化关键作业
+
+## **Volcano**
+
+- 调整 Queue 权重平衡多团队需求
+- 使用 Gang Scheduling 减少资源死锁
 
 ---
 layout: chapter
@@ -1371,6 +1363,11 @@ title: 未来展望：技术演进
 - **AI 驱动调度**: 使用 AI 预测负载，优化资源分配策略
 - **量子计算集成**: 支持量子-经典混合计算调度
 - **碳中和优化**: 基于能耗和碳排放的绿色调度算法
+
+---
+layout: image
+image: resources/mig_gpu.png
+---
 
 <!--
 建议更新：
@@ -1506,18 +1503,12 @@ layout: center
 title: 感谢聆听
 ---
 
-<p style="font-size: 32px !important">
-https://github.com/samzong
-</p>
-
 <!--
 整体建议总结：
 
 1. 技术深度不足：增加源码分析、性能优化、故障排查等深度内容
-2. 缺少最新特性：补充2024年的重要更新，特别是拓扑感知调度
 3. 可视化不足：每页至少30%应该是图表，减少纯文字和代码
 4. 缺少实战数据：添加基准测试、性能对比、实际案例数据
-5. 交互性差：考虑添加Demo视频链接或实时演示环节
 
 建议新增内容结构：
 - 性能基准测试专题（2-3页）
