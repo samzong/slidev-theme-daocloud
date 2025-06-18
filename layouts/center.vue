@@ -1,11 +1,5 @@
 <template>
   <div class="center-layout">
-    <!-- 背景装饰 -->
-    <div class="center-decoration">
-      <div class="spotlight-circle"></div>
-      <div class="grid-pattern"></div>
-    </div>
-    
     <!-- 主要内容区 -->
     <div class="center-content">
       <!-- 图标或表情 -->
@@ -35,15 +29,15 @@
       </div>
     </div>
     
-    <Logo v-if="$frontmatter.showLogo !== false" />
-    <PoweredBy v-if="$frontmatter.showPoweredBy !== false" />
+    <Logo v-if="$frontmatter.showLogo === true" />
+    <PoweredBy v-if="$frontmatter.showPoweredBy === true" />
     <ProgressBar />
   </div>
 </template>
 
 <style scoped>
 .center-layout {
-  background: linear-gradient(135deg, var(--daocloud-bg-dark) 0%, var(--daocloud-secondary) 100%);
+  background: transparent;
   color: var(--daocloud-text-light);
   position: relative;
   overflow: hidden;
@@ -54,76 +48,15 @@
   justify-content: center;
 }
 
-.center-decoration {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  pointer-events: none;
-}
-
-.spotlight-circle {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 800px;
-  height: 800px;
-  background: radial-gradient(
-    circle,
-    rgba(0, 255, 127, 0.1) 0%,
-    rgba(0, 255, 127, 0.05) 30%,
-    transparent 70%
-  );
-  border-radius: 50%;
-  animation: pulseGlow 4s ease-in-out infinite;
-}
-
-.grid-pattern {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-image: 
-    linear-gradient(rgba(0, 255, 127, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 255, 127, 0.03) 1px, transparent 1px);
-  background-size: 50px 50px;
-  animation: gridMove 20s linear infinite;
-}
-
-@keyframes pulseGlow {
-  0%, 100% {
-    opacity: 0.6;
-    transform: translate(-50%, -50%) scale(1);
-  }
-  50% {
-    opacity: 1;
-    transform: translate(-50%, -50%) scale(1.1);
-  }
-}
-
-@keyframes gridMove {
-  0% {
-    transform: translate(0, 0);
-  }
-  100% {
-    transform: translate(50px, 50px);
-  }
-}
-
 .center-content {
   text-align: center;
   max-width: 800px;
   padding: 3rem;
   z-index: 10;
-  animation: fadeInUp 1s ease-out;
 }
 
 .center-icon {
   margin-bottom: 2rem;
-  animation: fadeInUp 1s ease-out 0.2s both;
 }
 
 .icon-wrapper {
@@ -138,16 +71,6 @@
   border-radius: 50%;
   border: 3px solid rgba(0, 255, 127, 0.3);
   color: var(--daocloud-primary);
-  animation: iconFloat 3s ease-in-out infinite;
-}
-
-@keyframes iconFloat {
-  0%, 100% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
 }
 
 .center-header {
@@ -163,7 +86,6 @@
   -webkit-text-fill-color: transparent;
   background-clip: text;
   line-height: 1.1;
-  animation: fadeInUp 1s ease-out 0.4s both;
 }
 
 .center-subtitle {
@@ -171,7 +93,6 @@
   font-weight: 300;
   color: rgba(255, 255, 255, 0.8);
   line-height: 1.3;
-  animation: fadeInUp 1s ease-out 0.6s both;
 }
 
 .center-body {
@@ -179,7 +100,6 @@
   line-height: 1.6;
   margin-bottom: 2.5rem;
   color: rgba(255, 255, 255, 0.9);
-  animation: fadeInUp 1s ease-out 0.8s both;
 }
 
 .center-body h1,
@@ -199,79 +119,38 @@
   padding-left: 1.5rem;
 }
 
-.center-body li {
-  margin-bottom: 0.8rem;
-}
-
 .center-highlight {
   margin-bottom: 2rem;
-  animation: fadeInUp 1s ease-out 1s both;
 }
 
 .highlight-content {
-  background: linear-gradient(135deg, var(--daocloud-primary), var(--daocloud-primary-dark));
-  color: white;
-  padding: 1.5rem 2.5rem;
-  border-radius: 50px;
+  background: rgba(0, 255, 127, 0.1);
+  border: 1px solid rgba(0, 255, 127, 0.3);
+  border-radius: 8px;
+  padding: 1.5rem;
   font-size: 1.2rem;
-  font-weight: 600;
-  display: inline-block;
-  box-shadow: 0 8px 32px rgba(0, 255, 127, 0.3);
-  animation: highlightPulse 2s ease-in-out infinite;
-}
-
-@keyframes highlightPulse {
-  0%, 100% {
-    transform: scale(1);
-    box-shadow: 0 8px 32px rgba(0, 255, 127, 0.3);
-  }
-  50% {
-    transform: scale(1.02);
-    box-shadow: 0 12px 48px rgba(0, 255, 127, 0.4);
-  }
+  font-weight: 500;
+  color: var(--daocloud-primary);
 }
 
 .center-footer {
-  animation: fadeInUp 1s ease-out 1.2s both;
+  margin-top: 2rem;
 }
 
 .note-content {
   font-size: 1rem;
   color: rgba(255, 255, 255, 0.6);
   font-style: italic;
-  padding: 1rem 2rem;
-  border-top: 1px solid rgba(0, 255, 127, 0.2);
-  border-radius: 0;
-  display: inline-block;
-}
-
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(40px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
 
 /* 响应式设计 */
-@media (max-width: 768px) {
-  .center-content {
-    padding: 2rem;
-  }
-  
+@media (max-width: 1024px) {
   .center-title {
     font-size: 3rem;
   }
   
   .center-subtitle {
-    font-size: 1.4rem;
-  }
-  
-  .center-body {
-    font-size: 1.2rem;
+    font-size: 1.5rem;
   }
   
   .icon-wrapper {
@@ -280,4 +159,46 @@
     font-size: 3rem;
   }
 }
-</style> 
+
+@media (max-width: 768px) {
+  .center-content {
+    padding: 2rem;
+  }
+  
+  .center-title {
+    font-size: 2.5rem;
+  }
+  
+  .center-subtitle {
+    font-size: 1.3rem;
+  }
+  
+  .center-body {
+    font-size: 1.2rem;
+  }
+  
+  .icon-wrapper {
+    width: 80px;
+    height: 80px;
+    font-size: 2.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .center-content {
+    padding: 1.5rem;
+  }
+  
+  .center-title {
+    font-size: 2rem;
+  }
+  
+  .center-subtitle {
+    font-size: 1.1rem;
+  }
+  
+  .center-body {
+    font-size: 1rem;
+  }
+}
+</style>

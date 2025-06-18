@@ -27,7 +27,7 @@
 
 <style scoped>
 .chapter-layout {
-  background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
+  background: transparent;
   color: var(--daocloud-text-light);
   position: relative;
   overflow: hidden;
@@ -35,23 +35,22 @@
   height: 100%;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
 }
 
 /* 主要内容区 */
 .chapter-content {
   text-align: left;
-  max-width: 900px;
-  width: 100%;
+  max-width: 50%;
+  width: 50%;
+  margin-left: 50%;
   padding: 3rem;
   z-index: 10;
-  animation: fadeInUp 1s ease-out 0.5s both;
 }
 
 /* Part 指示器 */
 .part-indicator {
   margin-bottom: 2rem;
-  animation: fadeInUp 1s ease-out 0.8s both;
 }
 
 .part-text {
@@ -80,7 +79,6 @@
   margin-bottom: 1rem;
   color: var(--daocloud-text-light);
   line-height: 1.2;
-  animation: fadeInUp 1s ease-out 1s both;
   letter-spacing: 0.02em;
 }
 
@@ -94,22 +92,16 @@
   font-size: 1.4rem;
   line-height: 1.6;
   color: rgba(255, 255, 255, 0.9);
-  animation: fadeInUp 1s ease-out 1.4s both;
-}
-
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(40px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
 
 /* 响应式设计 */
 @media (max-width: 1024px) {
+  .chapter-content {
+    max-width: 60%;
+    width: 60%;
+    margin-left: 40%;
+  }
+  
   .part-text,
   .part-number {
     font-size: 2.5rem;
@@ -122,6 +114,9 @@
 
 @media (max-width: 768px) {
   .chapter-content {
+    max-width: 70%;
+    width: 70%;
+    margin-left: 30%;
     padding: 2rem;
   }
   
@@ -136,6 +131,13 @@
 }
 
 @media (max-width: 480px) {
+  .chapter-content {
+    max-width: 90%;
+    width: 90%;
+    margin-left: 10%;
+    padding: 1.5rem;
+  }
+  
   .part-text,
   .part-number {
     font-size: 1.8rem;

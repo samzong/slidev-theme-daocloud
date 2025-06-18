@@ -102,6 +102,9 @@
 
 .intro-avatar {
   margin-bottom: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .avatar-img {
@@ -111,6 +114,8 @@
   border: 4px solid var(--daocloud-primary);
   box-shadow: 0 8px 32px rgba(0, 255, 127, 0.3);
   object-fit: cover;
+  display: block;
+  margin: 0 auto;
 }
 
 .avatar-icon {
@@ -189,6 +194,57 @@
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .intro-content {
+    padding: 1.5rem;
+  }
+  
+  .avatar-img {
+    width: 100px;
+    height: 100px;
+  }
+  
+  .avatar-icon {
+    width: 100px;
+    height: 100px;
+    font-size: 2.5rem;
+  }
+  
+  .intro-title {
+    font-size: 2.5rem;
+  }
+  
+  .intro-subtitle {
+    font-size: 1.3rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .intro-content {
+    padding: 1rem;
+  }
+  
+  .avatar-img {
+    width: 80px;
+    height: 80px;
+  }
+  
+  .avatar-icon {
+    width: 80px;
+    height: 80px;
+    font-size: 2rem;
+  }
+  
+  .intro-title {
+    font-size: 2rem;
+  }
+  
+  .intro-subtitle {
+    font-size: 1.1rem;
   }
 }
 </style> 
