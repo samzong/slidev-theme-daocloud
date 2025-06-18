@@ -45,6 +45,68 @@ showPoweredBy: true
 ---
 ```
 
+### Global Configuration System
+The theme supports a global configuration system with three levels of precedence:
+1. **Frontmatter** (highest priority) - per-slide configuration
+2. **Theme Config** (medium priority) - theme-wide defaults  
+3. **Built-in defaults** (lowest priority) - fallback values
+
+#### Available Global Options
+- `showLogo: boolean` - Display logo component
+- `showPoweredBy: boolean` - Display "Powered by" component
+- `logo: string` - Logo image path
+- `showProgressBar: boolean` - Display progress indicator
+- `logoPosition: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right'` - Logo placement
+- `poweredByVariant: 'default' | 'white'` - PoweredBy component style
+- `progressBarStyle: 'default' | 'thin' | 'hidden'` - Progress bar appearance
+
+#### Configuration Examples
+
+**Theme-wide configuration** (index.ts):
+```typescript
+export default {
+  name: 'daocloud',
+  themeConfig: {
+    // ... other config
+    globalConfig: {
+      showLogo: false,           // Hide logo by default
+      showPoweredBy: true,       // Show PoweredBy by default
+      logo: '/custom-logo.png',  // Custom logo path
+      logoPosition: 'top-left'   // Move logo to top-left
+    }
+  }
+}
+```
+
+**Per-slide override** (frontmatter):
+```yaml
+---
+layout: cover
+showLogo: true        # Override theme config to show logo
+poweredByVariant: white
+---
+```
+
+**New layout development**:
+```vue
+<script setup lang="ts">
+import { useThemeConfig } from '../composables/useThemeConfig'
+
+// Get all config values with proper precedence
+const { showLogo, showPoweredBy, showProgressBar } = useThemeConfig()
+</script>
+
+<template>
+  <div class="my-layout">
+    <slot />
+    <!-- Components automatically respect global config -->
+    <Logo v-if="showLogo" />
+    <PoweredBy v-if="showPoweredBy" />
+    <ProgressBar v-if="showProgressBar" />
+  </div>
+</template>
+```
+
 ### Layout Usage
 Specify layout in slide frontmatter:
 ```yaml

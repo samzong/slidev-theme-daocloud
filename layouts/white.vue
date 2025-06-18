@@ -9,11 +9,17 @@
     <div class="white-content">
       <slot />
     </div>
-    <Logo v-if="$frontmatter.showLogo === true" class="logo-dark" />
-    <PoweredBy v-if="$frontmatter.showPoweredBy === true" class="powered-by-dark" />
-    <ProgressBar />
+    <Logo v-if="showLogo" class="logo-dark" />
+    <PoweredBy v-if="showPoweredBy" class="powered-by-dark" />
+    <ProgressBar v-if="showProgressBar" />
   </div>
 </template>
+
+<script setup lang="ts">
+import { useThemeConfig } from '../composables/useThemeConfig'
+
+const { showLogo, showPoweredBy, showProgressBar } = useThemeConfig()
+</script>
 
 <style scoped>
 .white-layout {

@@ -17,14 +17,16 @@
         </div>
       </div>
     </div>
-    <Logo v-if="$frontmatter.showLogo !== false" />
-    <PoweredBy v-if="$frontmatter.showPoweredBy !== false" />
-    <ProgressBar />
+    <Logo v-if="showLogo" />
+    <PoweredBy v-if="showPoweredBy" />
+    <ProgressBar v-if="showProgressBar" />
   </div>
 </template>
 
 <script setup lang="ts">
-// 布局组件无需额外导入
+import { useThemeConfig } from '../composables/useThemeConfig'
+
+const { showLogo, showPoweredBy, showProgressBar } = useThemeConfig()
 </script>
 
 <style scoped>

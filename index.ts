@@ -3,7 +3,17 @@ export default {
   themeConfig: {
     primary: '#00ff7f',
     primaryDark: '#00cc66',
-    secondary: '#1a1a2e'
+    secondary: '#1a1a2e',
+    // 全局配置
+    globalConfig: {
+      showLogo: true,
+      showPoweredBy: true,
+      logo: '/logo.png',
+      showProgressBar: true,
+      logoPosition: 'top-right',
+      poweredByVariant: 'default',
+      progressBarStyle: 'default'
+    }
   },
   colorSchema: 'both',
   highlighter: 'shiki',

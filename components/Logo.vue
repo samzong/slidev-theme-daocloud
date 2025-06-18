@@ -1,7 +1,7 @@
 <template>
-  <div class="logo-container" v-if="showLogo">
+  <div class="logo-container">
     <img 
-      :src="logoSrc" 
+      :src="logo" 
       alt="Logo" 
       class="logo"
     />
@@ -9,9 +9,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { useThemeConfig } from '../composables/useThemeConfig'
 
-// 使用 $frontmatter 访问页面配置
-const showLogo = computed(() => $frontmatter.showLogo !== false)
-const logoSrc = computed(() => $frontmatter.logo || '/logo.png')
+const { logo } = useThemeConfig()
 </script>

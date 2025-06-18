@@ -14,15 +14,9 @@
         <slot />
       </div>
     </div>
-
-    <!-- PoweredBy 组件 -->
-    <PoweredBy />
   </div>
 </template>
 
-<script setup lang="ts">
-import PoweredBy from '../components/PoweredBy.vue'
-</script>
 
 <style scoped>
 .toc-layout {

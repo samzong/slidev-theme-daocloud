@@ -9,11 +9,15 @@
     <div class="default-content">
       <slot />
     </div>
-    <Logo v-if="$frontmatter.showLogo === true" />
-    <PoweredBy v-if="$frontmatter.showPoweredBy === true" />
-    <ProgressBar />
+    <ProgressBar v-if="showProgressBar" />
   </div>
 </template>
+
+<script setup lang="ts">
+import { useThemeConfig } from '../composables/useThemeConfig'
+
+const { showProgressBar } = useThemeConfig()
+</script>
 
 <style scoped>
 .default-layout {

@@ -43,7 +43,7 @@
   text-align: left;
   max-width: 50%;
   width: 50%;
-  margin-left: 50%;
+  margin-left: 40%;
   padding: 3rem;
   z-index: 10;
 }
@@ -55,7 +55,7 @@
 
 .part-text {
   font-size: 3rem;
-  font-weight: 300;
+  font-weight: 700;
   color: var(--daocloud-text-light);
   margin-right: 1rem;
   letter-spacing: 0.1em;
@@ -74,7 +74,7 @@
 }
 
 .chapter-title {
-  font-size: 3.5rem;
+  font-size: 2rem;
   font-weight: 400;
   margin-bottom: 1rem;
   color: var(--daocloud-text-light);
