@@ -170,15 +170,15 @@ onMounted(async () => {
 /* 框内容 */
 .box-content {
   flex: 1;
-  font-size: 1rem;
-  line-height: 1.7;
+  font-size: 0.85rem;
+  line-height: 1.6;
   color: var(--daocloud-text-light);
   letter-spacing: 0.02em;
 }
 
 .box-content :deep(p) {
   margin-bottom: 0.8rem;
-  line-height: 1.7;
+  line-height: 1.6;
 }
 
 .box-content :deep(p:last-child) {
@@ -195,7 +195,7 @@ onMounted(async () => {
   position: relative;
   padding-left: 1.2rem;
   margin-bottom: 0.5rem;
-  line-height: 1.7;
+  line-height: 1.6;
 }
 
 .box-content :deep(li::before) {
