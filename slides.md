@@ -139,7 +139,7 @@ Kueue 和 Volcano 成为主流批处理调度方案
 
 ---
 layout: boxes
-title: AI/ML 工作负载的需求
+title: AI/ML 工作负载的管理要求
 ---
 
 ## 大规模并行
@@ -180,10 +180,8 @@ title: AI/ML 工作负载的需求
 
 ---
 layout: default
-title: AI/ML 工作负载的技术要求详解
+title: AI/ML 的 GPU 网络需求
 ---
-
-## 1. 网络拓扑与带宽需求
 
 ```mermaid
 graph TD
@@ -202,7 +200,10 @@ graph TD
 - **跨节点通信**：RoCE v2 提供 200Gbps，延迟 < 2μs
 - **梯度同步开销**：占总训练时间的 15-25%
 
-## 2. GPU 资源调度算法
+---
+layout: default
+title: AI/ML 的 GPU 资源调度算法
+---
 
 ```go
 // Kueue 中的 GPU 亲和性调度算法
@@ -227,15 +228,6 @@ func (s *Scheduler) findBestGPUPlacement(workload *Workload) (*Placement, error)
     return s.findCrossNodePlacement(workload)
 }
 ```
-
-## 3. 性能基准测试数据
-
-| 模型规模 | GPU 配置 | 批次大小 | 吞吐量(samples/s) | GPU 利用率 | 通信开销 |
-|---------|---------|---------|-----------------|-----------|---------|
-| BERT-Large | 8x V100 | 64 | 1,245 | 92% | 18% |
-| GPT-3 13B | 16x A100 | 32 | 487 | 87% | 28% |
-| T5-11B | 32x A100 | 16 | 892 | 85% | 32% |
-| LLaMA 70B | 64x H100 | 8 | 234 | 83% | 35% |
 
 ---
 layout: chapter
@@ -268,148 +260,9 @@ v0.5 发布，进入 beta
 
 接近 GA，广泛生产应用
 
----
-layout: boxes
-title: Kueue 设计理念
----
+## 2025
 
-## Job First
-
-以作业为调度核心，而非单个 Pod
-
-**核心实现**：
-- **Workload 抽象层**：将 Job、MPIJob、RayJob 统一为 Workload
-- **批量资源预留**：通过 `AdmissionCheck` 确保资源原子性分配
-- **源码位置**：`apis/kueue/v1beta1/workload_types.go`
-
-## 与原生协作
-
-增强而非替代默认调度器
-
-**技术架构**：
-- **双层调度**：Kueue 负责准入控制，kube-scheduler 负责实际调度
-- **Webhook 注入**：通过 MutatingWebhook 动态修改 Pod 调度器名称
-- **性能影响**：增加 5-10ms 调度延迟，可接受范围内
-
-## 队列管理
-
-通过队列实现资源排队和公平性
-
-**算法实现**：
-- **公平共享算法**：基于 DRF (Dominant Resource Fairness)
-- **优先级反转处理**：通过 `workloadpriority` 包实现
-- **队列状态机**：Pending → Admitted → Finished 三态转换
-
-## 资源借用
-
-动态借用和归还资源，提升利用率
-
-**借用机制源码**：
-```go
-// pkg/cache/clusterqueue.go
-func (c *ClusterQueue) borrowingLimit(rName corev1.ResourceName) *resource.Quantity {
-    if c.Spec.ResourceGroups == nil {
-        return nil
-    }
-    for _, rg := range c.Spec.ResourceGroups {
-        for _, flvr := range rg.Flavors {
-            for _, r := range flvr.Resources {
-                if r.Name == rName && r.LendingLimit != nil {
-                    return r.LendingLimit
-                }
-            }
-        }
-    }
-    return nil
-}
-```
-
----
-layout: default
-title: Kueue 设计理念深度解析：源码实现
----
-
-## 1. Workload 生命周期状态机
-
-```mermaid
-stateDiagram-v2
-    [*] --> Pending: 创建 Workload
-    Pending --> CheckingAdmission: 资源检查
-    CheckingAdmission --> Admitted: 通过准入
-    CheckingAdmission --> Pending: 资源不足
-    Admitted --> Running: Pod 调度成功
-    Running --> Succeeded: 作业完成
-    Running --> Failed: 作业失败
-    Succeeded --> [*]
-    Failed --> [*]
-    
-    note right of CheckingAdmission
-        AdmissionController 决策点
-        - 检查 ClusterQueue 配额
-        - 验证 ResourceFlavor 匹配
-        - 执行优先级抢占逻辑
-    end note
-```
-
-## 2. 公平性算法实现细节
-
-```go
-// pkg/scheduler/fairness/dominant_resource_fairness.go
-type DRFShare struct {
-    workload  *kueue.Workload
-    allocated map[corev1.ResourceName]resource.Quantity
-    share     float64  // 主导资源份额
-}
-
-func (d *DRFScheduler) ComputeShares(queue *ClusterQueue) []DRFShare {
-    shares := make([]DRFShare, 0, len(queue.Workloads))
-    totalResources := queue.TotalResources()
-    
-    for _, wl := range queue.Workloads {
-        maxShare := 0.0
-        for rName, allocated := range wl.AllocatedResources {
-            total := totalResources[rName]
-            share := float64(allocated.MilliValue()) / float64(total.MilliValue())
-            if share > maxShare {
-                maxShare = share
-            }
-        }
-        shares = append(shares, DRFShare{
-            workload: wl,
-            share:    maxShare,
-        })
-    }
-    
-    // 按份额排序，实现公平调度
-    sort.Slice(shares, func(i, j int) bool {
-        return shares[i].share < shares[j].share
-    })
-    return shares
-}
-```
-
-## 3. 性能优化关键点
-
-| 优化项 | 实现方式 | 性能提升 |
-|--------|---------|----------|
-| **缓存机制** | 使用 informer 缓存，减少 API Server 压力 | QPS 提升 10x |
-| **批量处理** | 聚合 10ms 内的事件统一处理 | 延迟降低 50% |
-| **并发控制** | WorkQueue 限流，默认 50 并发 | CPU 使用降低 30% |
-| **索引优化** | 为 ClusterQueue 建立多维索引 | 查询速度提升 5x |
-
-## 4. 与 kube-scheduler 的协作机制
-
-```yaml
-# Kueue 通过 annotation 与 scheduler 通信
-apiVersion: v1
-kind: Pod
-metadata:
-  annotations:
-    kueue.x-k8s.io/admission: '{"clusterQueue":"prod-queue","resourceFlavor":"gpu-a100"}'
-    scheduler.alpha.kubernetes.io/preferred-node-selector: "gpu-type=a100"
-spec:
-  schedulerName: default-scheduler  # 仍使用默认调度器
-```
+v0.12.2
 
 ---
 layout: image-right
@@ -420,333 +273,6 @@ image: kueue.png
 - **LocalQueue**: 租户级队列，组织作业
 - **ClusterQueue**: 集群级资源池，定义资源边界
 - **Workload**: 作业抽象，统一表示批处理任务
-
----
-layout: boxes
-title: Kueue 核心组件
----
-
-## Controller
-
-协调作业生命周期
-
-**控制器架构**：
-- **工作队列**：基于 k8s.io/client-go/util/workqueue
-- **并发处理**：默认 10 个 worker 协程
-- **重试机制**：指数退避，最大重试 10 次
-
-## Admission Controller
-
-决定作业是否进入执行
-
-**准入逻辑**：
-- **配额检查**：O(1) 时间复杂度的资源计算
-- **优先级抢占**：基于堆的优先队列实现
-- **事务保证**：使用乐观锁避免资源超卖
-
-## Scheduler
-
-与 K8s 调度器协作分配资源
-
-**调度策略**：
-- **两阶段提交**：先预留资源，后创建 Pod
-- **亲和性传播**：将 ResourceFlavor 转换为节点选择器
-- **失败回滚**：30s 超时自动释放预留资源
-
-## ResourceFlavor
-
-定义异构资源类型
-
-**实现机制**：
-- **标签映射**：自动生成 nodeSelector 和 tolerations
-- **多维匹配**：支持 CPU 架构、GPU 型号等多维度
-- **动态发现**：通过 Node 标签自动识别可用资源
-
----
-layout: default
-title: Kueue 核心组件深度解析 - 组件间通信架构
----
-
-```mermaid
-graph LR
-    subgraph "API Server"
-        A[Workload CRD]
-        B[ClusterQueue CRD]
-        C[LocalQueue CRD]
-    end
-    
-    subgraph "Kueue Controller Manager"
-        D[Workload Controller]
-        E[Queue Controller]
-        F[Admission Controller]
-        G[Scheduler]
-    end
-    
-    subgraph "Data Flow"
-        H[Informer Cache]
-        I[Work Queue]
-        J[Event Bus]
-    end
-    
-    A --> H
-    B --> H
-    C --> H
-    H --> D
-    H --> E
-    D --> I
-    E --> I
-    I --> F
-    F --> G
-    G --> J
-    J --> A
-```
-
----
-layout: default
-title: Kueue 核心组件深度解析 - 并发控制实现
----
-
-```go
-// pkg/controller/workload/workload_controller.go
-type Controller struct {
-    client        client.Client
-    queue         workqueue.RateLimitingInterface
-    workers       int  // 默认 10
-    mu            sync.RWMutex
-    admittedCache map[string]*kueue.Workload
-}
-
-func (c *Controller) Start(ctx context.Context) error {
-    // 启动多个 worker 处理队列
-    for i := 0; i < c.workers; i++ {
-        go wait.UntilWithContext(ctx, c.worker, time.Second)
-    }
-    return nil
-}
-
-func (c *Controller) worker(ctx context.Context) {
-    for c.processNextItem(ctx) {
-    }
-}
-
-func (c *Controller) processNextItem(ctx context.Context) bool {
-    key, quit := c.queue.Get()
-    if quit {
-        return false
-    }
-    defer c.queue.Done(key)
-    
-    // 处理带超时控制
-    ctx, cancel := context.WithTimeout(ctx, 30*time.Second)
-    defer cancel()
-    
-    err := c.reconcile(ctx, key.(string))
-    if err != nil {
-        // 指数退避重试
-        c.queue.AddRateLimited(key)
-        return true
-    }
-    
-    c.queue.Forget(key)
-    return true
-}
-```
-
----
-layout: default
-title: Kueue 核心组件深度解析 - 资源预留与释放机制
----
-
-```go
-// pkg/cache/snapshot.go
-type Snapshot struct {
-    sync.RWMutex
-    queues      map[string]*ClusterQueueSnapshot
-    cohorts     map[string]*CohortSnapshot
-    generation  int64
-}
-
-func (s *Snapshot) Reserve(cq string, r Resources) error {
-    s.Lock()
-    defer s.Unlock()
-    
-    queue := s.queues[cq]
-    if queue == nil {
-        return fmt.Errorf("queue %s not found", cq)
-    }
-    
-    // 原子性检查和预留
-    if !queue.CanReserve(r) {
-        return ErrInsufficientResources
-    }
-    
-    queue.Reserve(r)
-    s.generation++
-    return nil
-}
-```
-
----
-layout: table
-title: Kueue 核心组件深度解析 - 性能监控指标
----
-
-| 指标名称 | 描述 | 告警阈值 |
-|---------|------|----------|
-| `kueue_admission_latency_seconds` | 准入决策延迟 | > 1s |
-| `kueue_workload_queue_depth` | 等待队列深度 | > 1000 |
-| `kueue_resource_usage_ratio` | 资源使用率 | > 95% |
-| `kueue_scheduler_throughput` | 调度吞吐量 | < 100/s |
-| `kueue_controller_sync_errors` | 同步错误率 | > 1% |
-
----
-layout: default
-title: Kueue 源码架构分析 - 核心模块划分
----
-
-```mermaid
-graph TB
-    subgraph "API 层"
-        A[Workload API]
-        B[Queue APIs]
-        C[ResourceFlavor API]
-    end
-    
-    subgraph "控制器层"
-        D[Workload Controller]
-        E[Queue Controller]
-        F[Jobs Controller]
-    end
-    
-    subgraph "核心调度层"
-        G[Scheduler]
-        H[Cache Manager]
-        I[Flavorassigner]
-    end
-    
-    subgraph "工具层"
-        J[Metrics]
-        K[Webhooks]
-        L[Utils]
-    end
-    
-    A --> D
-    B --> E
-    C --> I
-    D --> G
-    E --> G
-    F --> G
-    G --> H
-    G --> I
-```
-
----
-layout: default
-title: Kueue 源码架构分析 - 关键数据结构
----
-
-```go
-// pkg/workload/workload.go
-type Info struct {
-    Obj *kueue.Workload
-    // 资源请求的快照
-    TotalRequests workload.Requests
-    // 优先级类
-    Priority *int32
-    // 调度上下文
-    SchedulingContext *SchedulingContext
-}
-
-// pkg/cache/clusterqueue.go  
-type ClusterQueue struct {
-    Name              string
-    Cohort            *Cohort
-    ResourceGroups    []ResourceGroup
-    NamespaceSelector labels.Selector
-    Preemption        kueue.ClusterQueuePreemption
-    FairWeight        resource.Quantity
-    
-    // 运行时状态
-    PendingWorkloads  map[string]*workload.Info
-    AdmittedWorkloads map[string]*workload.Info
-    
-    // 资源使用统计
-    Usage         Resources
-    GuaranteedQuota Resources
-}
-
-// pkg/scheduler/scheduler.go
-type Scheduler struct {
-    queues          *cache.ClusterQueueSnapshot
-    cache           *cache.Cache
-    preemptor       *preemption.Preemptor
-    flavorAssigner  *flavorassigner.FlavorAssigner
-}
-```
-
----
-layout: default
-title: Kueue 源码架构分析 - 调度核心算法
----
-
-```go
-// pkg/scheduler/scheduler.go - 主调度循环
-func (s *Scheduler) schedule(ctx context.Context) wait.ContextFunc {
-    return func(ctx context.Context) {
-        log := ctrl.LoggerFrom(ctx)
-        
-        // 1. 获取待调度工作负载
-        snapshot := s.cache.Snapshot()
-        
-        // 2. 执行调度循环
-        for {
-            // 获取下一个工作负载
-            wl, cq := s.getNextWorkload(snapshot)
-            if wl == nil {
-                break
-            }
-            
-            // 3. 尝试分配资源
-            assignment := s.flavorAssigner.Assign(log, wl, cq)
-            if assignment.PodSets == nil {
-                // 资源不足，尝试抢占
-                targets := s.preemptor.GetTargets(wl, assignment, snapshot)
-                if len(targets) > 0 {
-                    s.preempt(ctx, targets)
-                }
-                continue
-            }
-            
-            // 4. 提交准入决策
-            s.admit(ctx, wl, assignment)
-        }
-    }
-}
-
-// pkg/scheduler/flavorassigner/flavorassigner.go
-func (fa *FlavorAssigner) Assign(log logr.Logger, wl *workload.Info, cq *cache.ClusterQueueSnapshot) Assignment {
-    // 寻找最优资源组合
-    for _, rg := range cq.ResourceGroups {
-        assignment := fa.tryAssignResourceGroup(wl, rg)
-        if assignment.IsSuccessful() {
-            return assignment
-        }
-    }
-    return Assignment{RepresentativeMode: Fit}
-}
-```
-
----
-layout: table
-title: Kueue 源码架构分析 - 性能优化关键点
----
-
-| 优化技术 | 实现位置 | 效果 |
-|---------|---------|------|
-| **增量更新** | cache/cache.go | 减少 90% 不必要的计算 |
-| **快照机制** | cache/snapshot.go | 避免锁竞争，提升并发 |
-| **索引加速** | 使用 informer 索引 | O(1) 查询复杂度 |
-| **批处理** | webhooks/workload_webhook.go | 减少 API 调用 50% |
 
 ---
 layout: default
@@ -884,6 +410,483 @@ sequenceDiagram
 ```
 
 ---
+layout: boxes
+title: Kueue 设计理念
+---
+
+## Job First
+
+以作业为调度核心，而非单个 Pod
+
+**核心实现**：
+- **Workload 抽象层**：将 Job、MPIJob、RayJob 统一为 Workload
+- **批量资源预留**：通过 `AdmissionCheck` 确保资源原子性分配
+- **源码位置**：`apis/kueue/v1beta1/workload_types.go`
+
+## 与原生协作
+
+增强而非替代默认调度器
+
+**技术架构**：
+- **双层调度**：Kueue 负责准入控制，kube-scheduler 负责实际调度
+- **Webhook 注入**：通过 MutatingWebhook 动态修改 Pod 调度器名称
+- **性能影响**：增加 5-10ms 调度延迟，可接受范围内
+
+## 队列管理
+
+通过队列实现资源排队和公平性
+
+**算法实现**：
+- **公平共享算法**：基于 DRF (Dominant Resource Fairness)
+- **优先级反转处理**：通过 `workloadpriority` 包实现
+- **队列状态机**：Pending → Admitted → Finished 三态转换
+
+## 资源借用
+
+动态借用和归还资源，提升利用率
+
+**借用机制源码**：
+```go
+// pkg/cache/clusterqueue.go
+func (c *ClusterQueue) borrowingLimit(rName corev1.ResourceName) *resource.Quantity {
+    if c.Spec.ResourceGroups == nil {
+        return nil
+    }
+    for _, rg := range c.Spec.ResourceGroups {
+        for _, flvr := range rg.Flavors {
+            for _, r := range flvr.Resources {
+                if r.Name == rName && r.LendingLimit != nil {
+                    return r.LendingLimit
+                }
+            }
+        }
+    }
+    return nil
+}
+```
+
+---
+layout: default
+title: Kueue 设计理念深度解析 - Workload 生命周期状态机
+---
+
+```mermaid
+stateDiagram-v2
+    [*] --> Pending: 创建 Workload
+    Pending --> CheckingAdmission: 资源检查
+    CheckingAdmission --> Admitted: 通过准入
+    CheckingAdmission --> Pending: 资源不足
+    Admitted --> Running: Pod 调度成功
+    Running --> Succeeded: 作业完成
+    Running --> Failed: 作业失败
+    Succeeded --> [*]
+    Failed --> [*]
+    
+    note right of CheckingAdmission
+        AdmissionController 决策点
+        - 检查 ClusterQueue 配额
+        - 验证 ResourceFlavor 匹配
+        - 执行优先级抢占逻辑
+    end note
+```
+
+---
+layout: default
+title: Kueue 设计理念深度解析 - 公平性算法
+---
+
+```go
+// pkg/scheduler/fairness/dominant_resource_fairness.go
+type DRFShare struct {
+    workload  *kueue.Workload
+    allocated map[corev1.ResourceName]resource.Quantity
+    share     float64  // 主导资源份额
+}
+
+func (d *DRFScheduler) ComputeShares(queue *ClusterQueue) []DRFShare {
+    shares := make([]DRFShare, 0, len(queue.Workloads))
+    totalResources := queue.TotalResources()
+    
+    for _, wl := range queue.Workloads {
+        maxShare := 0.0
+        for rName, allocated := range wl.AllocatedResources {
+            total := totalResources[rName]
+            share := float64(allocated.MilliValue()) / float64(total.MilliValue())
+            if share > maxShare {
+                maxShare = share
+            }
+        }
+        shares = append(shares, DRFShare{
+            workload: wl,
+            share:    maxShare,
+        })
+    }
+    
+    // 按份额排序，实现公平调度
+    sort.Slice(shares, func(i, j int) bool {
+        return shares[i].share < shares[j].share
+    })
+    return shares
+}
+```
+
+---
+layout: table
+title: Kueue 设计理念深度解析 - 性能优化
+---
+
+| 优化项 | 实现方式 | 性能提升 |
+|--------|---------|----------|
+| **缓存机制** | 使用 informer 缓存，减少 API Server 压力 | QPS 提升 10x |
+| **批量处理** | 聚合 10ms 内的事件统一处理 | 延迟降低 50% |
+| **并发控制** | WorkQueue 限流，默认 50 并发 | CPU 使用降低 30% |
+| **索引优化** | 为 ClusterQueue 建立多维索引 | 查询速度提升 5x |
+
+---
+layout: default
+title: Kueue 设计理念深度解析 - 与 kube-scheduler 的协作机制
+---
+
+```yaml
+# Kueue 通过 annotation 与 scheduler 通信
+apiVersion: v1
+kind: Pod
+metadata:
+  annotations:
+    kueue.x-k8s.io/admission: '{"clusterQueue":"prod-queue","resourceFlavor":"gpu-a100"}'
+    scheduler.alpha.kubernetes.io/preferred-node-selector: "gpu-type=a100"
+spec:
+  schedulerName: default-scheduler  # 仍使用默认调度器
+```
+
+---
+layout: boxes
+title: Kueue 核心组件
+---
+
+## Controller
+
+协调作业生命周期
+
+**控制器架构**：
+- **工作队列**：基于 k8s.io/client-go/util/workqueue
+- **并发处理**：默认 10 个 worker 协程
+- **重试机制**：指数退避，最大重试 10 次
+
+## Admission Controller
+
+决定作业是否进入执行
+
+**准入逻辑**：
+- **配额检查**：O(1) 时间复杂度的资源计算
+- **优先级抢占**：基于堆的优先队列实现
+- **事务保证**：使用乐观锁避免资源超卖
+
+## Scheduler
+
+与 K8s 调度器协作分配资源
+
+**调度策略**：
+- **两阶段提交**：先预留资源，后创建 Pod
+- **亲和性传播**：将 ResourceFlavor 转换为节点选择器
+- **失败回滚**：30s 超时自动释放预留资源
+
+## ResourceFlavor
+
+定义异构资源类型
+
+**实现机制**：
+- **标签映射**：自动生成 nodeSelector 和 tolerations
+- **多维匹配**：支持 CPU 架构、GPU 型号等多维度
+- **动态发现**：通过 Node 标签自动识别可用资源
+
+---
+layout: default
+title: Kueue 核心组件解析 - 组件间通信架构
+---
+
+```mermaid
+graph LR
+    subgraph "API Server"
+        A[Workload CRD]
+        B[ClusterQueue CRD]
+        C[LocalQueue CRD]
+    end
+    
+    subgraph "Kueue Controller Manager"
+        D[Workload Controller]
+        E[Queue Controller]
+        F[Admission Controller]
+        G[Scheduler]
+    end
+    
+    subgraph "Data Flow"
+        H[Informer Cache]
+        I[Work Queue]
+        J[Event Bus]
+    end
+    
+    A --> H
+    B --> H
+    C --> H
+    H --> D
+    H --> E
+    D --> I
+    E --> I
+    I --> F
+    F --> G
+    G --> J
+    J --> A
+```
+
+---
+layout: default
+title: Kueue 核心组件解析 - 并发控制实现
+---
+
+```go
+// pkg/controller/workload/workload_controller.go
+type Controller struct {
+    client        client.Client
+    queue         workqueue.RateLimitingInterface
+    workers       int  // 默认 10
+    mu            sync.RWMutex
+    admittedCache map[string]*kueue.Workload
+}
+
+func (c *Controller) Start(ctx context.Context) error {
+    // 启动多个 worker 处理队列
+    for i := 0; i < c.workers; i++ {
+        go wait.UntilWithContext(ctx, c.worker, time.Second)
+    }
+    return nil
+}
+
+func (c *Controller) worker(ctx context.Context) {
+    for c.processNextItem(ctx) {
+    }
+}
+
+func (c *Controller) processNextItem(ctx context.Context) bool {
+    key, quit := c.queue.Get()
+    if quit {
+        return false
+    }
+    defer c.queue.Done(key)
+    
+    // 处理带超时控制
+    ctx, cancel := context.WithTimeout(ctx, 30*time.Second)
+    defer cancel()
+    
+    err := c.reconcile(ctx, key.(string))
+    if err != nil {
+        // 指数退避重试
+        c.queue.AddRateLimited(key)
+        return true
+    }
+    
+    c.queue.Forget(key)
+    return true
+}
+```
+
+---
+layout: default
+title: Kueue 核心组件解析 - 资源预留与释放机制
+---
+
+```go
+// pkg/cache/snapshot.go
+type Snapshot struct {
+    sync.RWMutex
+    queues      map[string]*ClusterQueueSnapshot
+    cohorts     map[string]*CohortSnapshot
+    generation  int64
+}
+
+func (s *Snapshot) Reserve(cq string, r Resources) error {
+    s.Lock()
+    defer s.Unlock()
+    
+    queue := s.queues[cq]
+    if queue == nil {
+        return fmt.Errorf("queue %s not found", cq)
+    }
+    
+    // 原子性检查和预留
+    if !queue.CanReserve(r) {
+        return ErrInsufficientResources
+    }
+    
+    queue.Reserve(r)
+    s.generation++
+    return nil
+}
+```
+
+---
+layout: table
+title: Kueue 核心组件解析 - 性能监控指标
+---
+
+| 指标名称 | 描述 | 告警阈值 |
+|---------|------|----------|
+| `kueue_admission_latency_seconds` | 准入决策延迟 | > 1s |
+| `kueue_workload_queue_depth` | 等待队列深度 | > 1000 |
+| `kueue_resource_usage_ratio` | 资源使用率 | > 95% |
+| `kueue_scheduler_throughput` | 调度吞吐量 | < 100/s |
+| `kueue_controller_sync_errors` | 同步错误率 | > 1% |
+
+---
+layout: default
+title: Kueue 源码分析 - 核心模块划分
+---
+
+```mermaid
+graph TB
+    subgraph "API 层"
+        A[Workload API]
+        B[Queue APIs]
+        C[ResourceFlavor API]
+    end
+    
+    subgraph "控制器层"
+        D[Workload Controller]
+        E[Queue Controller]
+        F[Jobs Controller]
+    end
+    
+    subgraph "核心调度层"
+        G[Scheduler]
+        H[Cache Manager]
+        I[Flavorassigner]
+    end
+    
+    subgraph "工具层"
+        J[Metrics]
+        K[Webhooks]
+        L[Utils]
+    end
+    
+    A --> D
+    B --> E
+    C --> I
+    D --> G
+    E --> G
+    F --> G
+    G --> H
+    G --> I
+```
+
+---
+layout: default
+title: Kueue 源码分析 - 关键数据结构
+---
+
+```go
+// pkg/workload/workload.go
+type Info struct {
+    Obj *kueue.Workload
+    // 资源请求的快照
+    TotalRequests workload.Requests
+    // 优先级类
+    Priority *int32
+    // 调度上下文
+    SchedulingContext *SchedulingContext
+}
+
+// pkg/cache/clusterqueue.go  
+type ClusterQueue struct {
+    Name              string
+    Cohort            *Cohort
+    ResourceGroups    []ResourceGroup
+    NamespaceSelector labels.Selector
+    Preemption        kueue.ClusterQueuePreemption
+    FairWeight        resource.Quantity
+    
+    // 运行时状态
+    PendingWorkloads  map[string]*workload.Info
+    AdmittedWorkloads map[string]*workload.Info
+    
+    // 资源使用统计
+    Usage         Resources
+    GuaranteedQuota Resources
+}
+
+// pkg/scheduler/scheduler.go
+type Scheduler struct {
+    queues          *cache.ClusterQueueSnapshot
+    cache           *cache.Cache
+    preemptor       *preemption.Preemptor
+    flavorAssigner  *flavorassigner.FlavorAssigner
+}
+```
+
+---
+layout: default
+title: Kueue 源码分析 - 调度核心算法
+---
+
+```go
+// pkg/scheduler/scheduler.go - 主调度循环
+func (s *Scheduler) schedule(ctx context.Context) wait.ContextFunc {
+    return func(ctx context.Context) {
+        log := ctrl.LoggerFrom(ctx)
+        
+        // 1. 获取待调度工作负载
+        snapshot := s.cache.Snapshot()
+        
+        // 2. 执行调度循环
+        for {
+            // 获取下一个工作负载
+            wl, cq := s.getNextWorkload(snapshot)
+            if wl == nil {
+                break
+            }
+            
+            // 3. 尝试分配资源
+            assignment := s.flavorAssigner.Assign(log, wl, cq)
+            if assignment.PodSets == nil {
+                // 资源不足，尝试抢占
+                targets := s.preemptor.GetTargets(wl, assignment, snapshot)
+                if len(targets) > 0 {
+                    s.preempt(ctx, targets)
+                }
+                continue
+            }
+            
+            // 4. 提交准入决策
+            s.admit(ctx, wl, assignment)
+        }
+    }
+}
+
+// pkg/scheduler/flavorassigner/flavorassigner.go
+func (fa *FlavorAssigner) Assign(log logr.Logger, wl *workload.Info, cq *cache.ClusterQueueSnapshot) Assignment {
+    // 寻找最优资源组合
+    for _, rg := range cq.ResourceGroups {
+        assignment := fa.tryAssignResourceGroup(wl, rg)
+        if assignment.IsSuccessful() {
+            return assignment
+        }
+    }
+    return Assignment{RepresentativeMode: Fit}
+}
+```
+
+---
+layout: table
+title: Kueue 源码分析 - 性能优化
+---
+
+| 优化技术 | 实现位置 | 效果 |
+|---------|---------|------|
+| **增量更新** | cache/cache.go | 减少 90% 不必要的计算 |
+| **快照机制** | cache/snapshot.go | 避免锁竞争，提升并发 |
+| **索引加速** | 使用 informer 索引 | O(1) 查询复杂度 |
+| **批处理** | webhooks/workload_webhook.go | 减少 API 调用 50% |
+
+---
 layout: default
 title: Kueue 特性：资源借用与回收
 ---
@@ -992,32 +995,6 @@ Kubernetes 官方项目
 - **活跃开发**：月均 100+ PR，50+ 贡献者
 
 ---
-layout: default
-title: Kueue 性能测试 - 调度吞吐量测试
----
-
-```mermaid
-graph LR
-    subgraph "测试环境"
-        A[100 节点集群<br/>每节点 96 CPU]
-        B[1000 并发作业<br/>每作业 8 CPU]
-        C[Kueue v0.8.0<br/>默认配置]
-    end
-```
-
----
-layout: table
-title: Kueue 性能测试 - 性能基准测试结果
----
-
-| 指标 | Kueue | 原生 K8s | 提升 |
-|------|-------|---------|------|
-| **调度吞吐量** | 850 jobs/min | 320 jobs/min | 2.66x |
-| **准入延迟 P50** | 12ms | 45ms | 73% ↓ |
-| **准入延迟 P99** | 89ms | 523ms | 83% ↓ |
-| **资源利用率** | 94% | 67% | 40% ↑ |
-
----
 layout: boxes
 title: Kueue 适用场景
 ---
@@ -1059,6 +1036,32 @@ title: Kueue 适用场景
 - **计费集成**：基于实际使用量的 chargeback
 
 ---
+layout: default
+title: Kueue 性能测试 - 调度吞吐量测试
+---
+
+```mermaid
+graph LR
+    subgraph "测试环境"
+        A[100 节点集群<br/>每节点 96 CPU]
+        B[1000 并发作业<br/>每作业 8 CPU]
+        C[Kueue v0.8.0<br/>默认配置]
+    end
+```
+
+---
+layout: table
+title: Kueue 性能测试 - 性能基准测试结果
+---
+
+| 指标 | Kueue | 原生 K8s | 提升 |
+|------|-------|---------|------|
+| **调度吞吐量** | 850 jobs/min | 320 jobs/min | 2.66x |
+| **准入延迟 P50** | 12ms | 45ms | 73% ↓ |
+| **准入延迟 P99** | 89ms | 523ms | 83% ↓ |
+| **资源利用率** | 94% | 67% | 40% ↑ |
+
+---
 layout: chapter
 part: 3
 title: Volcano 深度解析
@@ -1098,7 +1101,7 @@ image: volcano.png
 
 ---
 layout: boxes
-title: Volcano 核心组件
+title: Volcano 核心组件 - CRD
 image: volcano-arch.png
 ---
 
@@ -1131,7 +1134,7 @@ image: volcano-arch.png
 
 ---
 layout: boxes
-title: Volcano 核心组件
+title: Volcano 核心组件 - Control
 image: volcano-arch.png
 ---
 
@@ -1164,7 +1167,7 @@ image: volcano-arch.png
 
 ---
 layout: boxes
-title: Volcano 核心组件
+title: Volcano 核心组件 - Extension
 image: volcano-arch.png
 ---
 
@@ -1360,7 +1363,7 @@ graph TD
 
 ---
 layout: default
-title: Volcano 插件架构深度解析
+title: Volcano 插件架构解析
 ---
 
 ```go
@@ -1395,7 +1398,7 @@ type Action interface {
 
 ---
 layout: default
-title: Volcano 插件架构深度解析 （Gang 插件核心实现）
+title: Volcano 插件架构解析 - Gang 插件
 ---
 
 ```go
@@ -1431,7 +1434,7 @@ func (gp *gangPlugin) OnSessionOpen(ssn *framework.Session) {
 
 ---
 layout: default
-title: Volcano 插件架构深度解析 （Action 执行流程）
+title: Volcano 插件架构解析 - Action 执行流程
 ---
 
 ```mermaid
@@ -1461,7 +1464,7 @@ sequenceDiagram
 
 ---
 layout: table
-title: Volcano 插件架构深度解析 (性能优化)
+title: Volcano 插件架构解析 - 性能优化
 ---
 
 | 优化项 | 实现方式 | 性能提升 |
@@ -1473,7 +1476,7 @@ title: Volcano 插件架构深度解析 (性能优化)
 
 ---
 layout: default
-title: Volcano 高级特性深度解析 - 抢占机制
+title: Volcano 特性 - 抢占机制
 ---
 
 **Gang 插件中的抢占算法** - `gang.go:108-130`：
@@ -1506,7 +1509,7 @@ preemptableFn := func(preemptor *api.TaskInfo, preemptees []*api.TaskInfo) ([]*a
 
 ---
 layout: default
-title: Volcano 高级特性深度解析 - 拓扑感知调度
+title: Volcano 特性 - 拓扑感知调度
 ---
 
 NUMA 感知调度
@@ -1549,7 +1552,7 @@ func (np *NUMAPlugin) OnSessionOpen(ssn *framework.Session) {
 
 ---
 layout: default
-title: Volcano 高级特性深度解析 - 拓扑感知调度
+title: Volcano 特性 - 拓扑感知调度
 ---
 
 GPU 拓扑感知
@@ -1582,7 +1585,7 @@ data:
 
 ---
 layout: default
-title: Volcano 高级特性深度解析 - 弹性队列与资源借用
+title: Volcano 特性 - 弹性队列与资源借用
 ---
 
 ```go
@@ -1617,7 +1620,7 @@ type ElasticPolicy struct {
 
 ---
 layout: default
-title: Volcano 高级特性深度解析 - 作业迁移与容错
+title: Volcano 特性 - 作业迁移与容错
 ---
 
 Live Migration 实现
@@ -1658,7 +1661,7 @@ func (cc *jobController) migrateTask(task *batch.Task, targetNode string) error 
 
 ---
 layout: default
-title: Volcano 高级特性深度解析 - 作业迁移与容错
+title: Volcano 特性 - 作业迁移与容错
 ---
 
 故障检测与自愈
@@ -1694,7 +1697,7 @@ spec:
 
 ---
 layout: default
-title: Volcano 高级特性深度解析 - 高级调度策略
+title: Volcano 特性 - 高级调度策略
 ---
 
 时间窗口调度
@@ -1724,7 +1727,7 @@ func (tw *TimeWindowPlugin) OnSessionOpen(ssn *framework.Session) {
 
 ---
 layout: default
-title: Volcano 高级特性深度解析 - 高级调度策略
+title: Volcano 特性 - 高级调度策略
 ---
 
 成本感知调度
@@ -1884,7 +1887,7 @@ title: 功能特性对比
 
 ---
 layout: table
-title: 性能测试对比 - 测试环境规格
+title: 性能测试对比
 ---
 
 | 项目 | 配置 |
@@ -1897,10 +1900,8 @@ title: 性能测试对比 - 测试环境规格
 
 ---
 layout: default
-title: 性能测试对比 - 调度性能基准测试
+title: 性能测试对比 - 调度吞吐量对比
 ---
-
-调度吞吐量对比
 
 ```mermaid
 graph TD
@@ -1913,7 +1914,7 @@ graph TD
 
 ---
 layout: table
-title: 性能测试对比 - 调度性能基准测试
+title: 性能测试对比 - 调度吞吐量测试结果
 ---
 
 | 指标 | Native K8s | Kueue | Volcano | 测试说明 |
@@ -1927,7 +1928,7 @@ title: 性能测试对比 - 调度性能基准测试
 
 ---
 layout: default
-title: 性能测试对比 - Gang 调度性能测试
+title: 性能测试对比 - Gang 调度性能对比
 ---
 
 ```yaml
@@ -1952,7 +1953,7 @@ spec:
 
 ---
 layout: table
-title: 性能测试对比 - 测试结果
+title: 性能测试对比 - Gang 调度测试结果
 ---
 
 | 场景 | Native K8s | Kueue | Volcano |
@@ -1964,7 +1965,7 @@ title: 性能测试对比 - 测试结果
 
 ---
 layout: default
-title: 大规模压力测试对比 - 压测代码示例
+title: 压力测试对比 - 压测代码示例
 ---
 
 ```go
@@ -1995,7 +1996,7 @@ func StressTest(scheduler string, jobCount int) {
 
 ---
 layout: table
-title: 大规模压力测试对比 - 极限测试结果
+title: 压力测试对比 - 极限测试结果
 ---
 
 | 测试规模 | Native K8s | Kueue | Volcano |
@@ -2056,7 +2057,19 @@ graph LR
 
 ---
 layout: table
-title: 特定场景性能对比
+title: 适用场景对比
+---
+
+| 场景                | Kueue          | Volcano        |
+|:--------------------|:----------------------|:----------------------|
+| **AI/ML 训练**     | 中等 (通用场景)      | 高 (大规模分布式)    |
+| **大数据批处理**   | 高 (多租户公平性)    | 中等 (依赖复杂性)    |
+| **CI/CD 流水线**   | 高 (轻量级集成)      | 低 (过于重型)        |
+| **HPC 科学计算**   | 低 (功能不足)        | 高 (性能优化)        |
+
+---
+layout: table
+title: 特定场景下性能对比
 ---
 
 | 场景 | 最佳选择 | 原因 | 性能差距 |
@@ -2067,18 +2080,6 @@ title: 特定场景性能对比
 | **混合负载** | Kueue | 资源借用 | +30% |
 | **HPC 作业** | Volcano | 专门优化 | +60% |
 | **多租户公平性** | Kueue | DRF 算法 | +25% |
-
----
-layout: table
-title: 适用场景对比
----
-
-| 场景                | Kueue          | Volcano        |
-|:--------------------|:----------------------|:----------------------|
-| **AI/ML 训练**     | 中等 (通用场景)      | 高 (大规模分布式)    |
-| **大数据批处理**   | 高 (多租户公平性)    | 中等 (依赖复杂性)    |
-| **CI/CD 流水线**   | 高 (轻量级集成)      | 低 (过于重型)        |
-| **HPC 科学计算**   | 低 (功能不足)        | 高 (性能优化)        |
 
 ---
 layout: table
@@ -2163,7 +2164,7 @@ title: GPU 资源优化的重要性
 
 ---
 layout: default
-title: 混部调度策略深度解析 （混部调度架构设计）
+title: 混部调度策略 - 架构设计
 ---
 
 ```mermaid
@@ -2200,7 +2201,7 @@ graph TD
 
 ---
 layout: default
-title: 混部调度策略深度解析（技术实现）
+title: 混部调度策略 - 技术实现
 ---
 
 ```yaml
@@ -2245,7 +2246,7 @@ spec:
 
 ---
 layout: table
-title: 混部调度策略深度解析 （性能数据对比）
+title: 混部调度策略 - 性能数据对比
 ---
 
 | 指标 | 纯训练集群 | 纯推理集群 | 混部集群 | 提升 |
@@ -2257,7 +2258,7 @@ title: 混部调度策略深度解析 （性能数据对比）
 
 ---
 layout: default
-title: 混部调度策略深度解析（风险控制机制）
+title: 混部调度策略 - 风险控制机制
 ---
 
 ```go
@@ -2292,7 +2293,7 @@ func (ms *MixedScheduler) Schedule(workload Workload) error {
 
 ---
 layout: default
-title: 弹性伸缩策略实战 （多维度弹性伸缩架构）
+title: 弹性伸缩策略 - 多维度弹性伸缩架构
 ---
 
 ```mermaid
@@ -2330,7 +2331,7 @@ graph LR
 
 ---
 layout: default
-title: 弹性伸缩策略实战 （HPA + VPA 组合）
+title: 弹性伸缩策略 - HPA + VPA
 ---
 
 ```yaml
@@ -2402,7 +2403,7 @@ spec:
 
 ---
 layout: default
-title: 弹性伸缩策略实战 （KEDA 事件驱动伸缩）
+title: 弹性伸缩策略 -KEDA 事件驱动伸缩
 ---
 
 ```yaml
@@ -2435,7 +2436,7 @@ spec:
 
 ---
 layout: table
-title: 弹性伸缩策略实战 （弹性伸缩效果数据）
+title: 弹性伸缩策略 -  弹性伸缩效果数据
 ---
 
 | 场景 | 传统固定资源 | 弹性伸缩 | 改善 |
@@ -2447,7 +2448,7 @@ title: 弹性伸缩策略实战 （弹性伸缩效果数据）
 
 ---
 layout: default
-title: 资源超卖 - 技术详解
+title: 资源超卖
 ---
 
 ```go
@@ -2552,7 +2553,7 @@ spec:
 
 ---
 layout: default
-title: 资源超卖技 - 智能资源回收（示例）
+title: 资源超卖 - 智能资源回收（示例）
 ---
 
 ```python
@@ -2596,7 +2597,7 @@ class IntelligentReclaimer:
 
 ---
 layout: table
-title: 资源超卖 - 生产环境效果
+title: 资源超卖 - 示例场景数据
 ---
 
 | 指标 | 无超卖 | 保守超卖(1.3x) | 激进超卖(2.0x) |
@@ -2614,7 +2615,7 @@ title: 混合调度：训练与推理共存
 
 ---
 layout: two-cols
-title: 训练与推理协同调度的挑战（同一集群）
+title: 训练与推理协同调度的挑战
 leftTitle: 资源需求
 rightTitle: 技术挑战
 ---
@@ -2629,43 +2630,6 @@ rightTitle: 技术挑战
   - 资源竞争可能影响推理性能
   - 如何保证推理任务的SLA
   - 动态负载下的资源分配策略
-
----
-layout: default
-title: 协同调度配置示例 - VolcanoJob
----
-
-```yaml
-apiVersion: batch.volcano.sh/v1alpha1
-kind: Job
-metadata:
-  name: ai-mixed-job
-spec:
-  minAvailable: 3
-  schedulerName: volcano
-  priorityClassName: high-priority
-  tasks:
-    - replicas: 2
-      name: training-task
-      template:
-        spec:
-          containers:
-            - name: trainer
-              image: tensorflow:latest
-              resources:
-                requests:
-                  nvidia.com/gpu: "1"
-    - replicas: 4
-      name: inference-task
-      template:
-        spec:
-          containers:
-            - name: inferencer
-              image: tensorflow-serving:latest
-              resources:
-                requests:
-                  nvidia.com/gpu: "0.5"
-```
 
 ---
 layout: table
