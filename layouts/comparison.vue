@@ -107,16 +107,15 @@
 .comparison-layout .comparison-content table {
   width: 100%;
   margin: 0;
-  table-layout: fixed;
-  border-collapse: separate !important;
+  table-layout: auto;
+  border-collapse: separate;
   border-spacing: 0;
   background: rgba(26, 26, 46, 0.6);
-  border: 2px solid rgba(255, 255, 255, 0.5) !important;
+  border: 2px solid rgba(255, 255, 255, 0.5);
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 
-    0 0 0 1px rgba(255, 255, 255, 0.1),
-    0 10px 32px rgba(0, 0, 0, 0.5),
+    0 4px 16px rgba(0, 0, 0, 0.3),
     inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
@@ -131,22 +130,21 @@
   font-weight: 700;
   font-size: 1.15rem;
   color: var(--daocloud-primary);
-  border-bottom: 2px solid rgba(255, 255, 255, 0.5) !important;
-  border-right: 1px solid rgba(255, 255, 255, 0.3) !important;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.5);
+  border-right: 1px solid rgba(255, 255, 255, 0.3);
   text-transform: uppercase;
   letter-spacing: 0.08em;
   background: rgba(0, 255, 127, 0.08);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .comparison-layout .comparison-content th:first-child {
-  width: 20%; /* 固定第一列宽度 */
+  min-width: 180px; /* 使用最小宽度替代固定宽度 */
 }
 
 .comparison-layout .comparison-content th:last-child {
-  border-right: none !important;
+  border-right: none;
 }
 
 /* 表格主体 */
@@ -156,32 +154,33 @@
 
 .comparison-layout .comparison-content td {
   padding: 1.2rem 1.5rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.2) !important;
-  border-right: 1px solid rgba(255, 255, 255, 0.2) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  border-right: 1px solid rgba(255, 255, 255, 0.2);
   font-size: 1.1rem;
   line-height: 1.6;
   color: var(--daocloud-text-light);
   background: transparent;
   vertical-align: top;
-  transition: all 0.2s ease;
+  transition: background-color 0.2s ease;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .comparison-layout .comparison-content td:last-child {
-  border-right: none !important;
+  border-right: none;
 }
 
 .comparison-layout .comparison-content tbody tr:last-child td {
-  border-bottom: none !important;
+  border-bottom: none;
 }
 
-/* 悬停效果 - 增强交互感 */
+/* 悬停效果 - 优化性能 */
 .comparison-layout .comparison-content tbody tr {
-  transition: all 0.3s ease;
+  transition: background-color 0.2s ease;
 }
 
 .comparison-layout .comparison-content tbody tr:hover {
-  background: rgba(0, 255, 127, 0.12) !important;
-  transform: translateX(4px);
+  background: rgba(0, 255, 127, 0.12);
 }
 
 .comparison-layout .comparison-content tbody tr:hover td {
@@ -199,9 +198,9 @@
   color: rgba(0, 255, 127, 1);
   background: rgba(0, 255, 127, 0.08);
   border-left: 4px solid var(--daocloud-primary);
-  white-space: nowrap;
   font-size: 1.05rem;
   letter-spacing: 0.02em;
+  min-width: 180px;
 }
 
 /* 表格内的代码样式 */
@@ -312,28 +311,58 @@
     padding: 80px 20px 20px 20px;
   }
   
-  /* 移动端表格优化 */
+  /* 移动端表格优化 - 卡片式布局 */
   .comparison-layout .comparison-content table {
-    font-size: 0.9rem;
     display: block;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
+    font-size: 1rem;
   }
   
-  .comparison-layout .comparison-content th,
+  .comparison-layout .comparison-content thead {
+    display: none; /* 隐藏表头，使用卡片式布局 */
+  }
+  
+  .comparison-layout .comparison-content tbody {
+    display: block;
+  }
+  
+  .comparison-layout .comparison-content tr {
+    display: block;
+    margin-bottom: 1rem;
+    background: rgba(26, 26, 46, 0.8);
+    border-radius: 8px;
+    padding: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+  
   .comparison-layout .comparison-content td {
-    padding: 0.8rem 1rem;
-    font-size: 0.9rem;
+    display: block;
+    padding: 0.5rem 0;
+    border: none;
+    text-align: left;
   }
   
-  /* 移动端隐藏第一列的 nowrap */
+  .comparison-layout .comparison-content td:before {
+    content: attr(data-label) ": ";
+    font-weight: bold;
+    color: var(--daocloud-primary);
+    display: inline-block;
+    min-width: 100px;
+  }
+  
   .comparison-layout .comparison-content td:first-child {
-    white-space: normal;
+    border-left: none;
+    background: transparent;
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
   }
   
-  /* 移动端取消悬停位移效果 */
-  .comparison-layout .comparison-content tbody tr:hover {
-    transform: none;
+  .comparison-layout .comparison-content td:first-child:before {
+    content: "";
+    display: none;
   }
 }
 
@@ -362,4 +391,4 @@
 .comparison-layout .comparison-content > *:not(table) {
   max-width: 1200px;
 }
-</style> 
+</style>
