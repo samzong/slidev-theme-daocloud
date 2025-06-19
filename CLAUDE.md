@@ -10,7 +10,7 @@ This is **Slidev Theme DaoCloud** - a custom Slidev presentation theme designed 
 
 ### Theme Structure
 - **Entry Point**: `index.ts` - defines theme configuration, colors, and registers all layouts/components
-- **Layouts**: 15 specialized layout components in `layouts/` directory for different presentation needs
+- **Layouts**: 14 specialized layout components in `layouts/` directory for different presentation needs
 - **Components**: 4 reusable components (`Logo.vue`, `PoweredBy.vue`, `ProgressBar.vue`, `AnimationController.vue`)
 - **Composables**: `useThemeConfig.ts` - centralized theme configuration management
 - **Styles**: Modular CSS architecture with separate files for layouts, code highlighting, and components
@@ -20,7 +20,7 @@ This is **Slidev Theme DaoCloud** - a custom Slidev presentation theme designed 
 - `default.vue` - Dark content pages
 - `white.vue` - Light content pages  
 - `intro.vue` - Introduction/profile pages
-- `comparison.vue` - Side-by-side comparisons
+- `table.vue` - Table layouts for data comparison
 - `two-cols.vue` - Two-column layouts
 - `image-left.vue` / `image-right.vue` / `image.vue` - Image-text combinations
 - `quote.vue` - Quote/testimonial pages
@@ -185,7 +185,7 @@ author: "Author Name"
 ## File Organization
 
 - `index.ts` - Theme registration and configuration
-- `layouts/` - All layout Vue components (15 total)
+- `layouts/` - All layout Vue components (14 total)
 - `components/` - Reusable UI components (4 total)
 - `composables/` - Vue composables for shared logic
 - `styles/` - Modular CSS files and style entry point

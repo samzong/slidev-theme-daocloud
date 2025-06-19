@@ -24,7 +24,6 @@ export default {
     chapter: './layouts/chapter.vue',
     toc: './layouts/toc.vue',
     white: './layouts/white.vue',
-    comparison: './layouts/comparison.vue',
     intro: './layouts/intro.vue',
     'two-cols': './layouts/two-cols.vue',
     'image-left': './layouts/image-left.vue',
@@ -32,6 +31,7 @@ export default {
     center: './layouts/center.vue',
     quote: './layouts/quote.vue',
     timeline: './layouts/timeline.vue',
+    table: './layouts/table.vue',
   },
   components: {
     Logo: './components/Logo.vue',

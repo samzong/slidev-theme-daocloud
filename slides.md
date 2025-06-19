@@ -86,7 +86,7 @@ image: public/scheduling-framework-extensions.png
 -->
 
 ---
-layout: comparison
+layout: table
 title: 批处理调度的核心挑战与业界解决方案
 ---
 
@@ -831,7 +831,7 @@ title: Kueue vs. Volcano
 -->
 
 ---
-layout: comparison
+layout: table
 title:  设计理念对比
 ---
 
@@ -850,7 +850,7 @@ title:  设计理念对比
 -->
 
 ---
-layout: comparison
+layout: table
 title:  功能特性对比
 ---
 
@@ -864,7 +864,7 @@ title:  功能特性对比
 | **多集群**    | MultiKueue (实验性)           | 暂无原生支持                |
 
 ---
-layout: comparison
+layout: table
 title: 性能对比
 ---
 
@@ -875,7 +875,7 @@ title: 性能对比
 | **大规模作业** | 适合中小规模 | 更适合大规模 HPC |
 
 ---
-layout: comparison
+layout: table
 title: 适用场景对比
 ---
 
@@ -887,7 +887,7 @@ title: 适用场景对比
 | **HPC 科学计算**   | 低 (功能不足)        | 高 (性能优化)        |
 
 ---
-layout: comparison
+layout: table
 title: 2025 发展路线对比
 ---
 
