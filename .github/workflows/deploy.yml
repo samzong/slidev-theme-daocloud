@@ -25,14 +25,14 @@ jobs:
         with:
           node-version: 'lts/*'
 
-      - name: Setup @antfu/ni
-        run: npm i -g @antfu/ni
+      - name: Setup @slidev/cli
+        run: npm install -g @slidev/cli
 
       - name: Install dependencies
-        run: nci
+        run: npm install
 
       - name: Build
-        run: nr build --base /${{github.event.repository.name}}/
+        run: slidev build --base /${{github.event.repository.name}}/
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
