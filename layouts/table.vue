@@ -74,7 +74,8 @@ const { showProgressBar } = useThemeConfig()
 .table-wrapper {
   width: 100%;
   max-width: 100%;
-  overflow-x: auto;
+  max-height: 75vh;
+  overflow: auto;
   border-radius: 12px;
   background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(10px);
@@ -86,8 +87,8 @@ const { showProgressBar } = useThemeConfig()
 .table-wrapper :deep(table) {
   width: 100%;
   border-collapse: collapse;
-  font-size: 1.1rem;
-  line-height: 1.6;
+  font-size: 0.8rem;
+  line-height: 1.0;
   margin: 0;
   background: transparent;
 }
@@ -100,10 +101,10 @@ const { showProgressBar } = useThemeConfig()
 }
 
 .table-wrapper :deep(thead th) {
-  padding: 18px 24px;
+  padding: 14px 20px;
   text-align: left;
   font-weight: 700;
-  font-size: 1.2rem;
+  font-size: 1rem;
   color: var(--daocloud-bg-dark);
   letter-spacing: 0.05em;
   text-transform: uppercase;
@@ -138,25 +139,25 @@ const { showProgressBar } = useThemeConfig()
 }
 
 .table-wrapper :deep(tbody td) {
-  padding: 20px 24px;
+  padding: 16px 20px;
   color: var(--daocloud-text-light);
-  font-size: 1.1rem;
-  line-height: 1.7;
+  font-size: 0.8rem;
+  line-height: 1.0;
   vertical-align: top;
   border: none;
   word-wrap: break-word;
-  min-height: 60px;
+  min-height: 50px;
 }
 
 /* 动态行高支持 */
 .table-wrapper :deep(tbody td) {
   height: auto;
-  min-height: 60px;
+  min-height: 50px;
 }
 
 .table-wrapper :deep(tbody td p) {
-  margin: 0 0 0.8rem 0;
-  line-height: 1.6;
+  margin: 0 0 0.6rem 0;
+  line-height: 1.0;
 }
 
 .table-wrapper :deep(tbody td p:last-child) {
@@ -233,7 +234,7 @@ const { showProgressBar } = useThemeConfig()
   }
   
   .page-title {
-    font-size: 2rem;
+    font-size: 1.4rem;
   }
   
   .table-content {
