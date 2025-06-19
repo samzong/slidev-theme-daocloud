@@ -73,7 +73,7 @@ title: Kubernetes 原生调度
 ---
 layout: image-right
 title: Kubernetes 原生调度的局限性
-image: /scheduling-framework-extensions.png
+image: scheduling-framework-extensions.png
 ---
 
 `default-scheduler` 为通用场景设计，但在批处理领域力不从心
@@ -414,7 +414,7 @@ spec:
 ---
 layout: image-right
 title: Kueue 核心架构
-image: /kueue.png
+image: kueue.png
 ---
 
 - **LocalQueue**: 租户级队列，组织作业
@@ -926,7 +926,7 @@ value: 1000
 ---
 layout: image-right
 title: Kueue 特性：MultiKueue (新)
-image: /kueue-multikueue.png
+image: kueue-multikueue.png
 ---
 
 - **目标**: 跨集群作业调度
@@ -936,7 +936,7 @@ image: /kueue-multikueue.png
 ---
 layout: image-right
 title: Kueue 特性： TAS（拓扑感知调度） (新)
-image: /kueue-tas.png
+image: kueue-tas.png
 ---
 
 TAS 调度算法分两个主要阶段运行：
@@ -1088,7 +1088,7 @@ v1.12
 ---
 layout: image-right
 title: Volcano 设计理念
-image: /volcano.png
+image: volcano.png
 ---
 
 - **HPC 优先**: 借鉴传统高性能计算调度
@@ -1099,7 +1099,7 @@ image: /volcano.png
 ---
 layout: boxes
 title: Volcano 核心组件
-image: /volcano-arch.png
+image: volcano-arch.png
 ---
 
 ## **VolcanoJob**
@@ -1132,7 +1132,7 @@ image: /volcano-arch.png
 ---
 layout: boxes
 title: Volcano 核心组件
-image: /volcano-arch.png
+image: volcano-arch.png
 ---
 
 ## **vc-scheduler**
@@ -1165,7 +1165,7 @@ image: /volcano-arch.png
 ---
 layout: boxes
 title: Volcano 核心组件
-image: /volcano-arch.png
+image: volcano-arch.png
 ---
 
 ## **插件系统**

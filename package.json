@@ -34,7 +34,8 @@
   ],
   "devDependencies": {
     "@slidev/cli": "^0.48.0",
-    "@slidev/types": "^0.48.0"
+    "@slidev/types": "^0.48.0",
+    "playwright-chromium": "^1.53.1"
   },
   "peerDependencies": {
     "@slidev/cli": "*"
