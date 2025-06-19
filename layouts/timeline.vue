@@ -37,6 +37,8 @@
         </div>
       </div>
     </div>
+    <ProgressBar v-if="showProgressBar" />
+    <AnimationController />
   </div>
 </template>
 
@@ -47,6 +49,9 @@ interface TimelineNode {
   title: string
   content: string
 }
+import { useThemeConfig } from '../composables/useThemeConfig'
+
+const { showProgressBar } = useThemeConfig()
 
 const nodes = ref<TimelineNode[]>([])
 const originalContent = ref<HTMLElement>()

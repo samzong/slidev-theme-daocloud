@@ -8,6 +8,13 @@ date: '2025-06-18'
 author: "船长"
 showLogo: false
 showPoweredBy: false
+fonts:
+  # 基础字体
+  sans: Robot
+  # 与 UnoCSS 的 `font-serif` css 类一同使用
+  serif: Robot Slab
+  # 用于代码块、内联代码等
+  mono: Fira Code
 ---
 
 ---
@@ -1796,69 +1803,6 @@ title: Volcano 优势
 - **Ray**：Gang 调度支持
 
 ---
-layout: default
-title: Volcano 性能基准测试数据
----
-
-## 1. 大规模集群测试结果
-
-**测试环境**：
-- **集群规模**：5000 节点，40000 CPU，8000 GPU
-- **作业类型**：混合 AI 训练和 HPC 任务
-- **测试时长**：7×24 小时连续运行
-
-```mermaid
-graph TD
-    subgraph "调度性能对比"
-        A[调度延迟<br/>Volcano: 45ms<br/>Default: 312ms]
-        B[吞吐量<br/>Volcano: 1580/min<br/>Default: 420/min]
-        C[失败率<br/>Volcano: 0.2%<br/>Default: 3.7%]
-    end
-```
-
-## 2. AI 训练加速效果
-
-| 框架 | 模型 | GPU数 | Volcano | 默认调度器 | 加速比 |
-|------|------|-------|---------|-----------|--------|
-| **PyTorch** | ResNet-50 | 64 | 1.2h | 1.8h | 1.5x |
-| **TensorFlow** | BERT-Large | 128 | 3.5h | 5.2h | 1.48x |
-| **MXNet** | GPT-2 | 256 | 8.3h | 13.1h | 1.58x |
-| **PaddlePaddle** | ERNIE 3.0 | 512 | 15.7h | 26.4h | 1.68x |
-
-**加速原因分析**：
-1. **Gang 调度**减少等待时间：平均减少 67%
-2. **拓扑感知**降低通信开销：跨节点通信减少 45%
-3. **资源预留**避免碎片化：GPU 碎片率从 18% 降至 3%
-
-## 3. HPC 工作负载优化
-
-```yaml
-# MPI 作业性能对比
-workload: HPL Benchmark
-problem_size: 50000
-nodes: 128 (每节点 96 核)
-
-results:
-  volcano:
-    runtime: 892s
-    efficiency: 94.3%
-    network_util: 87%
-  
-  default:
-    runtime: 1456s
-    efficiency: 71.2%
-    network_util: 52%
-```
-
-## 4. 生产环境案例
-
-| 公司 | 场景 | 规模 | 效果 |
-|------|------|------|------|
-| **华为云** | ModelArts | 10K+ GPU | 训练效率提升 40% |
-| **百度** | PaddlePaddle | 5K+ GPU | 资源利用率提升 35% |
-| **京东** | 推荐系统 | 3K+ GPU | 调度延迟降低 80% |
-
----
 layout: boxes
 title: Volcano 适用场景
 ---
@@ -2145,7 +2089,7 @@ title: 发展路线对比
 |:--------------------|:----------------------|:----------------------|
 | **多集群调度**     | 🚀 **MultiKueue 增强**<br/>用户体验优化      | 🆕 **原生支持开发中**<br/>跨云跨集群调度    |
 | **AI 优化**           | 🍀 **通用 AI 支持**<br/>多框架集成      | 🎆 **CNAI 深度特化**<br/>GPU 共享、NUMA 感知    |
-| **资源管理**        | 📊 **味道分配策略**<br/>成本 vs 借用优化   | 📈 **弹性分层队列**<br/>动态资源超卖    |
+| **资源管理**        | 📊 **智能分配策略**<br/>成本 vs 借用优化   | 📈 **弹性分层队列**<br/>动态资源超卖    |
 | **生态集成**        | 🤝 **广泛集成**<br/>Kubeflow, Spark, Ray  | 💪 **深度集成**<br/>Flink, MindSpore 原生支持 |
 | **统一调度**        | ☮️ **与默认调度器协作** | 🌐 **完全替代 kube-scheduler**<br/>统一微服务+AI 调度 |
 
