@@ -15,9 +15,9 @@ layout: intro
 avatar: https://avatars.githubusercontent.com/u/13782141?v=4
 title: 船长 @samzong
 subtitle: 资深云原生 及 AI 平台产品架构与布道师
-tags: 
+tags:
   - "Cloud-Native"
-  - "Kubernetes" 
+  - "Kubernetes"
   - "LLM Infra"
 github: samzong
 techStack:
@@ -130,7 +130,6 @@ Kueue 和 Volcano 成为主流批处理调度方案
 - 标注CNCF项目成熟度变化
 -->
 
-
 ---
 layout: boxes
 title: AI/ML 工作负载的需求
@@ -236,6 +235,7 @@ layout: chapter
 part: 2
 title: Kueue 深度解析
 ---
+
 <!--
 这里介绍下基础的 Kubernetes 的编排和调度的现状
 -->
@@ -728,11 +728,11 @@ func (fa *FlavorAssigner) Assign(log logr.Logger, wl *workload.Info, cq *cache.C
     return Assignment{RepresentativeMode: Fit}
 }
 ```
+
 ---
 layout: table
 title: Kueue 源码架构分析 - 性能优化关键点
 ---
-
 
 | 优化技术 | 实现位置 | 效果 |
 |---------|---------|------|
@@ -1003,7 +1003,6 @@ layout: table
 title: Kueue 性能测试 - 性能基准测试结果
 ---
 
-
 | 指标 | Kueue | 原生 K8s | 提升 |
 |------|-------|---------|------|
 | **调度吞吐量** | 850 jobs/min | 320 jobs/min | 2.66x |
@@ -1083,7 +1082,6 @@ v1.12
 layout: image-right
 title: Volcano 设计理念
 image: public/volcano.png
-
 ---
 
 - **HPC 优先**: 借鉴传统高性能计算调度
@@ -1203,6 +1201,7 @@ sequenceDiagram
     S->>P: 创建PodGroup
     P->>U: 作业执行
 ```
+
 ---
 layout: default
 title: Volcano 核心概念：VolcanoJob
@@ -1234,7 +1233,6 @@ spec:
 layout: default
 title: Volcano 核心概念：PodGroup
 ---
-
 
 - **作用**: 将作业的 Pod 组织为一个调度单位
 - **特性**: 确保组内 Pod 满足最小可用数才调度
@@ -1269,7 +1267,6 @@ spec:
 layout: default
 title: Volcano 核心概念：Queue （资源预留）
 ---
-
 
 ```yaml
 apiVersion: scheduling.volcano.sh/v1beta1
@@ -1499,6 +1496,7 @@ preemptableFn := func(preemptor *api.TaskInfo, preemptees []*api.TaskInfo) ([]*a
     return victims, util.Permit
 }
 ```
+
 ---
 layout: default
 title: Volcano 高级特性深度解析 - 拓扑感知调度
@@ -1910,13 +1908,14 @@ layout: chapter
 part: 4
 title: Kueue vs. Volcano
 ---
+
 <!--
 这里介绍下基础的 Kubernetes 的编排和调度的现状
 -->
 
 ---
 layout: table
-title:  设计理念对比
+title: 设计理念对比
 ---
 
 | 维度          | Kueue                          | Volcano                       |
@@ -1927,7 +1926,7 @@ title:  设计理念对比
 
 ---
 layout: table
-title:  功能特性对比
+title: 功能特性对比
 ---
 
 | 特性          | Kueue                          | Volcano                       |
@@ -2906,7 +2905,6 @@ rightTitle: 资源问题
   - 检查 lendingLimit 是否过低
   - 确认是否有其他队列可用资源
 
-
 ---
 layout: default
 title: Kueue 生产高可用架构 - 高可用部署
@@ -3109,7 +3107,6 @@ spec:
 layout: table
 title: Kueue 生产高可用架构 - 性能调优
 ---
-
 
 | 组件 | 参数 | 生产推荐值 | 说明 |
 |------|------|-----------|------|
@@ -3458,7 +3455,6 @@ data:
           "weight.memory": "1"
 ```
 
-
 ---
 layout: default
 title: 性能优化案例 2 - 成本优化效果 (Spot 实例)
@@ -3525,11 +3521,10 @@ title: 性能优化总结
 - **调度周期调优**：大作业 1s，小作业 100ms
 - **缓存预热**：启动时加载历史调度数据
 
-
 ---
 layout: chapter
 part: 8
-title:  总结与展望
+title: 总结与展望
 ---
 
 ---
@@ -3635,6 +3630,7 @@ title: 未来展望：生态融合
 leftTitle: 云原生 AI 平台
 rightTitle: 技术融合趋势
 ---
+
 ::left::
 
 - **调度层**: Kueue + Volcano 融合，形成统一 API
