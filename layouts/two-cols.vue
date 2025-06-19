@@ -1,9 +1,14 @@
 <template>
   <div class="two-cols-layout">
     <!-- 标题区域 -->
-    <div class="cols-header" v-if="$frontmatter.title || $frontmatter.subtitle">
-      <h1 v-if="$frontmatter.title" class="cols-title">{{ $frontmatter.title }}</h1>
-      <h2 v-if="$frontmatter.subtitle" class="cols-subtitle">{{ $frontmatter.subtitle }}</h2>
+    <div class="page-header" v-if="$frontmatter.title">
+      <div class="title-decorator"></div>
+      <h1 class="page-title">{{ $frontmatter.title }}</h1>
+    </div>
+    
+    <!-- 副标题区域 -->
+    <div class="subtitle-header" v-if="$frontmatter.subtitle">
+      <h2 class="cols-subtitle">{{ $frontmatter.subtitle }}</h2>
     </div>
     
     <!-- 双栏内容区域 -->
@@ -37,8 +42,7 @@
       </div>
     </div>
     
-    <Logo v-if="$frontmatter.showLogo !== false" />
-    <PoweredBy v-if="$frontmatter.showPoweredBy !== false" />
+
     <ProgressBar />
   </div>
 </template>
@@ -51,22 +55,41 @@
   overflow: hidden;
   width: 100%;
   height: 100%;
-  padding: 40px 60px;
+  padding: 120px 60px 60px 60px;
   display: flex;
   flex-direction: column;
 }
 
-.cols-header {
+.page-header {
+  position: absolute;
+  top: 32px;
+  left: 32px;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  z-index: 20;
+}
+
+.title-decorator {
+  width: 24px;
+  height: 24px;
+  background: var(--daocloud-primary);
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.page-title {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: var(--daocloud-text-light);
+  margin: 0;
+  line-height: 1.2;
+}
+
+.subtitle-header {
   text-align: center;
   margin-bottom: 2rem;
   animation: fadeInUp 0.8s ease-out;
-}
-
-.cols-title {
-  font-size: 2.5rem;
-  font-weight: 700;
-  margin-bottom: 1rem;
-  color: var(--daocloud-primary);
 }
 
 .cols-subtitle {
@@ -162,18 +185,7 @@
   animation: growHeight 1s ease-out 0.6s both;
 }
 
-.cols-divider::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 12px;
-  height: 12px;
-  background: var(--daocloud-primary);
-  border-radius: 50%;
-  box-shadow: 0 0 0 4px rgba(0, 255, 127, 0.2);
-}
+
 
 @keyframes fadeInUp {
   from {
@@ -209,7 +221,32 @@
 }
 
 /* 响应式设计 */
+@media (max-width: 1024px) {
+  .page-header {
+    top: 40px;
+    left: 40px;
+  }
+  
+  .page-title {
+    font-size: 2rem;
+  }
+}
+
 @media (max-width: 768px) {
+  .page-header {
+    top: 30px;
+    left: 30px;
+  }
+  
+  .title-decorator {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .page-title {
+    font-size: 1.8rem;
+  }
+  
   .cols-container {
     grid-template-columns: 1fr;
     gap: 2rem;
