@@ -14,9 +14,32 @@ alwaysApply: false
 ### 核心文件结构
 
 - **入口点**: [index.ts](mdc:index.ts) - 定义主题配置、颜色方案和注册所有布局/组件
-- **布局目录**: [layouts/](mdc:layouts/) - 包含 12 个专用布局组件
-- **组件目录**: [components/](mdc:components/) - 包含 3 个可复用组件
+- **布局目录**: [layouts/](mdc:layouts/) - 包含 15 个专用布局组件
+- **组件目录**: [components/](mdc:components/) - 包含 4 个可复用组件
 - **样式目录**: [styles/](mdc:styles/) - 模块化 CSS 架构
+- **组合式函数**: [composables/](mdc:composables/) - Vue 组合式函数
+
+### 主题配置系统
+
+#### 全局配置 (themeConfig.globalConfig)
+```typescript
+globalConfig: {
+  showLogo: true,              // 显示 Logo
+  showPoweredBy: true,         // 显示品牌归属
+  logo: '/logo.png',           // Logo 路径
+  showProgressBar: true,       // 显示进度条
+  logoPosition: 'top-right',   // Logo 位置: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right'
+  poweredByVariant: 'default', // 品牌样式: 'default' | 'white'
+  progressBarStyle: 'default', // 进度条样式: 'default' | 'thin' | 'hidden'
+  disableAnimations: false     // 禁用动画效果
+}
+```
+
+#### 配置优先级
+通过 [useThemeConfig](mdc:composables/useThemeConfig.ts) 组合式函数管理：
+1. Frontmatter 配置（最高优先级）
+2. themeConfig.globalConfig
+3. 默认配置
 
 ### 布局组件说明
 
@@ -35,16 +58,20 @@ alwaysApply: false
 - [comparison.vue](mdc:layouts/comparison.vue) - 对比展示
 - [image-left.vue](mdc:layouts/image-left.vue) - 左图右文
 - [image-right.vue](mdc:layouts/image-right.vue) - 右图左文
+- [image.vue](mdc:layouts/image.vue) - 全屏图片展示
 
 #### 特殊布局
 - [quote.vue](mdc:layouts/quote.vue) - 引用/证言页面
 - [toc.vue](mdc:layouts/toc.vue) - 目录页
+- [timeline.vue](mdc:layouts/timeline.vue) - 时间线展示
+- [boxes.vue](mdc:layouts/boxes.vue) - 卡片网格布局
 
 ### 可复用组件
 
 - [Logo.vue](mdc:components/Logo.vue) - 可配置的 Logo 组件
 - [PoweredBy.vue](mdc:components/PoweredBy.vue) - 品牌归属组件（支持深色/浅色）
 - [ProgressBar.vue](mdc:components/ProgressBar.vue) - 演示进度条
+- [AnimationController.vue](mdc:components/AnimationController.vue) - 全局动画控制器
 
 ### 样式系统
 
@@ -52,6 +79,7 @@ alwaysApply: false
 - [styles/layout.css](mdc:styles/layout.css) - 全局布局样式
 - [styles/components.css](mdc:styles/components.css) - 组件样式
 - [styles/code.css](mdc:styles/code.css) - 代码高亮样式
+- [styles/animations.css](mdc:styles/animations.css) - 动画效果样式
 
 ## 颜色系统
 
@@ -70,8 +98,15 @@ alwaysApply: false
 ```yaml
 ---
 theme: ./path-to-theme
-showLogo: true          # 显示 Logo
-showPoweredBy: true     # 显示品牌归属
+# 全局配置选项
+showLogo: true              # 显示 Logo
+showPoweredBy: true         # 显示品牌归属
+logo: /custom-logo.png      # 自定义 Logo 路径
+showProgressBar: true       # 显示进度条
+logoPosition: top-right     # Logo 位置
+poweredByVariant: default   # 品牌样式
+progressBarStyle: default   # 进度条样式
+disableAnimations: false    # 禁用动画
 ---
 ```
 
@@ -132,21 +167,85 @@ image: ./path/to/image.jpg
 右侧文本内容
 ```
 
+#### 全屏图片
+```yaml
+---
+layout: image
+image: ./path/to/image.jpg
+title: 可选标题
+subtitle: 可选副标题
+caption: 可选说明文字
+objectFit: cover  # cover | contain | fill | scale-down
+---
+```
+
+#### 时间线布局
+```yaml
+---
+layout: timeline
+title: 项目里程碑
+---
+
+## 2024年1月
+项目启动，完成初步规划
+
+## 2024年3月
+完成核心功能开发
+
+## 2024年6月
+发布第一个版本
+```
+
+#### 卡片网格布局
+```yaml
+---
+layout: boxes
+title: 功能特性
+---
+
+## 特性一
+详细说明第一个特性的内容
+
+## 特性二
+详细说明第二个特性的内容
+
+## 特性三
+详细说明第三个特性的内容
+```
+
 ### 组件属性
 
 #### Logo 组件
-- 路径可通过主题配置自定义
-- 根据 `showLogo` frontmatter 控制显示
+- 路径通过 `logo` frontmatter 或 `themeConfig.globalConfig.logo` 配置
+- 位置通过 `logoPosition` 配置
+- 根据 `showLogo` 控制显示
 
 #### PoweredBy 组件
 - 有 `white` 和 `default` 两种变体
-- 根据 `showPoweredBy` frontmatter 控制显示
+- 通过 `poweredByVariant` 配置样式
+- 根据 `showPoweredBy` 控制显示
 
 #### ProgressBar 组件
 - 自动显示在页面底部
-- 显示当前页码和总页数
+- 通过 `progressBarStyle` 配置样式
+- 根据 `showProgressBar` 控制显示
+
+#### AnimationController 组件
+- 自动包含在需要动画的布局中
+- 通过 `disableAnimations` 全局控制动画开关
+- 使用 `data-disable-animations` HTML 属性控制
 
 ## 开发指南
+
+### 使用主题配置
+
+使用 [useThemeConfig](mdc:composables/useThemeConfig.ts) 获取配置：
+
+```typescript
+import { useThemeConfig } from '../composables/useThemeConfig'
+
+const { config, showLogo, disableAnimations } = useThemeConfig()
+```
 
 ### 创建新布局
 
@@ -158,6 +257,7 @@ image: ./path/to/image.jpg
    }
    ```
 3. 添加相应的样式到 [styles/layout.css](mdc:styles/layout.css)
+4. 在布局中包含 `<AnimationController />` 组件
 
 ### 添加新组件
 
@@ -175,12 +275,14 @@ image: ./path/to/image.jpg
 - 遵循 BEM 命名规范
 - 响应式设计优先
 - 支持深色/浅色主题切换
+- 使用 `[data-disable-animations="true"]` 选择器控制动画
 
 ### 动画效果
 
 - 封面页使用流体光晕动画
 - 支持页面切换过渡效果
 - 使用 `@keyframes` 定义动画
+- 通过 `disableAnimations` 配置全局控制
 
 ## 技术要求
 
@@ -195,16 +297,39 @@ image: ./path/to/image.jpg
 - 使用 [slides.md](mdc:slides.md) 作为参考示例
 - 合理使用不同布局组合
 - 保持视觉一致性
+- 利用主题配置系统统一管理样式
 
 ### 性能优化
 - 图片使用合适的格式和尺寸
-- 避免过度使用动画效果
+- 通过 `disableAnimations` 在低性能设备上禁用动画
 - 保持组件轻量化
+- 使用 CSS 变换代替位置属性动画
 
 ### 可访问性
 - 确保足够的颜色对比度
 - 提供适当的语义标记
 - 支持键盘导航
+- 提供动画开关选项
+
+## 特殊布局说明
+
+### Timeline 布局
+- 自动解析 H2 标题作为时间节点
+- H2 下的内容作为节点描述
+- 支持响应式布局（移动端垂直显示）
+- 节点自动均匀分布
+
+### Boxes 布局
+- 自动解析 H2 标题作为卡片标题
+- H2 下的内容作为卡片内容
+- 自适应网格布局（1-4列）
+- 支持悬停效果
+
+### Image 布局
+- 支持全屏图片展示
+- 可选标题、副标题和说明文字
+- 支持 objectFit 配置
+- 带有占位符提示
 
 ## 调试技巧
 
@@ -212,6 +337,7 @@ image: ./path/to/image.jpg
 1. 布局不显示：检查 frontmatter 中的 layout 名称
 2. 样式未生效：确认样式文件已在 [styles/index.ts](mdc:styles/index.ts) 中导入
 3. 组件未找到：验证组件已在 [index.ts](mdc:index.ts) 中注册
+4. 动画未禁用：检查 `disableAnimations` 配置和 AnimationController 组件
 
 ### 开发命令
 ```bash
@@ -233,7 +359,10 @@ npm run preview
 themeConfig: {
   primary: '#your-color',
   primaryDark: '#your-dark-color',
-  secondary: '#your-secondary'
+  secondary: '#your-secondary',
+  globalConfig: {
+    // 添加自定义配置
+  }
 }
 ```
 
@@ -252,16 +381,34 @@ themeConfig: {
 
 - 主题配置: [index.ts](mdc:index.ts)
 - 示例演示: [slides.md](mdc:slides.md)
-- 布局示例: [layout-examples.md](mdc:layout-examples.md)
+- 主题配置组合式函数: [useThemeConfig.ts](mdc:composables/useThemeConfig.ts)
 - 项目文档: [CLAUDE.md](mdc:CLAUDE.md)
 - 包配置: [package.json](mdc:package.json)
+
+## 公共资源
+
+主题包含以下公共资源文件：
+- Logo 图片: [logo.png](mdc:logo.png)
+- PoweredBy 默认样式: [powerby-default.png](mdc:powerby-default.png)
+- PoweredBy 白色样式: [powerby-white.png](mdc:powerby-white.png)
+- 示例图片: [public/](mdc:public/) 目录
 
 ## 注意事项
 
 ### 布局注册
 所有布局组件都已在 [index.ts](mdc:index.ts) 中正确注册：
-- `chapter` - 章节分隔页（对应 chapter.vue）
-- `toc` - 目录页（对应 toc.vue）
-- 其他 10 个布局组件
+- 基础布局：`default`, `white`, `center`
+- 封面类：`cover`, `intro`, `chapter`
+- 内容类：`two-cols`, `comparison`, `quote`, `toc`
+- 图片类：`image`, `image-left`, `image-right`
+- 特殊类：`timeline`, `boxes`
 
 确保使用正确的布局名称，避免使用未注册的布局。
+
+### 配置继承
+主题使用三级配置系统，优先级从高到低：
+1. 页面 frontmatter 配置
+2. 主题全局配置 (themeConfig.globalConfig)
+3. 默认配置
+
+合理利用配置继承可以减少重复配置。

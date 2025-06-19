@@ -10,8 +10,9 @@ This is **Slidev Theme DaoCloud** - a custom Slidev presentation theme designed 
 
 ### Theme Structure
 - **Entry Point**: `index.ts` - defines theme configuration, colors, and registers all layouts/components
-- **Layouts**: 12 specialized layout components in `layouts/` directory for different presentation needs
-- **Components**: 3 reusable components (`Logo.vue`, `PoweredBy.vue`, `ProgressBar.vue`)
+- **Layouts**: 15 specialized layout components in `layouts/` directory for different presentation needs
+- **Components**: 4 reusable components (`Logo.vue`, `PoweredBy.vue`, `ProgressBar.vue`, `AnimationController.vue`)
+- **Composables**: `useThemeConfig.ts` - centralized theme configuration management
 - **Styles**: Modular CSS architecture with separate files for layouts, code highlighting, and components
 
 ### Key Layouts
@@ -21,11 +22,13 @@ This is **Slidev Theme DaoCloud** - a custom Slidev presentation theme designed 
 - `intro.vue` - Introduction/profile pages
 - `comparison.vue` - Side-by-side comparisons
 - `two-cols.vue` - Two-column layouts
-- `image-left.vue` / `image-right.vue` - Image-text combinations
+- `image-left.vue` / `image-right.vue` / `image.vue` - Image-text combinations
 - `quote.vue` - Quote/testimonial pages
 - `chapter.vue` - Chapter/section dividers
 - `center.vue` - Centered content
 - `toc.vue` - Table of contents
+- `timeline.vue` - Interactive timeline with nodes (NEW)
+- `boxes.vue` - Responsive grid layout with cards (NEW)
 
 ### Color System
 - Primary: `#00ff7f` (bright green)
@@ -52,14 +55,14 @@ The theme supports a global configuration system with three levels of precedence
 3. **Built-in defaults** (lowest priority) - fallback values
 
 #### Available Global Options
-- `showLogo: boolean` - Display logo component
-- `showPoweredBy: boolean` - Display "Powered by" component
-- `logo: string` - Logo image path
-- `showProgressBar: boolean` - Display progress indicator
-- `logoPosition: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right'` - Logo placement
-- `poweredByVariant: 'default' | 'white'` - PoweredBy component style
-- `progressBarStyle: 'default' | 'thin' | 'hidden'` - Progress bar appearance
-- `disableAnimations: boolean` - Disable all animations and transitions for serious presentations
+- `showLogo: boolean` - Display logo component (default: true)
+- `showPoweredBy: boolean` - Display "Powered by" component (default: true)
+- `logo: string` - Logo image path (default: '/logo.png')
+- `showProgressBar: boolean` - Display progress indicator (default: true)
+- `logoPosition: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right'` - Logo placement (default: 'top-right')
+- `poweredByVariant: 'default' | 'white'` - PoweredBy component style (default: 'default')
+- `progressBarStyle: 'default' | 'thin' | 'hidden'` - Progress bar appearance (default: 'default')
+- `disableAnimations: boolean` - Disable all animations and transitions for serious presentations (default: true)
 
 #### Configuration Examples
 
@@ -113,8 +116,53 @@ const { showLogo, showPoweredBy, showProgressBar } = useThemeConfig()
     <Logo v-if="showLogo" />
     <PoweredBy v-if="showPoweredBy" />
     <ProgressBar v-if="showProgressBar" />
+    <AnimationController />
   </div>
 </template>
+```
+
+#### New Layout Features
+
+**Timeline Layout** (`timeline.vue`):
+- Automatically parses H2 headers as timeline nodes
+- Creates interactive timeline with alternating top/bottom positioning
+- Responsive design switches to vertical layout on mobile
+- Usage:
+```yaml
+---
+layout: timeline
+title: "Project Timeline"
+---
+
+## Phase 1
+Initial planning and research phase
+
+## Phase 2
+Development and implementation
+
+## Phase 3
+Testing and deployment
+```
+
+**Boxes Layout** (`boxes.vue`):
+- Automatically converts H2 sections into responsive card grid
+- Supports 1-4 boxes per row with automatic width calculation
+- Hover effects and consistent styling
+- Usage:
+```yaml
+---
+layout: boxes
+title: "Feature Overview"
+---
+
+## Feature A
+Description of feature A with details
+
+## Feature B
+Description of feature B with details
+
+## Feature C
+Description of feature C with details
 ```
 
 ### Layout Usage
@@ -129,24 +177,72 @@ author: "Author Name"
 ```
 
 ### Component Customization
-- Logo path can be customized via theme configuration
-- PoweredBy component has white and default variants
-- Progress bar display controlled via frontmatter options
+- **Logo**: Path can be customized via theme configuration, supports different positions
+- **PoweredBy**: Has white and default variants for different backgrounds
+- **ProgressBar**: Display controlled via frontmatter options with multiple styles
+- **AnimationController**: Automatically manages animation states based on `disableAnimations` setting
 
 ## File Organization
 
 - `index.ts` - Theme registration and configuration
-- `layouts/` - All layout Vue components
-- `components/` - Reusable UI components
+- `layouts/` - All layout Vue components (15 total)
+- `components/` - Reusable UI components (4 total)
+- `composables/` - Vue composables for shared logic
 - `styles/` - Modular CSS files and style entry point
+- `public/` - Public assets for presentations
 - `logo.png` - Default theme logo
 - `powerby-*.png` - Brand attribution images
 
 ## Development Notes
 
 - Built for Slidev >= 0.48.0
-- Uses Vue 3 Composition API
+- Uses Vue 3 Composition API with TypeScript support
 - Follows Slidev theme development conventions
 - Responsive design with mobile optimization
 - Modern animations and visual effects (fluid halos, gradients)
 - Inter font family for typography
+- Centralized configuration management via `useThemeConfig` composable
+- Animation control system for presentation contexts
+- Automatic content parsing for timeline and boxes layouts
+
+## Development Guidelines
+
+### Adding New Layouts
+1. Create new `.vue` file in `layouts/` directory
+2. Import and use `useThemeConfig` for consistent configuration
+3. Include `AnimationController` component for animation management
+4. Follow existing naming conventions and styling patterns
+5. Register new layout in `index.ts`
+
+### Configuration Management
+- Use `useThemeConfig()` composable for all theme configuration needs
+- Support three-level configuration precedence (frontmatter > theme > default)
+- Document new configuration options in TypeScript interfaces
+- Provide sensible defaults for all configuration options
+
+### Styling Conventions
+- Use CSS custom properties for theming (`--daocloud-*`)
+- Maintain responsive design patterns
+- Follow consistent spacing and typography scales
+- Use animation control system for context-appropriate effects
+
+## Testing and Validation
+
+### Theme Testing
+- Test all layouts with different content types
+- Verify responsive behavior across device sizes
+- Validate configuration precedence behavior
+- Test animation states (enabled/disabled)
+
+### Development Workflow
+1. Use `slides.md` as development playground
+2. Test new layouts with various content structures
+3. Verify global configuration changes
+4. Check cross-browser compatibility
+5. Validate accessibility features
+
+### Common Issues
+- **Missing components**: Ensure all components are properly imported and registered
+- **Configuration not applying**: Check configuration precedence and TypeScript types
+- **Responsive issues**: Test on different screen sizes and orientations
+- **Animation conflicts**: Use `disableAnimations` for testing static layouts
