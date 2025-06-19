@@ -268,6 +268,8 @@ spec:
           image: busybox
 ```
 
+**源码解析**：Kueue 的核心调度器在 `pkg/scheduler/scheduler.go` 中处理 workload 调度决策，采用公平共享算法确保资源分配公平性。
+
 ---
 layout: default
 title: Kueue 核心概念：LocalQueue
@@ -358,6 +360,9 @@ layout: default
 title: Kueue 调度流程
 ---
 
+**调度器核心代码分析**：scheduler.go:712 中的 `connectToServer` 函数
+
+
 ```mermaid
 sequenceDiagram
     participant U as User
@@ -392,6 +397,8 @@ spec:
         nominalQuota: 10
         lendingLimit: 5
 ```
+
+**源码实现**：调度器在 `scheduler.go` 中通过 `netUsage` 算法动态计算可借用资源量，确保不会超出 `lendingLimit` 限制。最新提交 "Simplify scheduler.netUsage" 优化了这一机制。
 
 ---
 layout: default
@@ -576,6 +583,8 @@ spec:
           image: busybox
 ```
 
+**源码解析**：Volcano 的作业管理器在 `vc-controller` 中处理 VolcanoJob 的生命周期，通过 `OnSessionOpen` 和 `OnSessionClose` 回调函数协调作业的创建和销毁。
+
 ---
 layout: default
 title: Volcano 核心概念：PodGroup
@@ -635,6 +644,8 @@ layout: default
 title: Volcano 调度流程
 ---
 
+**调度器核心代码**：`vc-scheduler` 使用插件化架构，Gang 插件通过 `AddJobValidFn` 注册作业验证函数，确保只有满足条件的作业才能进入调度队列。
+
 ```mermaid
 sequenceDiagram
     participant U as User
@@ -657,30 +668,30 @@ title: Volcano 特性：Gang Scheduling
 - **定义**: 组调度，确保作业满足最小 Pod 数才执行
 - **优势**: 避免资源死锁
 
-<br />
-
 ```yaml
 spec:
   minAvailable: 5
 ```
 
-<br />
-
-https://github.com/volcano-sh/volcano/blob/6e2959db/pkg/scheduler/plugins/gang/gang.go#L83-L106
+**Gang 调度算法源码分析** - `pkg/scheduler/plugins/gang/gang.go`：
 
 ```go
+// 作业验证函数：检查是否有足够的有效任务
 validJobFn := func(obj interface{}) *api.ValidateResult {
     job := obj.(*api.JobInfo)
     if vtn := job.ValidTaskNum(); vtn < job.MinAvailable {
         return &api.ValidateResult{
             Pass:   false,
             Reason: v1beta1.NotEnoughPodsReason,
-            Message: fmt.Sprintf("gang job valid task number %d less than minAvailable %d", vtn, job.MinAvailable),
+            Message: fmt.Sprintf("Not enough valid tasks for gang-scheduling, valid: %d, min: %d", 
+                vtn, job.MinAvailable),
         }
     }
     return nil
 }
 ```
+
+关键算法：检查 `ValidTaskNum()` 是否达到 `MinAvailable` 阈值，保证 Gang 调度的 All-or-Nothing 特性
 
 ---
 layout: default
@@ -690,8 +701,6 @@ title: Volcano 特性：作业依赖
 - **作用**: 定义作业间依赖关系
 - **场景**: 数据处理流水线
 
-<br />
-
 ```yaml
 spec:
   policies:
@@ -700,6 +709,8 @@ spec:
     condition:
       taskName: preprocess
 ```
+
+**源码解析**：依赖管理在 `vc-controller` 中实现，通过监听 Pod 事件来触发后续作业的执行。
 
 ---
 layout: default
@@ -715,6 +726,41 @@ graph TD
     A[Volcano] --> B[TensorFlow]
     A --> C[PyTorch]
     A --> D[MPI]
+```
+
+**调度算法源码**：在 `OnSessionClose` 中，调度器通过 `metrics.RegisterJobRetries` 记录未调度作业，并通过 `UpdateUnscheduleTaskCount` 更新指标，为 AI/ML 作业提供进度监控。
+
+---
+layout: default
+title: Volcano 核心算法：抢占机制
+---
+
+**Gang 插件中的抢占算法** - `gang.go:108-130`：
+> 这个算法确保 Gang 调度的安全性：不会破坏正在运行作业的 MinAvailable 约束。
+
+```go
+// 抢占函数：决定哪些任务可以被抢占
+preemptableFn := func(preemptor *api.TaskInfo, preemptees []*api.TaskInfo) ([]*api.TaskInfo, int) {
+    var victims []*api.TaskInfo
+    jobOccupiedMap := map[api.JobID]int32{}
+    
+    for _, preemptee := range preemptees {
+        job := ssn.Jobs[preemptee.Job]
+        if _, found := jobOccupiedMap[job.UID]; !found {
+            jobOccupiedMap[job.UID] = job.ReadyTaskNum()
+        }
+        
+        // 关键逻辑：只有当作业的 Ready 任务数 > MinAvailable 时才可抢占
+        if jobOccupiedMap[job.UID] > job.MinAvailable {
+            jobOccupiedMap[job.UID]--
+            victims = append(victims, preemptee)
+        } else {
+            klog.V(4).Infof("Cannot preempt task because job ready num(%d) <= MinAvailable(%d)",
+                jobOccupiedMap[job.UID], job.MinAvailable)
+        }
+    }
+    return victims, util.Permit
+}
 ```
 
 ---
@@ -745,7 +791,7 @@ layout: boxes
 title: Volcano 适用场景
 ---
 
-## *大规模 AI 训练**
+## **大规模 AI 训练**
 
 分布式训练优化
 
