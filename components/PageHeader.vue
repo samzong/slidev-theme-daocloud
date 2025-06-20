@@ -13,7 +13,7 @@
 <style scoped>
 .page-header {
   position: absolute;
-  top: 32px;
+  top: 60px;
   left: 32px;
   display: flex;
   align-items: center;
@@ -22,8 +22,8 @@
 }
 
 .title-decorator {
-  width: 20px;
-  height: 20px;
+  width: 16px;
+  height: 16px;
   background: var(--daocloud-primary);
   border-radius: 2px;
   flex-shrink: 0;
@@ -40,7 +40,7 @@
 /* 响应式设计 */
 @media (max-width: 1024px) {
   .page-header {
-    top: 40px;
+    top: 90px;
     left: 40px;
   }
   
@@ -51,17 +51,33 @@
 
 @media (max-width: 768px) {
   .page-header {
-    top: 30px;
+    top: 70px;
     left: 30px;
   }
   
   .title-decorator {
-    width: 20px;
-    height: 20px;
+    width: 14px;
+    height: 14px;
   }
   
   .page-title {
     font-size: 1.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .page-header {
+    top: 60px;
+    left: 24px;
+  }
+  
+  .title-decorator {
+    width: 12px;
+    height: 12px;
+  }
+  
+  .page-title {
+    font-size: 1.6rem;
   }
 }
 </style> 
