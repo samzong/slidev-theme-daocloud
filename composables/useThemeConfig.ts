@@ -19,7 +19,7 @@ const DEFAULT_CONFIG: Required<ThemeGlobalConfig> = {
   showLogo: false,
   showPoweredBy: false,
   logo: 'logo.png',
-  showProgressBar: true,
+  showProgressBar: false,
   logoPosition: 'top-right',
   poweredByVariant: 'default',
   progressBarStyle: 'default',

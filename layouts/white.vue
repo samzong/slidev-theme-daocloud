@@ -1,10 +1,6 @@
 <template>
   <div class="white-layout">
-    <!-- 页面标题区域 -->
-    <div class="page-header" v-if="$frontmatter.title">
-      <div class="title-decorator"></div>
-      <h1 class="page-title">{{ $frontmatter.title }}</h1>
-    </div>
+    <PageHeader />
 
     <div class="white-content">
       <slot />
@@ -17,6 +13,7 @@
 
 <script setup lang="ts">
 import { useThemeConfig } from '../composables/useThemeConfig'
+import PageHeader from '../components/PageHeader.vue'
 
 const { showLogo, showPoweredBy, showProgressBar } = useThemeConfig()
 </script>
@@ -29,32 +26,6 @@ const { showLogo, showPoweredBy, showProgressBar } = useThemeConfig()
   overflow: hidden;
   width: 100%;
   height: 100%;
-}
-
-.page-header {
-  position: absolute;
-  top: 60px;
-  left: 60px;
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  z-index: 20;
-}
-
-.title-decorator {
-  width: 24px;
-  height: 24px;
-  background: var(--daocloud-primary);
-  border-radius: 2px;
-  flex-shrink: 0;
-}
-
-.page-title {
-  font-size: 2.5rem;
-  font-weight: 600;
-  color: var(--daocloud-text-dark);
-  margin: 0;
-  line-height: 1.2;
 }
 
 .white-content {
@@ -123,35 +94,12 @@ const { showLogo, showPoweredBy, showProgressBar } = useThemeConfig()
 
 /* 响应式设计 */
 @media (max-width: 1024px) {
-  .page-header {
-    top: 40px;
-    left: 40px;
-  }
-  
-  .page-title {
-    font-size: 2rem;
-  }
-  
   .white-content {
     padding: 100px 40px 40px 40px;
   }
 }
 
 @media (max-width: 768px) {
-  .page-header {
-    top: 30px;
-    left: 30px;
-  }
-  
-  .title-decorator {
-    width: 20px;
-    height: 20px;
-  }
-  
-  .page-title {
-    font-size: 1.8rem;
-  }
-  
   .white-content {
     padding: 90px 30px 30px 30px;
   }

@@ -1,23 +1,31 @@
 <template>
   <div class="default-layout">
     <!-- 页面标题区域 -->
-    <div class="page-header" v-if="$frontmatter.title">
-      <div class="title-decorator"></div>
-      <h1 class="page-title">{{ $frontmatter.title }}</h1>
-    </div>
+    <PageHeader />
 
     <div class="default-content">
       <slot />
     </div>
-    <ProgressBar v-if="showProgressBar" />
+    
+    <Logo v-if="showLogo" :position="logoPosition" />
+    <PoweredBy v-if="showPoweredBy" :variant="poweredByVariant" />
+    <ProgressBar v-if="showProgressBar" :style="progressBarStyle" />
     <AnimationController />
   </div>
 </template>
 
 <script setup lang="ts">
 import { useThemeConfig } from '../composables/useThemeConfig'
+import PageHeader from '../components/PageHeader.vue'
 
-const { showProgressBar } = useThemeConfig()
+const { 
+  showLogo, 
+  showPoweredBy, 
+  showProgressBar, 
+  logoPosition,
+  poweredByVariant,
+  progressBarStyle 
+} = useThemeConfig()
 </script>
 
 <style scoped>
@@ -28,32 +36,6 @@ const { showProgressBar } = useThemeConfig()
   overflow: hidden;
   width: 100%;
   height: 100%;
-}
-
-.page-header {
-  position: absolute;
-  top: 32px;
-  left: 32px;
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  z-index: 20;
-}
-
-.title-decorator {
-  width: 24px;
-  height: 24px;
-  background: var(--daocloud-primary);
-  border-radius: 2px;
-  flex-shrink: 0;
-}
-
-.page-title {
-  font-size: 1.8rem;
-  font-weight: 600;
-  color: var(--daocloud-text-light);
-  margin: 0;
-  line-height: 1.2;
 }
 
 .default-content {
@@ -122,35 +104,12 @@ const { showProgressBar } = useThemeConfig()
 
 /* 响应式设计 */
 @media (max-width: 1024px) {
-  .page-header {
-    top: 40px;
-    left: 40px;
-  }
-  
-  .page-title {
-    font-size: 2rem;
-  }
-  
   .default-content {
     padding: 100px 40px 40px 40px;
   }
 }
 
 @media (max-width: 768px) {
-  .page-header {
-    top: 30px;
-    left: 30px;
-  }
-  
-  .title-decorator {
-    width: 20px;
-    height: 20px;
-  }
-  
-  .page-title {
-    font-size: 1.8rem;
-  }
-  
   .default-content {
     padding: 90px 30px 30px 30px;
   }

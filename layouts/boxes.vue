@@ -1,10 +1,6 @@
 <template>
   <div class="boxes-layout">
-    <!-- 页面标题区域 - 与 default.vue 保持一致 -->
-    <div class="page-header" v-if="$frontmatter.title">
-      <div class="title-decorator"></div>
-      <h1 class="page-title">{{ $frontmatter.title }}</h1>
-    </div>
+    <PageHeader />
 
     <div class="boxes-container" ref="containerRef">
       <!-- 初始内容用于解析 -->
@@ -23,7 +19,9 @@
       </div>
     </div>
     
-    <ProgressBar v-if="showProgressBar" />
+    <Logo v-if="showLogo" :position="logoPosition" />
+    <PoweredBy v-if="showPoweredBy" :variant="poweredByVariant" />
+    <ProgressBar v-if="showProgressBar" :style="progressBarStyle" />
     <AnimationController />
   </div>
 </template>
@@ -31,8 +29,16 @@
 <script setup lang="ts">
 import { ref, onMounted, computed, nextTick } from 'vue'
 import { useThemeConfig } from '../composables/useThemeConfig'
+import PageHeader from '../components/PageHeader.vue'
 
-const { showProgressBar } = useThemeConfig()
+const { 
+  showLogo, 
+  showPoweredBy, 
+  showProgressBar, 
+  logoPosition,
+  poweredByVariant,
+  progressBarStyle 
+} = useThemeConfig()
 
 interface Box {
   title: string
@@ -92,33 +98,6 @@ onMounted(async () => {
   overflow: hidden;
   width: 100%;
   height: 100%;
-}
-
-/* 页面标题 - 与 default.vue 保持一致 */
-.page-header {
-  position: absolute;
-  top: 32px;
-  left: 32px;
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  z-index: 20;
-}
-
-.title-decorator {
-  width: 24px;
-  height: 24px;
-  background: var(--daocloud-primary);
-  border-radius: 2px;
-  flex-shrink: 0;
-}
-
-.page-title {
-  font-size: 1.8rem;
-  font-weight: 600;
-  color: var(--daocloud-text-light);
-  margin: 0;
-  line-height: 1.2;
 }
 
 /* 框容器 */
@@ -234,15 +213,6 @@ onMounted(async () => {
 }
 
 @media (max-width: 1024px) {
-  .page-header {
-    top: 40px;
-    left: 40px;
-  }
-  
-  .page-title {
-    font-size: 2rem;
-  }
-  
   .boxes-container {
     padding: 100px 20px 40px 20px;
     gap: 15px;
@@ -254,20 +224,6 @@ onMounted(async () => {
 }
 
 @media (max-width: 768px) {
-  .page-header {
-    top: 30px;
-    left: 30px;
-  }
-  
-  .title-decorator {
-    width: 20px;
-    height: 20px;
-  }
-  
-  .page-title {
-    font-size: 1.8rem;
-  }
-  
   .boxes-container {
     padding: 90px 20px 30px 20px;
     gap: 15px;

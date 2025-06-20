@@ -42,9 +42,25 @@
       <slot />
     </div>
 
-    <ProgressBar />
+    <Logo v-if="showLogo" :position="logoPosition" />
+    <PoweredBy v-if="showPoweredBy" :variant="poweredByVariant" />
+    <ProgressBar v-if="showProgressBar" :style="progressBarStyle" />
+    <AnimationController />
   </div>
 </template>
+
+<script setup lang="ts">
+import { useThemeConfig } from '../composables/useThemeConfig'
+
+const { 
+  showLogo, 
+  showPoweredBy, 
+  showProgressBar, 
+  logoPosition,
+  poweredByVariant,
+  progressBarStyle 
+} = useThemeConfig()
+</script>
 
 <style scoped>
 .image-layout {

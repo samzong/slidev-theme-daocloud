@@ -29,11 +29,24 @@
       </div>
     </div>
     
-    <Logo v-if="$frontmatter.showLogo === true" />
-    <PoweredBy v-if="$frontmatter.showPoweredBy === true" />
-    <ProgressBar />
+    <Logo v-if="showLogo" :position="logoPosition" />
+    <PoweredBy v-if="showPoweredBy" :variant="poweredByVariant" />
+    <ProgressBar v-if="showProgressBar" :style="progressBarStyle" />
   </div>
 </template>
+
+<script setup lang="ts">
+import { useThemeConfig } from '../composables/useThemeConfig'
+
+const { 
+  showLogo, 
+  showPoweredBy, 
+  showProgressBar, 
+  logoPosition,
+  poweredByVariant,
+  progressBarStyle 
+} = useThemeConfig()
+</script>
 
 <style scoped>
 .center-layout {

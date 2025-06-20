@@ -1,5 +1,5 @@
 <template>
-  <div class="powered-by" v-if="showPoweredBy">
+  <div class="powered-by">
     <img 
       :src="poweredByImage" 
       alt="Powered By DaoCloud" 
@@ -11,9 +11,15 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 
-const showPoweredBy = computed(() => $frontmatter.showPoweredBy !== false)
-const isWhiteLayout = computed(() => $frontmatter.layout === 'white')
+interface Props {
+  variant?: 'default' | 'white'
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  variant: 'default'
+})
+
 const poweredByImage = computed(() => 
-  isWhiteLayout.value ? '/powerby-white.png' : '/powerby-default.png'
+  props.variant === 'white' ? '/powerby-white.png' : '/powerby-default.png'
 )
 </script>

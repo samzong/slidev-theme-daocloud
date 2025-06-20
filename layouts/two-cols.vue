@@ -1,16 +1,7 @@
 <template>
   <div class="two-cols-layout">
-    <!-- 标题区域 -->
-    <div class="page-header" v-if="$frontmatter.title">
-      <div class="title-decorator"></div>
-      <h1 class="page-title">{{ $frontmatter.title }}</h1>
-    </div>
-    
-    <!-- 副标题区域 -->
-    <div class="subtitle-header" v-if="$frontmatter.subtitle">
-      <h2 class="cols-subtitle">{{ $frontmatter.subtitle }}</h2>
-    </div>
-    
+    <PageHeader />
+
     <!-- 双栏内容区域 -->
     <div class="cols-container">
       <!-- 左栏 -->
@@ -42,10 +33,27 @@
       </div>
     </div>
     
-
-    <ProgressBar />
+    <Logo v-if="showLogo" :position="logoPosition" />
+    <PoweredBy v-if="showPoweredBy" :variant="poweredByVariant" />
+    <ProgressBar v-if="showProgressBar" :style="progressBarStyle" />
+    <AnimationController />
   </div>
 </template>
+
+<script setup lang="ts">
+import { computed } from 'vue'
+import { useThemeConfig } from '../composables/useThemeConfig'
+import PageHeader from '../components/PageHeader.vue'
+
+const { 
+  showLogo, 
+  showPoweredBy, 
+  showProgressBar, 
+  logoPosition,
+  poweredByVariant,
+  progressBarStyle 
+} = useThemeConfig()
+</script>
 
 <style scoped>
 .two-cols-layout {
@@ -58,32 +66,6 @@
   padding: 120px 60px 60px 60px;
   display: flex;
   flex-direction: column;
-}
-
-.page-header {
-  position: absolute;
-  top: 32px;
-  left: 32px;
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  z-index: 20;
-}
-
-.title-decorator {
-  width: 24px;
-  height: 24px;
-  background: var(--daocloud-primary);
-  border-radius: 2px;
-  flex-shrink: 0;
-}
-
-.page-title {
-  font-size: 1.8rem;
-  font-weight: 600;
-  color: var(--daocloud-text-light);
-  margin: 0;
-  line-height: 1.2;
 }
 
 .subtitle-header {
@@ -222,31 +204,9 @@
 
 /* 响应式设计 */
 @media (max-width: 1024px) {
-  .page-header {
-    top: 40px;
-    left: 40px;
-  }
-  
-  .page-title {
-    font-size: 2rem;
-  }
 }
 
 @media (max-width: 768px) {
-  .page-header {
-    top: 30px;
-    left: 30px;
-  }
-  
-  .title-decorator {
-    width: 20px;
-    height: 20px;
-  }
-  
-  .page-title {
-    font-size: 1.8rem;
-  }
-  
   .cols-container {
     grid-template-columns: 1fr;
     gap: 2rem;

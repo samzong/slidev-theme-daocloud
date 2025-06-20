@@ -16,40 +16,112 @@
   --daocloud-transition-timing: linear;
 }
 
-/* 禁用所有动画和过渡 */
-[data-disable-animations="true"] *,
-[data-disable-animations="true"] *::before,
-[data-disable-animations="true"] *::after {
-  animation-duration: 0s !important;
-  animation-delay: 0s !important;
-  animation-iteration-count: 1 !important;
-  animation-name: none !important;
-  animation: none !important;
-  transition-duration: 0s !important;
-  transition-delay: 0s !important;
-  transition: none !important;
+/* 
+ * 禁用动画功能
+ * 使用 !important 是必要的，以确保覆盖所有动画
+ * 这是为了支持对动作敏感的用户的可访问性需求
+ */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
-/* 禁用 Slidev 内置动画 */
-[data-disable-animations="true"] .slidev-layout {
-  animation: none !important;
-  transition: none !important;
-}
-
-/* 禁用页面切换动画 */
-[data-disable-animations="true"] .slidev-page {
-  animation: none !important;
-  transition: none !important;
-}
-
-/* 禁用滚动行为 */
+/* 手动禁用动画时的样式 */
 [data-disable-animations="true"] {
-  scroll-behavior: auto !important;
+  /* 使用单一规则减少重复 */
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+  
+  /* 禁用滚动动画 */
+  & {
+    scroll-behavior: auto !important;
+  }
+  
+  /* 重置 will-change 以提高性能 */
+  * {
+    will-change: auto !important;
+  }
 }
 
-/* 禁用 CSS 变换 */
-[data-disable-animations="true"] * {
-  will-change: auto !important;
+/* 动画效果定义 */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* 通用动画类 */
+.animate-fadeIn {
+  animation: fadeIn var(--daocloud-animation-duration) var(--daocloud-animation-timing);
+}
+
+.animate-fadeInUp {
+  animation: fadeInUp var(--daocloud-animation-duration) var(--daocloud-animation-timing);
+}
+
+.animate-slideInLeft {
+  animation: slideInLeft var(--daocloud-animation-duration) var(--daocloud-animation-timing);
+}
+
+.animate-slideInRight {
+  animation: slideInRight var(--daocloud-animation-duration) var(--daocloud-animation-timing);
+}
+
+.animate-scaleIn {
+  animation: scaleIn var(--daocloud-animation-duration) var(--daocloud-animation-timing);
 }
 
 /* 特别针对主题自定义动画 */

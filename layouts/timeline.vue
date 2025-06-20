@@ -1,13 +1,9 @@
 <template>
   <div class="timeline-layout">
-    <!-- 页面标题区域 -->
-    <div class="page-header" v-if="$frontmatter.title">
-      <div class="title-decorator"></div>
-      <h1 class="page-title">{{ $frontmatter.title }}</h1>
-    </div>
+    <PageHeader />
 
     <!-- 时间线容器 -->
-    <div class="timeline-container">
+    <div class="timeline-container" ref="containerRef">
       <!-- 时间线 -->
       <div class="timeline-line"></div>
       
@@ -37,24 +33,36 @@
         </div>
       </div>
     </div>
-    <ProgressBar v-if="showProgressBar" />
+    
+    <Logo v-if="showLogo" :position="logoPosition" />
+    <PoweredBy v-if="showPoweredBy" :variant="poweredByVariant" />
+    <ProgressBar v-if="showProgressBar" :style="progressBarStyle" />
     <AnimationController />
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted, nextTick } from 'vue'
+import { useThemeConfig } from '../composables/useThemeConfig'
+import PageHeader from '../components/PageHeader.vue'
 
 interface TimelineNode {
   title: string
   content: string
 }
-import { useThemeConfig } from '../composables/useThemeConfig'
 
-const { showProgressBar } = useThemeConfig()
+const { 
+  showLogo, 
+  showPoweredBy, 
+  showProgressBar, 
+  logoPosition,
+  poweredByVariant,
+  progressBarStyle 
+} = useThemeConfig()
 
 const nodes = ref<TimelineNode[]>([])
 const originalContent = ref<HTMLElement>()
+const containerRef = ref<HTMLElement>()
 
 // 计算节点在时间线上的位置
 const getNodePosition = (index: number) => {
@@ -105,33 +113,6 @@ onMounted(async () => {
   overflow: hidden;
   width: 100%;
   height: 100%;
-}
-
-/* 页面标题 - 与 default.vue 保持一致 */
-.page-header {
-  position: absolute;
-  top: 32px;
-  left: 32px;
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  z-index: 20;
-}
-
-.title-decorator {
-  width: 24px;
-  height: 24px;
-  background: var(--daocloud-primary);
-  border-radius: 2px;
-  flex-shrink: 0;
-}
-
-.page-title {
-  font-size: 1.8rem;
-  font-weight: 600;
-  color: var(--daocloud-text-light);
-  margin: 0;
-  line-height: 1.2;
 }
 
 /* 时间线容器 */
@@ -300,15 +281,6 @@ onMounted(async () => {
 
 /* 响应式设计 */
 @media (max-width: 1024px) {
-  .page-header {
-    top: 40px;
-    left: 40px;
-  }
-  
-  .page-title {
-    font-size: 2rem;
-  }
-  
   .timeline-container {
     padding: 100px 30px 40px 30px;
   }
@@ -325,20 +297,6 @@ onMounted(async () => {
 }
 
 @media (max-width: 768px) {
-  .page-header {
-    top: 30px;
-    left: 30px;
-  }
-  
-  .title-decorator {
-    width: 20px;
-    height: 20px;
-  }
-  
-  .page-title {
-    font-size: 1.8rem;
-  }
-  
   /* 移动端改为垂直布局 */
   .timeline-container {
     padding: 90px 20px 30px 60px;

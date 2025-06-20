@@ -1,5 +1,5 @@
 <template>
-  <div class="progress-bar" v-if="showProgress">
+  <div class="progress-bar" :class="progressBarClass">
     <div 
       class="progress-fill" 
       :style="{ width: progressPercentage + '%' }"
@@ -10,7 +10,18 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 
-const showProgress = computed(() => $frontmatter.showProgress !== false)
+interface Props {
+  style?: 'default' | 'thin' | 'hidden'
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  style: 'default'
+})
+
+const progressBarClass = computed(() => ({
+  'progress-bar-thin': props.style === 'thin',
+  'progress-bar-hidden': props.style === 'hidden'
+}))
 
 const progressPercentage = computed(() => {
   return Math.round(($slidev.nav.currentPage / $slidev.nav.total) * 100)
@@ -26,6 +37,14 @@ const progressPercentage = computed(() => {
   z-index: 100;
   height: 4px;
   background: rgba(255, 255, 255, 0.1);
+}
+
+.progress-bar-thin {
+  height: 2px;
+}
+
+.progress-bar-hidden {
+  display: none;
 }
 
 .progress-fill {

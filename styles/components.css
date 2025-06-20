@@ -78,17 +78,36 @@
   font-weight: 600;
 }
 
-/* 推荐度样式 */
-.slidev-layout table td:contains("高") {
+/* 推荐度样式 - 使用类名而不是 :contains() */
+.slidev-layout table td.rating-high {
   color: #00ff7f;
+  font-weight: 600;
 }
 
-.slidev-layout table td:contains("中等") {
+.slidev-layout table td.rating-medium {
   color: #ffa500;
+  font-weight: 600;
 }
 
-.slidev-layout table td:contains("低") {
+.slidev-layout table td.rating-low {
   color: #ff6b6b;
+  font-weight: 600;
+}
+
+/* 备选方案：使用属性选择器 */
+.slidev-layout table td[data-rating="high"] {
+  color: #00ff7f;
+  font-weight: 600;
+}
+
+.slidev-layout table td[data-rating="medium"] {
+  color: #ffa500;
+  font-weight: 600;
+}
+
+.slidev-layout table td[data-rating="low"] {
+  color: #ff6b6b;
+  font-weight: 600;
 }
 
 /* 技术要点列表美化 */
