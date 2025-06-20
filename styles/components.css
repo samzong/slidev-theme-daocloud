@@ -191,6 +191,24 @@
   opacity: 1;
 }
 
+/* Powered By SVG样式 */
+.powered-by-svg {
+  height: var(--powered-by-height);
+  width: auto;
+  opacity: 0.8;
+  transition: opacity 0.3s ease, transform 0.2s ease;
+}
+
+.powered-by-svg:hover {
+  opacity: 1;
+  transform: scale(1.05);
+}
+
+.powered-by-svg svg {
+  height: 100%;
+  width: auto;
+}
+
 .powered-by-text-default {
   color: var(--daocloud-text-light);
 }

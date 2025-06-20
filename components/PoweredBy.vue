@@ -2,6 +2,8 @@
   <div class="powered-by" :class="containerClass" v-if="!finalHidden">
     <!-- 插槽内容优先 -->
     <slot v-if="$slots.default" />
+    <!-- 新增: SVG 内容支持 -->
+    <div v-else-if="type === 'svg'" class="powered-by-svg" v-html="svgContent" />
     <!-- 文本内容 -->
     <div v-else-if="type === 'text'" class="powered-by-text" :class="textClass">
       {{ finalText }}
@@ -12,16 +14,18 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, onMounted } from 'vue'
 import { useThemeConfig } from '../composables/useThemeConfig'
 
 interface Props {
-  /** 内容类型：image(图片) | text(文本) | slot(插槽) */
-  type?: 'image' | 'text' | 'slot'
+  /** 内容类型：image(图片) | svg(SVG) | text(文本) | slot(插槽) */
+  type?: 'image' | 'svg' | 'text' | 'slot'
   /** 样式变体 */
   variant?: 'default' | 'white' | 'dark' | 'minimal'
   /** 自定义图片路径 */
   src?: string
+  /** SVG内容字符串 */
+  svgContent?: string
   /** 自定义文本内容 */
   text?: string
   /** 图片描述 */
@@ -47,6 +51,24 @@ const props = withDefaults(defineProps<Props>(), {
 })
 
 const { poweredByVariant, showPoweredBy } = useThemeConfig()
+
+// 运行时类型验证
+const validateProps = () => {
+  if (props.type === 'svg' && !props.svgContent) {
+    console.warn('[PoweredBy] SVG type requires svgContent prop')
+  }
+  if (props.type === 'text' && !props.text && !props.brand) {
+    console.warn('[PoweredBy] Text type requires text or brand prop')
+  }
+  if (props.type === 'image' && !props.src && !finalImage.value) {
+    console.warn('[PoweredBy] Image type requires src prop or default image')
+  }
+}
+
+// 在组件挂载时执行验证
+onMounted(() => {
+  validateProps()
+})
 
 // 最终使用的配置
 const finalVariant = computed(() => props.variant || poweredByVariant.value)
