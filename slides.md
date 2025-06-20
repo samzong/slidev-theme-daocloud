@@ -1062,6 +1062,217 @@ title: Kueue 性能测试 - 性能基准测试结果
 | **资源利用率** | 94% | 67% | 40% ↑ |
 
 ---
+layout: default
+title: Kueue 生产高可用架构 - 高可用部署
+---
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kueue-controller-manager
+  namespace: kueue-system
+spec:
+  replicas: 3  # 高可用配置
+  selector:
+    matchLabels:
+      control-plane: kueue-controller-manager
+  template:
+    spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchLabels:
+                control-plane: kueue-controller-manager
+            topologyKey: kubernetes.io/hostname
+      containers:
+      - name: manager
+        image: kueue:v0.8.0
+        args:
+        - --health-probe-bind-address=:8081
+        - --metrics-bind-address=:8080
+        - --leader-elect
+        - --leader-election-id=kueue-controller-leader
+        - --zap-log-level=info
+        - --zap-stacktrace-level=error
+        - --workload-workers=20  # 生产环境增加并发
+        - --cluster-queue-workers=10
+        resources:
+          limits:
+            cpu: 2
+            memory: 4Gi
+          requests:
+            cpu: 1
+            memory: 2Gi
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 8081
+          initialDelaySeconds: 15
+          periodSeconds: 20
+        readinessProbe:
+          httpGet:
+            path: /readyz
+            port: 8081
+          initialDelaySeconds: 5
+          periodSeconds: 10
+```
+
+---
+layout: default
+title: Kueue 生产高可用架构 - 监控与可观测性
+---
+
+Prometheus 集成
+
+```yaml
+# ServiceMonitor 配置
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: kueue-metrics
+  namespace: kueue-system
+spec:
+  selector:
+    matchLabels:
+      control-plane: kueue-controller-manager
+  endpoints:
+  - path: /metrics
+    port: metrics
+    interval: 30s
+    relabelings:
+    - sourceLabels: [__name__]
+      regex: '(kueue_admission_.*|kueue_pending_.*|kueue_quota_.*)'
+      action: keep
+```
+
+---
+layout: default
+title: Kueue 生产高可用架构 - 监控与可观测性
+---
+
+Grafana Dashboard
+
+```json
+{
+  "dashboard": {
+    "title": "Kueue/Volcano Production Metrics",
+    "panels": [
+      {
+        "title": "Scheduling Rate",
+        "targets": [{
+          "expr": "rate(kueue_admitted_workloads_total[5m])"
+        }]
+      },
+      {
+        "title": "Queue Depth",
+        "targets": [{
+          "expr": "kueue_pending_workloads"
+        }]
+      },
+      {
+        "title": "Resource Utilization",
+        "targets": [{
+          "expr": "sum(kueue_quota_used) / sum(kueue_quota_total)"
+        }]
+      }
+    ]
+  }
+}
+```
+
+---
+layout: default
+title: Kueue 生产高可用架构 - 安全加固
+---
+
+RBAC 配置
+
+```yaml
+# 细粒度权限控制
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: kueue-user-role
+rules:
+- apiGroups: ["kueue.x-k8s.io"]
+  resources: ["localqueues"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: ["kueue.x-k8s.io"]
+  resources: ["workloads"]
+  verbs: ["get", "list", "watch", "create", "update", "patch"]
+- apiGroups: ["kueue.x-k8s.io"]
+  resources: ["workloads/status"]
+  verbs: ["get"]
+---
+# 管理员角色
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: kueue-admin-role
+rules:
+- apiGroups: ["kueue.x-k8s.io"]
+  resources: ["*"]
+  verbs: ["*"]
+```
+
+---
+layout: default
+title: Kueue 生产高可用架构 - 安全加固
+---
+
+NetworkPolicy
+
+```yaml
+# 限制 Kueue 组件网络访问
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: kueue-network-policy
+  namespace: kueue-system
+spec:
+  podSelector:
+    matchLabels:
+      control-plane: kueue-controller-manager
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: kube-system
+    - podSelector:
+        matchLabels:
+          app: prometheus
+    ports:
+    - protocol: TCP
+      port: 8080  # metrics
+    - protocol: TCP
+      port: 9443  # webhook
+  egress:
+  - to:
+    - namespaceSelector: {}
+    ports:
+    - protocol: TCP
+      port: 443  # API server
+```
+
+---
+layout: table
+title: Kueue 生产高可用架构 - 性能调优
+---
+
+| 组件 | 参数 | 生产推荐值 | 说明 |
+|------|------|-----------|------|
+| **Kueue Controller** | `--workload-workers` | 20-50 | 根据作业提交频率调整 |
+| | `--cluster-queue-workers` | 10-20 | 队列数量多时增加 |
+| | `--fair-sharing-interval` | 1m | 公平性检查间隔 |
+| **API Server** | `--max-requests-inflight` | 800 | 提高并发处理能力 |
+| | `--max-mutating-requests` | 400 | 提高写入吞吐量 |
+
+---
 layout: chapter
 part: 3
 title: Volcano 深度解析
@@ -1098,6 +1309,85 @@ image: volcano.png
 - **自定义调度器**: 完全控制调度逻辑
 - **批处理优化**: 支持复杂作业依赖和资源管理
 - **插件化**: 易于扩展功能
+
+---
+layout: default
+title: Volcano 核心概念：VolcanoJob
+---
+
+- **定义**: 自定义作业资源
+- **特性**: 支持并行度、依赖关系
+
+```yaml
+apiVersion: batch.volcano.sh/v1alpha1
+kind: Job
+metadata:
+  name: volcano-job
+spec:
+  minAvailable: 3
+  tasks:
+  - replicas: 3
+    name: task1
+    template:
+      spec:
+        containers:
+        - name: app
+          image: busybox
+```
+
+**源码解析**：Volcano 的作业管理器在 `vc-controller` 中处理 VolcanoJob 的生命周期，通过 `OnSessionOpen` 和 `OnSessionClose` 回调函数协调作业的创建和销毁。
+
+---
+layout: default
+title: Volcano 核心概念：PodGroup
+---
+
+- **作用**: 将作业的 Pod 组织为一个调度单位
+- **特性**: 确保组内 Pod 满足最小可用数才调度
+
+```yaml
+apiVersion: scheduling.volcano.sh/v1beta1
+kind: PodGroup
+metadata:
+  name: pod-group
+spec:
+  minMember: 3
+```
+
+---
+layout: default
+title: Volcano 核心概念：Queue
+---
+
+- **作用**: 作业排队和资源分配单位
+- **特性**: 支持权重、优先级
+
+```yaml
+apiVersion: scheduling.volcano.sh/v1beta1
+kind: Queue
+metadata:
+  name: high-priority-queue
+spec:
+  weight: 10
+```
+
+---
+layout: default
+title: Volcano 核心概念：Queue （资源预留）
+---
+
+```yaml
+apiVersion: scheduling.volcano.sh/v1beta1
+kind: Queue
+metadata:
+  name: guaranteed-queue
+spec:
+  weight: 10
+  guarantee:  # 新特性：资源预留
+    resource:
+      cpu: 2
+      memory: 4Gi
+```
 
 ---
 layout: boxes
@@ -1214,155 +1504,6 @@ sequenceDiagram
 
 ---
 layout: default
-title: Volcano 核心概念：VolcanoJob
----
-
-- **定义**: 自定义作业资源
-- **特性**: 支持并行度、依赖关系
-
-```yaml
-apiVersion: batch.volcano.sh/v1alpha1
-kind: Job
-metadata:
-  name: volcano-job
-spec:
-  minAvailable: 3
-  tasks:
-  - replicas: 3
-    name: task1
-    template:
-      spec:
-        containers:
-        - name: app
-          image: busybox
-```
-
-**源码解析**：Volcano 的作业管理器在 `vc-controller` 中处理 VolcanoJob 的生命周期，通过 `OnSessionOpen` 和 `OnSessionClose` 回调函数协调作业的创建和销毁。
-
----
-layout: default
-title: Volcano 核心概念：PodGroup
----
-
-- **作用**: 将作业的 Pod 组织为一个调度单位
-- **特性**: 确保组内 Pod 满足最小可用数才调度
-
-```yaml
-apiVersion: scheduling.volcano.sh/v1beta1
-kind: PodGroup
-metadata:
-  name: pod-group
-spec:
-  minMember: 3
-```
-
----
-layout: default
-title: Volcano 核心概念：Queue
----
-
-- **作用**: 作业排队和资源分配单位
-- **特性**: 支持权重、优先级
-
-```yaml
-apiVersion: scheduling.volcano.sh/v1beta1
-kind: Queue
-metadata:
-  name: high-priority-queue
-spec:
-  weight: 10
-```
-
----
-layout: default
-title: Volcano 核心概念：Queue （资源预留）
----
-
-```yaml
-apiVersion: scheduling.volcano.sh/v1beta1
-kind: Queue
-metadata:
-  name: guaranteed-queue
-spec:
-  weight: 10
-  guarantee:  # 新特性：资源预留
-    resource:
-      cpu: 2
-      memory: 4Gi
-```
-
----
-layout: default
-title: Volcano 特性：Gang Scheduling
----
-
-- **定义**: 组调度，确保作业满足最小 Pod 数才执行
-- **优势**: 避免资源死锁
-
-```yaml
-spec:
-  minAvailable: 5
-```
-
-**Gang 调度算法源码分析** - `pkg/scheduler/plugins/gang/gang.go`：
-
-```go
-// 作业验证函数：检查是否有足够的有效任务
-validJobFn := func(obj interface{}) *api.ValidateResult {
-    job := obj.(*api.JobInfo)
-    if vtn := job.ValidTaskNum(); vtn < job.MinAvailable {
-        return &api.ValidateResult{
-            Pass:   false,
-            Reason: v1beta1.NotEnoughPodsReason,
-            Message: fmt.Sprintf("Not enough valid tasks for gang-scheduling, valid: %d, min: %d", 
-                vtn, job.MinAvailable),
-        }
-    }
-    return nil
-}
-```
-
-关键算法：检查 `ValidTaskNum()` 是否达到 `MinAvailable` 阈值，保证 Gang 调度的 All-or-Nothing 特性
-
----
-layout: default
-title: Volcano 特性：作业依赖
----
-
-- **作用**: 定义作业间依赖关系
-- **场景**: 数据处理流水线
-
-```yaml
-spec:
-  policies:
-  - event: TaskCompleted
-    action: Enqueue
-    condition:
-      taskName: preprocess
-```
-
-**源码解析**：依赖管理在 `vc-controller` 中实现，通过监听 Pod 事件来触发后续作业的执行。
-
----
-layout: default
-title: Volcano 特性：AI/ML 生态集成
----
-
-- **支持**: TensorFlow, PyTorch, MPI
-- **优化**: 分布式训练调度
-- **案例**: 华为云 AI 平台
-
-```mermaid
-graph TD
-    A[Volcano] --> B[TensorFlow]
-    A --> C[PyTorch]
-    A --> D[MPI]
-```
-
-**调度算法源码**：在 `OnSessionClose` 中，调度器通过 `metrics.RegisterJobRetries` 记录未调度作业，并通过 `UpdateUnscheduleTaskCount` 更新指标，为 AI/ML 作业提供进度监控。
-
----
-layout: default
 title: Volcano 插件架构解析
 ---
 
@@ -1463,16 +1604,74 @@ sequenceDiagram
 ```
 
 ---
-layout: table
-title: Volcano 插件架构解析 - 性能优化
+layout: default
+title: Volcano 特性：Gang Scheduling
 ---
 
-| 优化项 | 实现方式 | 性能提升 |
-|--------|---------|----------|
-| **缓存优化** | 使用 snapshot 避免重复计算 | 30% CPU 降低 |
-| **并行调度** | Action 间无依赖可并行执行 | 2x 吞吐量 |
-| **索引加速** | 为 Job/Task 建立多维索引 | 5x 查询速度 |
-| **批量操作** | 聚合 API 调用，减少往返 | 50% 延迟降低 |
+- **定义**: 组调度，确保作业满足最小 Pod 数才执行
+- **优势**: 避免资源死锁
+
+```yaml
+spec:
+  minAvailable: 5
+```
+
+**Gang 调度算法源码分析** - `pkg/scheduler/plugins/gang/gang.go`：
+
+```go
+// 作业验证函数：检查是否有足够的有效任务
+validJobFn := func(obj interface{}) *api.ValidateResult {
+    job := obj.(*api.JobInfo)
+    if vtn := job.ValidTaskNum(); vtn < job.MinAvailable {
+        return &api.ValidateResult{
+            Pass:   false,
+            Reason: v1beta1.NotEnoughPodsReason,
+            Message: fmt.Sprintf("Not enough valid tasks for gang-scheduling, valid: %d, min: %d", 
+                vtn, job.MinAvailable),
+        }
+    }
+    return nil
+}
+```
+
+关键算法：检查 `ValidTaskNum()` 是否达到 `MinAvailable` 阈值，保证 Gang 调度的 All-or-Nothing 特性
+
+---
+layout: default
+title: Volcano 特性：作业依赖
+---
+
+- **作用**: 定义作业间依赖关系
+- **场景**: 数据处理流水线
+
+```yaml
+spec:
+  policies:
+  - event: TaskCompleted
+    action: Enqueue
+    condition:
+      taskName: preprocess
+```
+
+**源码解析**：依赖管理在 `vc-controller` 中实现，通过监听 Pod 事件来触发后续作业的执行。
+
+---
+layout: default
+title: Volcano 特性：AI/ML 生态集成
+---
+
+- **支持**: TensorFlow, PyTorch, MPI
+- **优化**: 分布式训练调度
+- **案例**: 华为云 AI 平台
+
+```mermaid
+graph TD
+    A[Volcano] --> B[TensorFlow]
+    A --> C[PyTorch]
+    A --> D[MPI]
+```
+
+**调度算法源码**：在 `OnSessionClose` 中，调度器通过 `metrics.RegisterJobRetries` 记录未调度作业，并通过 `UpdateUnscheduleTaskCount` 更新指标，为 AI/ML 作业提供进度监控。
 
 ---
 layout: default
@@ -1509,10 +1708,8 @@ preemptableFn := func(preemptor *api.TaskInfo, preemptees []*api.TaskInfo) ([]*a
 
 ---
 layout: default
-title: Volcano 特性 - 拓扑感知调度
+title: Volcano 特性 - NUMA 感知调度
 ---
-
-NUMA 感知调度
 
 ```go
 // pkg/scheduler/plugins/numa/numa.go
@@ -1552,10 +1749,8 @@ func (np *NUMAPlugin) OnSessionOpen(ssn *framework.Session) {
 
 ---
 layout: default
-title: Volcano 特性 - 拓扑感知调度
+title: Volcano 特性 - GPU 拓扑感知调度
 ---
-
-GPU 拓扑感知
 
 ```yaml
 # GPU 拓扑配置
@@ -2812,217 +3007,6 @@ rightTitle: 资源问题
 - **资源借用失败**:
   - 检查 lendingLimit 是否过低
   - 确认是否有其他队列可用资源
-
----
-layout: default
-title: Kueue 生产高可用架构 - 高可用部署
----
-
-```yaml
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: kueue-controller-manager
-  namespace: kueue-system
-spec:
-  replicas: 3  # 高可用配置
-  selector:
-    matchLabels:
-      control-plane: kueue-controller-manager
-  template:
-    spec:
-      affinity:
-        podAntiAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-          - labelSelector:
-              matchLabels:
-                control-plane: kueue-controller-manager
-            topologyKey: kubernetes.io/hostname
-      containers:
-      - name: manager
-        image: kueue:v0.8.0
-        args:
-        - --health-probe-bind-address=:8081
-        - --metrics-bind-address=:8080
-        - --leader-elect
-        - --leader-election-id=kueue-controller-leader
-        - --zap-log-level=info
-        - --zap-stacktrace-level=error
-        - --workload-workers=20  # 生产环境增加并发
-        - --cluster-queue-workers=10
-        resources:
-          limits:
-            cpu: 2
-            memory: 4Gi
-          requests:
-            cpu: 1
-            memory: 2Gi
-        livenessProbe:
-          httpGet:
-            path: /healthz
-            port: 8081
-          initialDelaySeconds: 15
-          periodSeconds: 20
-        readinessProbe:
-          httpGet:
-            path: /readyz
-            port: 8081
-          initialDelaySeconds: 5
-          periodSeconds: 10
-```
-
----
-layout: default
-title: Kueue 生产高可用架构 - 监控与可观测性
----
-
-Prometheus 集成
-
-```yaml
-# ServiceMonitor 配置
-apiVersion: monitoring.coreos.com/v1
-kind: ServiceMonitor
-metadata:
-  name: kueue-metrics
-  namespace: kueue-system
-spec:
-  selector:
-    matchLabels:
-      control-plane: kueue-controller-manager
-  endpoints:
-  - path: /metrics
-    port: metrics
-    interval: 30s
-    relabelings:
-    - sourceLabels: [__name__]
-      regex: '(kueue_admission_.*|kueue_pending_.*|kueue_quota_.*)'
-      action: keep
-```
-
----
-layout: default
-title: Kueue 生产高可用架构 - 监控与可观测性
----
-
-Grafana Dashboard
-
-```json
-{
-  "dashboard": {
-    "title": "Kueue/Volcano Production Metrics",
-    "panels": [
-      {
-        "title": "Scheduling Rate",
-        "targets": [{
-          "expr": "rate(kueue_admitted_workloads_total[5m])"
-        }]
-      },
-      {
-        "title": "Queue Depth",
-        "targets": [{
-          "expr": "kueue_pending_workloads"
-        }]
-      },
-      {
-        "title": "Resource Utilization",
-        "targets": [{
-          "expr": "sum(kueue_quota_used) / sum(kueue_quota_total)"
-        }]
-      }
-    ]
-  }
-}
-```
-
----
-layout: default
-title: Kueue 生产高可用架构 - 安全加固
----
-
-RBAC 配置
-
-```yaml
-# 细粒度权限控制
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
-metadata:
-  name: kueue-user-role
-rules:
-- apiGroups: ["kueue.x-k8s.io"]
-  resources: ["localqueues"]
-  verbs: ["get", "list", "watch"]
-- apiGroups: ["kueue.x-k8s.io"]
-  resources: ["workloads"]
-  verbs: ["get", "list", "watch", "create", "update", "patch"]
-- apiGroups: ["kueue.x-k8s.io"]
-  resources: ["workloads/status"]
-  verbs: ["get"]
----
-# 管理员角色
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
-metadata:
-  name: kueue-admin-role
-rules:
-- apiGroups: ["kueue.x-k8s.io"]
-  resources: ["*"]
-  verbs: ["*"]
-```
-
----
-layout: default
-title: Kueue 生产高可用架构 - 安全加固
----
-
-NetworkPolicy
-
-```yaml
-# 限制 Kueue 组件网络访问
-apiVersion: networking.k8s.io/v1
-kind: NetworkPolicy
-metadata:
-  name: kueue-network-policy
-  namespace: kueue-system
-spec:
-  podSelector:
-    matchLabels:
-      control-plane: kueue-controller-manager
-  policyTypes:
-  - Ingress
-  - Egress
-  ingress:
-  - from:
-    - namespaceSelector:
-        matchLabels:
-          name: kube-system
-    - podSelector:
-        matchLabels:
-          app: prometheus
-    ports:
-    - protocol: TCP
-      port: 8080  # metrics
-    - protocol: TCP
-      port: 9443  # webhook
-  egress:
-  - to:
-    - namespaceSelector: {}
-    ports:
-    - protocol: TCP
-      port: 443  # API server
-```
-
----
-layout: table
-title: Kueue 生产高可用架构 - 性能调优
----
-
-| 组件 | 参数 | 生产推荐值 | 说明 |
-|------|------|-----------|------|
-| **Kueue Controller** | `--workload-workers` | 20-50 | 根据作业提交频率调整 |
-| | `--cluster-queue-workers` | 10-20 | 队列数量多时增加 |
-| | `--fair-sharing-interval` | 1m | 公平性检查间隔 |
-| **API Server** | `--max-requests-inflight` | 800 | 提高并发处理能力 |
-| | `--max-mutating-requests` | 400 | 提高写入吞吐量 |
 
 ---
 layout: default

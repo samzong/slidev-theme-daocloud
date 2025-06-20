@@ -23,7 +23,7 @@ const DEFAULT_CONFIG: Required<ThemeGlobalConfig> = {
   logoPosition: 'top-right',
   poweredByVariant: 'default',
   progressBarStyle: 'default',
-  disableAnimations: true
+  disableAnimations: false
 }
 
 /**
