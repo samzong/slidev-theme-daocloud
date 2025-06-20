@@ -1,65 +1,275 @@
-/* Logo 组件样式 */
+/* Logo 组件样式 - 重构版本 */
 .logo-container {
-    position: fixed;
-    top: 20px;
-    left: 40px;
-    z-index: 100;
+  position: fixed;
+  z-index: 100;
+  transition: opacity 0.3s ease, transform 0.2s ease;
+}
+
+/* Logo位置系统 */
+.logo-position-top-left {
+  top: var(--logo-spacing, 20px);
+  left: var(--logo-spacing, 20px);
+}
+
+.logo-position-top-right {
+  top: var(--logo-spacing, 20px);
+  right: var(--logo-spacing, 20px);
+}
+
+.logo-position-bottom-left {
+  bottom: var(--logo-spacing, 20px);
+  left: var(--logo-spacing, 20px);
+}
+
+.logo-position-bottom-right {
+  bottom: var(--logo-spacing, 20px);
+  right: var(--logo-spacing, 20px);
+}
+
+/* Logo尺寸系统 */
+.logo-size-sm { --logo-width: 80px; --logo-text-size: 1rem; }
+.logo-size-md { --logo-width: 120px; --logo-text-size: 1.25rem; }
+.logo-size-lg { --logo-width: 160px; --logo-text-size: 1.5rem; }
+.logo-size-xl { --logo-width: 200px; --logo-text-size: 1.75rem; }
+
+/* Logo图片样式 */
+.logo, .logo-image {
+  width: var(--logo-width);
+  height: auto;
+  opacity: 0.9;
+  transition: opacity 0.3s ease, transform 0.2s ease;
+}
+
+.logo:hover, .logo-image:hover {
+  opacity: 1;
+  transform: scale(1.02);
+}
+
+/* Logo文本样式 */
+.logo-text {
+  font-size: var(--logo-text-size);
+  font-weight: 600;
+  line-height: 1.2;
+  transition: all 0.3s ease;
+}
+
+.logo-text-default {
+  color: var(--daocloud-text-light);
+}
+
+.logo-text-white {
+  color: #ffffff;
+}
+
+.logo-text-dark {
+  color: var(--daocloud-text-dark);
+}
+
+.logo-text-minimal {
+  color: var(--daocloud-primary);
+  font-weight: 500;
+}
+
+/* Logo SVG样式 */
+.logo-svg {
+  width: var(--logo-width);
+  height: auto;
+  transition: transform 0.2s ease;
+}
+
+.logo-svg:hover {
+  transform: scale(1.02);
+}
+
+.logo-svg svg {
+  width: 100%;
+  height: auto;
+}
+
+/* Logo变体样式 */
+.logo-variant-white .logo-image {
+  filter: brightness(1.1);
+}
+
+.logo-variant-dark .logo-image {
+  filter: brightness(0.9);
+}
+
+.logo-variant-minimal .logo-image {
+  opacity: 0.8;
+}
+
+.logo-variant-minimal:hover .logo-image {
+  opacity: 1;
+}
+
+/* 隐藏状态 */
+.logo-hidden {
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0.8);
+}
+
+/* 响应式适配 */
+@media (max-width: 768px) {
+  .logo-container {
+    --logo-spacing: 16px;
   }
   
-  .logo {
-    width: 120px;
-    height: auto;
-    opacity: 0.9;
-    transition: opacity 0.3s ease;
+  .logo-size-sm { --logo-width: 60px; --logo-text-size: 0.875rem; }
+  .logo-size-md { --logo-width: 80px; --logo-text-size: 1rem; }
+  .logo-size-lg { --logo-width: 100px; --logo-text-size: 1.125rem; }
+  .logo-size-xl { --logo-width: 120px; --logo-text-size: 1.25rem; }
+}
+
+@media (max-width: 480px) {
+  .logo-container {
+    --logo-spacing: 12px;
   }
   
-  .logo:hover {
-    opacity: 1;
-  }
+  .logo-size-sm { --logo-width: 50px; --logo-text-size: 0.75rem; }
+  .logo-size-md { --logo-width: 60px; --logo-text-size: 0.875rem; }
+  .logo-size-lg { --logo-width: 80px; --logo-text-size: 1rem; }
+  .logo-size-xl { --logo-width: 100px; --logo-text-size: 1.125rem; }
+}
   
-  /* Powered By 组件样式 */
+/* Powered By 组件样式 - 重构版本 */
+.powered-by {
+  position: fixed;
+  z-index: 100;
+  transition: opacity 0.3s ease, transform 0.2s ease;
+}
+
+/* Powered By位置系统 */
+.powered-by-position-top-left {
+  top: var(--powered-by-spacing, 20px);
+  left: var(--powered-by-spacing, 20px);
+}
+
+.powered-by-position-top-right {
+  top: var(--powered-by-spacing, 20px);
+  right: var(--powered-by-spacing, 20px);
+}
+
+.powered-by-position-bottom-left {
+  bottom: var(--powered-by-spacing, 20px);
+  left: var(--powered-by-spacing, 20px);
+}
+
+.powered-by-position-bottom-right {
+  bottom: var(--powered-by-spacing, 20px);
+  right: var(--powered-by-spacing, 20px);
+}
+
+/* Powered By尺寸系统 */
+.powered-by-size-sm { --powered-by-height: 18px; --powered-by-text-size: 0.75rem; }
+.powered-by-size-md { --powered-by-height: 24px; --powered-by-text-size: 0.875rem; }
+.powered-by-size-lg { --powered-by-height: 32px; --powered-by-text-size: 1rem; }
+
+/* Powered By图片样式 */
+.powered-by-img, .powered-by-image {
+  height: var(--powered-by-height);
+  width: auto;
+  opacity: 0.8;
+  transition: opacity 0.3s ease, transform 0.2s ease;
+}
+
+.powered-by-img:hover, .powered-by-image:hover {
+  opacity: 1;
+  transform: scale(1.05);
+}
+
+/* Powered By文本样式 */
+.powered-by-text {
+  font-size: var(--powered-by-text-size);
+  font-weight: 500;
+  opacity: 0.8;
+  transition: opacity 0.3s ease;
+}
+
+.powered-by-text:hover {
+  opacity: 1;
+}
+
+.powered-by-text-default {
+  color: var(--daocloud-text-light);
+}
+
+.powered-by-text-white {
+  color: #ffffff;
+}
+
+.powered-by-text-dark {
+  color: var(--daocloud-text-dark);
+}
+
+.powered-by-text-minimal {
+  color: var(--daocloud-primary);
+  font-weight: 400;
+}
+
+/* Powered By变体样式 */
+.powered-by-variant-white .powered-by-image {
+  filter: brightness(1.2);
+}
+
+.powered-by-variant-dark .powered-by-image {
+  filter: brightness(0.8);
+}
+
+.powered-by-variant-minimal {
+  opacity: 0.6;
+}
+
+.powered-by-variant-minimal:hover {
+  opacity: 0.9;
+}
+
+/* 响应式适配 */
+@media (max-width: 768px) {
   .powered-by {
-    position: fixed;
-    bottom: 20px;
-    right: 40px;
-    z-index: 100;
+    --powered-by-spacing: 16px;
   }
   
-  .powered-by-img {
-    height: 24px;
-    width: auto;
-    opacity: 0.8;
-    transition: opacity 0.3s ease;
+  .powered-by-size-sm { --powered-by-height: 16px; --powered-by-text-size: 0.65rem; }
+  .powered-by-size-md { --powered-by-height: 20px; --powered-by-text-size: 0.75rem; }
+  .powered-by-size-lg { --powered-by-height: 24px; --powered-by-text-size: 0.875rem; }
+}
+
+@media (max-width: 480px) {
+  .powered-by {
+    --powered-by-spacing: 12px;
   }
   
-  .powered-by-img:hover {
-    opacity: 1;
-  }
+  .powered-by-size-sm { --powered-by-height: 14px; --powered-by-text-size: 0.6rem; }
+  .powered-by-size-md { --powered-by-height: 16px; --powered-by-text-size: 0.65rem; }
+  .powered-by-size-lg { --powered-by-height: 20px; --powered-by-text-size: 0.75rem; }
+}
 
 /* 专业对比表格样式 */
 .slidev-layout table {
   width: 100%;
   border-collapse: collapse;
-  margin: 2rem 0;
-  font-size: 0.95rem;
-  box-shadow: 0 4px 12px rgba(0, 255, 127, 0.1);
-  border-radius: 8px;
+  margin: var(--spacing-8) 0;
+  font-size: var(--font-size-sm);
+  box-shadow: var(--shadow-primary);
+  border-radius: var(--border-radius-lg);
   overflow: hidden;
 }
 
 .slidev-layout table th {
   background: linear-gradient(135deg, var(--daocloud-primary) 0%, var(--daocloud-primary-dark) 100%);
-  color: white;
-  font-weight: 600;
-  padding: 1rem;
+  color: var(--daocloud-text-light);
+  font-weight: var(--font-weight-semibold);
+  padding: var(--spacing-4);
   text-align: left;
   border: none;
 }
 
 .slidev-layout table td {
-  padding: 0.8rem 1rem;
+  padding: var(--spacing-3) var(--spacing-4);
   border: none;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: var(--border-width-1) solid rgba(255, 255, 255, 0.1);
 }
 
 .slidev-layout table tr:nth-child(even) {
@@ -68,8 +278,8 @@
 
 .slidev-layout table tr:hover {
   background: rgba(0, 255, 127, 0.1);
-  transform: translateX(2px);
-  transition: all 0.2s ease;
+  transform: translateX(var(--spacing-1));
+  transition: var(--transition-all);
 }
 
 /* 对比表格中的重要标记 */
@@ -118,9 +328,9 @@
 
 .slidev-layout li {
   position: relative;
-  padding-left: 2rem;
-  margin-bottom: 1rem;
-  line-height: 1.6;
+  padding-left: var(--spacing-8);
+  margin-bottom: var(--spacing-4);
+  line-height: var(--line-height-relaxed);
 }
 
 .slidev-layout li::before {
@@ -133,59 +343,59 @@
 }
 
 .slidev-layout li:hover::before {
-  transform: translateX(3px);
+  transform: translateX(var(--spacing-1));
 }
 
 /* 特殊技术标记 */
 .slidev-layout li strong {
   background: linear-gradient(90deg, var(--daocloud-primary), transparent);
-  background-size: 100% 2px;
+  background-size: 100% var(--border-width-2);
   background-repeat: no-repeat;
   background-position: 0 100%;
-  padding-bottom: 2px;
+  padding-bottom: var(--spacing-1);
 }
 
 /* 章节标题增强 */
 .slidev-layout h1 {
   position: relative;
-  margin-bottom: 2.5rem;
+  margin-bottom: var(--spacing-10);
 }
 
 .slidev-layout h1::after {
   content: '';
   position: absolute;
-  bottom: -10px;
+  bottom: calc(-1 * var(--spacing-3));
   left: 0;
   width: 60px;
-  height: 3px;
+  height: var(--border-width-4);
   background: linear-gradient(90deg, var(--daocloud-primary) 0%, transparent 100%);
-  border-radius: 2px;
+  border-radius: var(--border-radius-sm);
 }
 
 /* 二级标题样式 */
 .slidev-layout h2 {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  margin-bottom: 1.5rem;
+  gap: var(--spacing-4);
+  margin-bottom: var(--spacing-6);
 }
 
 .slidev-layout h2::before {
   content: '';
-  width: 4px;
+  width: var(--border-width-4);
   height: 24px;
   background: var(--daocloud-primary);
-  border-radius: 2px;
+  border-radius: var(--border-radius-sm);
   flex-shrink: 0;
 }
 
 /* 重要提示框 */
 .slidev-layout blockquote {
   background: rgba(0, 255, 127, 0.1);
-  border-left: 4px solid var(--daocloud-primary);
-  padding: 1rem 1.5rem;
-  margin: 1.5rem 0;
-  border-radius: 0 8px 8px 0;
+  border-left: var(--border-width-4) solid var(--daocloud-primary);
+  padding: var(--spacing-4) var(--spacing-6);
+  margin: var(--spacing-6) 0;
+  border-radius: 0 var(--border-radius-lg) var(--border-radius-lg) 0;
   font-style: italic;
 }
 
@@ -194,17 +404,17 @@
   display: inline-block;
   background: rgba(0, 255, 127, 0.1);
   color: var(--daocloud-primary);
-  padding: 2px 8px;
-  border-radius: 12px;
-  font-size: 0.8rem;
-  font-weight: 500;
-  margin: 0 4px;
+  padding: var(--spacing-1) var(--spacing-2);
+  border-radius: var(--border-radius-xl);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  margin: 0 var(--spacing-1);
 }
 
 /* 时间轴样式 */
 .timeline {
   position: relative;
-  padding: 2rem 0;
+  padding: var(--spacing-8) 0;
 }
 
 .timeline::before {
@@ -213,29 +423,29 @@
   left: 30px;
   top: 0;
   bottom: 0;
-  width: 2px;
+  width: var(--timeline-line-width);
   background: linear-gradient(180deg, var(--daocloud-primary) 0%, transparent 100%);
 }
 
 .timeline-item {
   position: relative;
-  padding-left: 4rem;
-  margin-bottom: 2rem;
+  padding-left: var(--spacing-16);
+  margin-bottom: var(--spacing-8);
 }
 
 .timeline-item::before {
   content: '';
   position: absolute;
   left: 22px;
-  top: 0.5rem;
-  width: 16px;
-  height: 16px;
+  top: var(--spacing-2);
+  width: var(--timeline-node-size);
+  height: var(--timeline-node-size);
   background: var(--daocloud-primary);
-  border-radius: 50%;
-  box-shadow: 0 0 0 4px rgba(0, 255, 127, 0.2);
+  border-radius: var(--border-radius-full);
+  box-shadow: 0 0 0 var(--spacing-1) rgba(0, 255, 127, 0.2);
 }
 
 .timeline-item strong {
   color: var(--daocloud-primary);
-  font-size: 1.1rem;
+  font-size: var(--font-size-lg);
 }

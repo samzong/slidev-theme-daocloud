@@ -1,0 +1,209 @@
+/**
+ * DaoCloud 主题设计系统
+ * 统一的样式变量和设计标准
+ */
+
+:root {
+  /* ========== 颜色系统 ========== */
+  /* 品牌色 */
+  --daocloud-primary: #00ff7f;
+  --daocloud-primary-dark: #00cc66;
+  --daocloud-primary-light: #33ff99;
+  --daocloud-primary-lighter: #66ffb3;
+  
+  /* 辅助色 */
+  --daocloud-secondary: #1a1a2e;
+  --daocloud-secondary-light: #2d2d4a;
+  --daocloud-secondary-dark: #141426;
+  
+  /* 背景色 */
+  --daocloud-bg-dark: #0f0f0f;
+  --daocloud-bg-light: #ffffff;
+  --daocloud-bg-gray: #f8f9fa;
+  --daocloud-bg-overlay: rgba(0, 0, 0, 0.8);
+  
+  /* 文本色 */
+  --daocloud-text-primary: #ffffff;
+  --daocloud-text-secondary: #cccccc;
+  --daocloud-text-muted: #999999;
+  --daocloud-text-dark: #333333;
+  --daocloud-text-light: #ffffff;
+  
+  /* 状态色 */
+  --daocloud-success: #28a745;
+  --daocloud-warning: #ffc107;
+  --daocloud-error: #dc3545;
+  --daocloud-info: #17a2b8;
+  
+  /* ========== 间距系统 ========== */
+  --spacing-0: 0;
+  --spacing-1: 0.25rem;    /* 4px */
+  --spacing-2: 0.5rem;     /* 8px */
+  --spacing-3: 0.75rem;    /* 12px */
+  --spacing-4: 1rem;       /* 16px */
+  --spacing-5: 1.25rem;    /* 20px */
+  --spacing-6: 1.5rem;     /* 24px */
+  --spacing-8: 2rem;       /* 32px */
+  --spacing-10: 2.5rem;    /* 40px */
+  --spacing-12: 3rem;      /* 48px */
+  --spacing-16: 4rem;      /* 64px */
+  --spacing-20: 5rem;      /* 80px */
+  
+  /* ========== 字体系统 ========== */
+  /* 字体族 */
+  --font-family-base: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-family-mono: "Fira Code", "JetBrains Mono", Monaco, "Cascadia Code", "Roboto Mono", monospace;
+  
+  /* 字体大小 */
+  --font-size-xs: 0.75rem;     /* 12px */
+  --font-size-sm: 0.875rem;    /* 14px */
+  --font-size-base: 1rem;      /* 16px */
+  --font-size-lg: 1.125rem;    /* 18px */
+  --font-size-xl: 1.25rem;     /* 20px */
+  --font-size-2xl: 1.5rem;     /* 24px */
+  --font-size-3xl: 1.875rem;   /* 30px */
+  --font-size-4xl: 2.25rem;    /* 36px */
+  --font-size-5xl: 3rem;       /* 48px */
+  --font-size-6xl: 3.75rem;    /* 60px */
+  
+  /* 字体粗细 */
+  --font-weight-light: 300;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-weight-extrabold: 800;
+  
+  /* 行高 */
+  --line-height-none: 1;
+  --line-height-tight: 1.25;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.75;
+  
+  /* ========== 边框系统 ========== */
+  --border-width-0: 0;
+  --border-width-1: 1px;
+  --border-width-2: 2px;
+  --border-width-4: 4px;
+  
+  --border-radius-none: 0;
+  --border-radius-sm: 0.125rem;   /* 2px */
+  --border-radius-base: 0.25rem;  /* 4px */
+  --border-radius-md: 0.375rem;   /* 6px */
+  --border-radius-lg: 0.5rem;     /* 8px */
+  --border-radius-xl: 0.75rem;    /* 12px */
+  --border-radius-2xl: 1rem;      /* 16px */
+  --border-radius-full: 9999px;
+  
+  /* ========== 阴影系统 ========== */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-base: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  --shadow-inner: inset 0 2px 4px 0 rgba(0, 0, 0, 0.06);
+  --shadow-none: none;
+  
+  /* 品牌色阴影 */
+  --shadow-primary: 0 4px 12px rgba(0, 255, 127, 0.15);
+  --shadow-primary-lg: 0 10px 20px rgba(0, 255, 127, 0.25);
+  
+  /* ========== 响应式断点 ========== */
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+  --breakpoint-2xl: 1536px;
+  
+  /* ========== 过渡动画 ========== */
+  --transition-none: none;
+  --transition-all: all 150ms ease-in-out;
+  --transition-colors: color 150ms ease-in-out, background-color 150ms ease-in-out, border-color 150ms ease-in-out;
+  --transition-opacity: opacity 150ms ease-in-out;
+  --transition-shadow: box-shadow 150ms ease-in-out;
+  --transition-transform: transform 150ms ease-in-out;
+  
+  /* ========== 层级系统 ========== */
+  --z-index-dropdown: 1000;
+  --z-index-sticky: 1020;
+  --z-index-fixed: 1030;
+  --z-index-modal-backdrop: 1040;
+  --z-index-modal: 1050;
+  --z-index-popover: 1060;
+  --z-index-tooltip: 1070;
+  --z-index-toast: 1080;
+  
+  /* ========== 组件特定变量 ========== */
+  /* Logo 组件 */
+  --logo-spacing: var(--spacing-5);
+  --logo-width-sm: 80px;
+  --logo-width-md: 120px;
+  --logo-width-lg: 160px;
+  --logo-width-xl: 200px;
+  
+  /* PoweredBy 组件 */
+  --powered-by-spacing: var(--spacing-5);
+  --powered-by-height-sm: 18px;
+  --powered-by-height-md: 24px;
+  --powered-by-height-lg: 32px;
+  
+  /* 进度条组件 */
+  --progress-height-thin: 2px;
+  --progress-height-default: 4px;
+  --progress-height-thick: 6px;
+  
+  /* 时间轴组件 */
+  --timeline-spacing: var(--spacing-10);
+  --timeline-line-width: 2px;
+  --timeline-node-size: 16px;
+  
+  /* 网格布局 */
+  --grid-gap: var(--spacing-6);
+  --grid-gap-sm: var(--spacing-4);
+  --grid-gap-lg: var(--spacing-8);
+}
+
+/* ========== 媒体查询断点 ========== */
+@media (max-width: 767px) {
+  :root {
+    /* 移动端间距调整 */
+    --logo-spacing: var(--spacing-4);
+    --powered-by-spacing: var(--spacing-4);
+    --timeline-spacing: var(--spacing-6);
+    --grid-gap: var(--spacing-4);
+    
+    /* 移动端字体大小调整 */
+    --font-size-xs: 0.7rem;
+    --font-size-sm: 0.8rem;
+    --font-size-base: 0.9rem;
+    --font-size-lg: 1rem;
+    --font-size-xl: 1.1rem;
+    --font-size-2xl: 1.3rem;
+    --font-size-3xl: 1.6rem;
+    --font-size-4xl: 2rem;
+  }
+}
+
+@media (max-width: 479px) {
+  :root {
+    /* 超小屏间距调整 */
+    --logo-spacing: var(--spacing-3);
+    --powered-by-spacing: var(--spacing-3);
+    --timeline-spacing: var(--spacing-4);
+    --grid-gap: var(--spacing-3);
+  }
+}
+
+/* ========== 工具类 ========== */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
