@@ -16,10 +16,10 @@ export interface ThemeGlobalConfig {
  * 默认全局配置
  */
 const DEFAULT_CONFIG: Required<ThemeGlobalConfig> = {
-  showLogo: false,
-  showPoweredBy: false,
+  showLogo: true,
+  showPoweredBy: true,
   logo: 'logo.png',
-  showProgressBar: false,
+  showProgressBar: true,
   logoPosition: 'top-right',
   poweredByVariant: 'default',
   progressBarStyle: 'default',

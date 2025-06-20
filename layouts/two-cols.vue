@@ -33,9 +33,9 @@
       </div>
     </div>
     
-    <Logo v-if="showLogo" :position="logoPosition" />
-    <PoweredBy v-if="showPoweredBy" :variant="poweredByVariant" />
-    <ProgressBar v-if="showProgressBar" :style="progressBarStyle" />
+    <Logo v-if="showLogo" />
+    <PoweredBy v-if="showPoweredBy" />
+    <ProgressBar v-if="showProgressBar" />
     <AnimationController />
   </div>
 </template>
@@ -48,10 +48,7 @@ import PageHeader from '../components/PageHeader.vue'
 const { 
   showLogo, 
   showPoweredBy, 
-  showProgressBar, 
-  logoPosition,
-  poweredByVariant,
-  progressBarStyle 
+  showProgressBar
 } = useThemeConfig()
 </script>
 
