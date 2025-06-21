@@ -14,8 +14,8 @@
   position: absolute;
   top: 50%;
   right: 20%;
-  width: 400px;
-  height: 400px;
+  width: var(--fluid-ring-size-lg);
+  height: var(--fluid-ring-size-lg);
   transform: translate(50%, -50%);
   opacity: 0.8;
   pointer-events: none;
@@ -78,8 +78,8 @@
   position: absolute;
   bottom: 0;
   right: 0;
-  width: 300px;
-  height: 200px;
+  width: var(--content-decoration-width-lg);
+  height: var(--content-decoration-height);
   opacity: 0.3;
   pointer-events: none;
 }
@@ -89,7 +89,7 @@
   position: absolute;
   bottom: var(--spacing-5);
   right: var(--spacing-5);
-  width: 200px;
+  width: var(--content-decoration-width-md);
   height: var(--border-width-2);
   background: linear-gradient(
     90deg,
@@ -106,7 +106,7 @@
   position: absolute;
   bottom: var(--spacing-10);
   right: var(--spacing-12);
-  width: 150px;
+  width: var(--content-decoration-width-sm);
   height: var(--border-width-1);
   background: linear-gradient(
     90deg,

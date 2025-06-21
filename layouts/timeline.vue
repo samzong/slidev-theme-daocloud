@@ -36,8 +36,8 @@
     
     <Logo v-if="showLogo" />
     <PoweredBy v-if="showPoweredBy" />
-    <ProgressBar v-if="showProgressBar" />
-    <AnimationController />
+    <!-- 进度条功能由 slidev-component-progress 插件提供 -->
+    <!-- 动画控制由 Slidev 内置功能提供 -->
   </div>
 </template>
 
@@ -54,7 +54,7 @@ interface TimelineNode {
 const { 
   showLogo, 
   showPoweredBy, 
-  showProgressBar
+  
 } = useThemeConfig()
 
 const nodes = ref<TimelineNode[]>([])
@@ -129,10 +129,10 @@ onMounted(async () => {
 /* 时间线 */
 .timeline-line {
   position: absolute;
-  left: 40px;
-  right: 40px;
+  left: var(--layout-timeline-offset);
+  right: var(--layout-timeline-offset);
   top: 50%;
-  height: 3px;
+  height: var(--timeline-line-width);
   background: var(--daocloud-primary);
   transform: translateY(-50%);
   z-index: 1;
@@ -279,12 +279,12 @@ onMounted(async () => {
 /* 响应式设计 */
 @media (max-width: 1024px) {
   .timeline-container {
-    padding: 100px 30px 40px 30px;
+    padding: 100px var(--layout-timeline-offset-sm) 40px var(--layout-timeline-offset-sm);
   }
   
   .timeline-line {
-    left: 30px;
-    right: 30px;
+    left: var(--layout-timeline-offset-sm);
+    right: var(--layout-timeline-offset-sm);
   }
   
   .node-card {

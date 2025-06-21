@@ -21,8 +21,8 @@
     
     <Logo v-if="showLogo" />
     <PoweredBy v-if="showPoweredBy" />
-    <ProgressBar v-if="showProgressBar" />
-    <AnimationController />
+    <!-- 进度条功能由 slidev-component-progress 插件提供 -->
+    <!-- 动画控制由 Slidev 内置功能提供 -->
   </div>
 </template>
 
@@ -32,7 +32,7 @@ import { useThemeConfig } from '../composables/useThemeConfig'
 const { 
   showLogo, 
   showPoweredBy, 
-  showProgressBar
+  
 } = useThemeConfig()
 </script>
 
@@ -52,10 +52,10 @@ const {
 /* 主要内容区 */
 .chapter-content {
   text-align: left;
-  max-width: 50%;
-  width: 50%;
-  margin-left: 40%;
-  padding: 3rem;
+  max-width: var(--layout-chapter-max-width);
+  width: var(--layout-chapter-max-width);
+  margin-left: var(--layout-chapter-margin-left);
+  padding: var(--spacing-12);
   z-index: 10;
 }
 

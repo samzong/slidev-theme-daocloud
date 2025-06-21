@@ -13,19 +13,19 @@
 <style scoped>
 .page-header {
   position: absolute;
-  top: 60px;
-  left: 32px;
+  top: var(--page-header-top);
+  left: var(--page-header-left);
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: var(--spacing-4);
   z-index: 20;
 }
 
 .title-decorator {
-  width: 16px;
-  height: 16px;
+  width: var(--page-header-decorator-size);
+  height: var(--page-header-decorator-size);
   background: var(--daocloud-primary);
-  border-radius: 2px;
+  border-radius: var(--border-radius-sm);
   flex-shrink: 0;
 }
 

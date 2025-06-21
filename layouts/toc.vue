@@ -17,8 +17,8 @@
     
     <Logo v-if="showLogo" />
     <PoweredBy v-if="showPoweredBy" />
-    <ProgressBar v-if="showProgressBar" />
-    <AnimationController />
+    <!-- 进度条功能由 slidev-component-progress 插件提供 -->
+    <!-- 动画控制由 Slidev 内置功能提供 -->
   </div>
 </template>
 
@@ -28,7 +28,7 @@ import { useThemeConfig } from '../composables/useThemeConfig'
 const { 
   showLogo, 
   showPoweredBy, 
-  showProgressBar
+  
 } = useThemeConfig()
 </script>
 

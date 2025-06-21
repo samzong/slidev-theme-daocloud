@@ -1,3 +1,6 @@
+import { computed, reactive, toRefs, watchEffect } from 'vue'
+import { objectKeys } from '@antfu/utils'
+
 /**
  * 主题全局配置接口
  */
@@ -14,19 +17,16 @@ export interface ThemeGlobalConfig {
   poweredByVariant?: "default" | "white" | "dark" | "minimal";
   poweredByPosition?: "top-left" | "top-right" | "bottom-left" | "bottom-right";
   poweredBySize?: "sm" | "md" | "lg";
-
-  // 进度条配置
-  showProgressBar?: boolean;
-  progressBarStyle?: "default" | "thin" | "hidden";
-
-  // 动画配置
-  disableAnimations?: boolean;
+  poweredByType?: 'image' | 'svg' | 'text';
+  poweredBySvg?: string;
+  poweredByText?: string;
+  poweredByImage?: string;
 }
 
 /**
  * 默认全局配置
  */
-const DEFAULT_CONFIG: Required<ThemeGlobalConfig> = {
+const DEFAULT_CONFIG: Readonly<Required<ThemeGlobalConfig>> = {
   // Logo 默认配置
   showLogo: true,
   logo: "/logo.png",
@@ -39,88 +39,32 @@ const DEFAULT_CONFIG: Required<ThemeGlobalConfig> = {
   poweredByVariant: "default",
   poweredByPosition: "bottom-right",
   poweredBySize: "sm",
-
-  // 进度条默认配置
-  showProgressBar: true,
-  progressBarStyle: "thin",
-
-  // 动画默认配置
-  disableAnimations: true,
+  poweredByType: 'image',
+  poweredBySvg: '',
+  poweredByText: 'Powered by DaoCloud',
+  poweredByImage: '/powerby-default.png',
 };
 
-import { computed } from 'vue'
+// 创建一个响应式的、类型安全的状态存储
+const themeConfigState = reactive<Required<ThemeGlobalConfig>>({ ...DEFAULT_CONFIG });
 
 /**
- * 获取合并后的主题配置
- * 优先级: frontmatter > themeConfig.globalConfig > DEFAULT_CONFIG
+ * 主题配置组合函数
+ * @returns 响应式的主题配置对象
  */
 export function useThemeConfig() {
-  // 获取配置的计算属性
-  const config = computed(() => {
-    // 在 Slidev 环境中，这些变量是全局可用的
-    const themeGlobalConfig =
-      (globalThis as any).$themeConfig?.globalConfig || {};
+  // 使用 watchEffect 来响应式地更新配置
+  watchEffect(() => {
+    const themeGlobalConfig = (globalThis as any).$themeConfig?.globalConfig || {};
     const frontmatter = (globalThis as any).$frontmatter || {};
 
-    // 获取当前页面的 frontmatter 配置
-    const frontmatterConfig: Partial<ThemeGlobalConfig> = {
-      // Logo 配置
-      showLogo: frontmatter.showLogo,
-      logo: frontmatter.logo,
-      logoPosition: frontmatter.logoPosition,
-      logoSize: frontmatter.logoSize,
-      logoVariant: frontmatter.logoVariant,
-
-      // PoweredBy 配置
-      showPoweredBy: frontmatter.showPoweredBy,
-      poweredByVariant: frontmatter.poweredByVariant,
-      poweredByPosition: frontmatter.poweredByPosition,
-      poweredBySize: frontmatter.poweredBySize,
-
-      // 进度条配置
-      showProgressBar: frontmatter.showProgressBar,
-      progressBarStyle: frontmatter.progressBarStyle,
-
-      // 动画配置
-      disableAnimations: frontmatter.disableAnimations,
-    };
-
-    // 过滤掉 undefined 值
-    const filteredFrontmatterConfig = Object.fromEntries(
-      Object.entries(frontmatterConfig).filter(
-        ([_, value]) => value !== undefined
-      )
-    );
-
-    // 合并配置：frontmatter > themeConfig > default
-    return {
-      ...DEFAULT_CONFIG,
-      ...themeGlobalConfig,
-      ...filteredFrontmatterConfig,
-    } as Required<ThemeGlobalConfig>;
+    for (const key of objectKeys(DEFAULT_CONFIG)) {
+      const value = frontmatter[key] ?? themeGlobalConfig[key] ?? DEFAULT_CONFIG[key];
+      // 类型断言是安全的，因为我们遍历的是 DEFAULT_CONFIG 的键
+      (themeConfigState as any)[key] = value;
+    }
   });
 
-  return {
-    config,
-    // 便捷访问单个配置项 - 现在都是响应式的
-    // Logo 配置
-    showLogo: computed(() => config.value.showLogo),
-    logo: computed(() => config.value.logo),
-    logoPosition: computed(() => config.value.logoPosition),
-    logoSize: computed(() => config.value.logoSize),
-    logoVariant: computed(() => config.value.logoVariant),
-
-    // PoweredBy 配置
-    showPoweredBy: computed(() => config.value.showPoweredBy),
-    poweredByVariant: computed(() => config.value.poweredByVariant),
-    poweredByPosition: computed(() => config.value.poweredByPosition),
-    poweredBySize: computed(() => config.value.poweredBySize),
-
-    // 进度条配置
-    showProgressBar: computed(() => config.value.showProgressBar),
-    progressBarStyle: computed(() => config.value.progressBarStyle),
-
-    // 动画配置
-    disableAnimations: computed(() => config.value.disableAnimations),
-  };
+  // toRefs 将响应式对象的每个属性都转换为 ref，方便在模板中使用
+  return toRefs(themeConfigState);
 }

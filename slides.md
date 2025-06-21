@@ -1,13 +1,11 @@
 ---
 theme: ./
-disableAnimations: true
+transition: fade
 layout: cover
 title: 'Kueue & Volcano 调度实战'
 subtitle: '深入对比与应用'
 date: '2025-06-18'
 author: "船长"
-showLogo: false
-showPoweredBy: false
 fonts:
   # 基础字体
   sans: Robot

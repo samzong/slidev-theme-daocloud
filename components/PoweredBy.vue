@@ -1,109 +1,81 @@
 <template>
-  <div class="powered-by" :class="containerClass" v-if="!finalHidden">
+  <div v-if="state.shouldShow.value" :class="componentClasses">
     <!-- 插槽内容优先 -->
-    <slot v-if="$slots.default" />
-    <!-- 新增: SVG 内容支持 -->
-    <div v-else-if="type === 'svg'" class="powered-by-svg" v-html="svgContent" />
+    <slot v-if="finalType === 'slot'" />
+    
+    <!-- SVG 内容 -->
+    <div 
+      v-else-if="finalType === 'svg' && finalSvgContent" 
+      class="powered-by-svg" 
+      v-html="finalSvgContent" 
+    />
+
     <!-- 文本内容 -->
-    <div v-else-if="type === 'text'" class="powered-by-text" :class="textClass">
-      {{ finalText }}
+    <div v-else-if="finalType === 'text'" class="powered-by-text">
+      {{ finalContent }}
     </div>
+
     <!-- 图片内容（默认） -->
-    <img v-else :src="finalImage" :alt="finalAlt" class="powered-by-img" :class="imageClass" />
+    <img 
+      v-else-if="finalType === 'image'" 
+      :src="finalContent" 
+      :alt="props.alt" 
+      class="powered-by-img"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
 import { computed, onMounted } from 'vue'
+import { useComponentState, generateComponentClasses, MediaComponentValidator } from '../composables/useBaseComponent'
 import { useThemeConfig } from '../composables/useThemeConfig'
 
-interface Props {
-  /** 内容类型：image(图片) | svg(SVG) | text(文本) | slot(插槽) */
-  type?: 'image' | 'svg' | 'text' | 'slot'
-  /** 样式变体 */
-  variant?: 'default' | 'white' | 'dark' | 'minimal'
-  /** 自定义图片路径 */
-  src?: string
-  /** SVG内容字符串 */
-  svgContent?: string
-  /** 自定义文本内容 */
-  text?: string
-  /** 图片描述 */
-  alt?: string
-  /** 组件位置 */
-  position?: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right'
-  /** 组件尺寸 */
-  size?: 'sm' | 'md' | 'lg'
-  /** 是否隐藏 */
-  hidden?: boolean
-  /** 品牌名称（用于文本模式） */
-  brand?: string
-}
-
-const props = withDefaults(defineProps<Props>(), {
-  type: 'image',
-  variant: undefined, // 使用配置系统默认值
-  alt: 'Powered By',
-  position: 'bottom-right',
-  size: 'md',
-  hidden: false,
-  brand: 'DaoCloud'
+// 定义组件的 Props
+const props = defineProps({
+  type: { type: String, default: undefined },
+  variant: { type: String, default: undefined },
+  src: { type: String, default: undefined },
+  svgContent: { type: String, default: undefined },
+  text: { type: String, default: undefined },
+  alt: { type: String, default: 'Powered By' },
+  position: { type: String, default: undefined },
+  size: { type: String, default: undefined },
+  hidden: { type: Boolean, default: false },
 })
 
-const { poweredByVariant, showPoweredBy } = useThemeConfig()
+// 获取全局主题配置
+const themeConfig = useThemeConfig()
 
-// 运行时类型验证
-const validateProps = () => {
-  if (props.type === 'svg' && !props.svgContent) {
-    console.warn('[PoweredBy] SVG type requires svgContent prop')
-  }
-  if (props.type === 'text' && !props.text && !props.brand) {
-    console.warn('[PoweredBy] Text type requires text or brand prop')
-  }
-  if (props.type === 'image' && !props.src && !finalImage.value) {
-    console.warn('[PoweredBy] Image type requires src prop or default image')
-  }
-}
+// 使用 useComponentState hook 来管理组件状态
+const state = useComponentState('PoweredBy', props)
+
+// 决定最终使用的内容类型
+const finalType = computed(() => props.type || themeConfig.poweredByType.value)
+
+// 决定最终使用的内容
+const finalContent = computed(() => {
+  if (finalType.value === 'image') return props.src || themeConfig.poweredByImage.value
+  if (finalType.value === 'text') return props.text || themeConfig.poweredByText.value
+  return ''
+})
+
+// 决定最终的 SVG 内容
+const finalSvgContent = computed(() => props.svgContent || themeConfig.poweredBySvg.value)
+
+// 生成样式类
+const componentClasses = computed(() => generateComponentClasses(
+  'PoweredBy',
+  state.finalVariant.value,
+  state.finalPosition.value,
+  state.finalSize.value,
+))
 
 // 在组件挂载时执行验证
 onMounted(() => {
-  validateProps()
+  MediaComponentValidator.validate(finalType.value, {
+    src: finalContent.value,
+    svgContent: finalSvgContent.value,
+    textContent: finalContent.value,
+  }, 'PoweredBy')
 })
-
-// 最终使用的配置
-const finalVariant = computed(() => props.variant || poweredByVariant.value)
-const finalHidden = computed(() => props.hidden || !showPoweredBy.value)
-const finalText = computed(() => {
-  if (props.text) return props.text
-  return `Powered by ${props.brand}`
-})
-const finalAlt = computed(() => {
-  if (props.alt !== 'Powered By') return props.alt
-  return `Powered By ${props.brand}`
-})
-const finalImage = computed(() => {
-  if (props.src) return props.src
-  // 默认图片路径逻辑
-  const variant = finalVariant.value
-  if (variant === 'white') return '/powerby-white.png'
-  if (variant === 'dark') return '/powerby-dark.png'
-  return '/powerby-default.png'
-})
-
-// 样式类
-const containerClass = computed(() => [
-  `powered-by-position-${props.position}`,
-  `powered-by-size-${props.size}`,
-  `powered-by-variant-${finalVariant.value}`
-])
-
-const imageClass = computed(() => [
-  'powered-by-image',
-  `powered-by-image-${finalVariant.value}`
-])
-
-const textClass = computed(() => [
-  `powered-by-text-${finalVariant.value}`,
-  `powered-by-text-${props.size}`
-])
 </script>

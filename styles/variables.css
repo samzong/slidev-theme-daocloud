@@ -158,6 +158,31 @@
   --timeline-line-width: 2px;
   --timeline-node-size: 16px;
   
+  /* 布局系统 */
+  --layout-content-max-width: 60%;
+  --layout-chapter-max-width: 50%;
+  --layout-chapter-margin-left: 40%;
+  --layout-content-padding: var(--spacing-16);
+  --layout-content-padding-sm: var(--spacing-10);
+  --layout-content-padding-xs: var(--spacing-6);
+  --layout-timeline-offset: var(--spacing-10);
+  --layout-timeline-offset-sm: var(--spacing-8);
+  --layout-timeline-offset-xs: var(--spacing-6);
+  
+  /* 页面头部系统 */
+  --page-header-top: var(--spacing-16);
+  --page-header-left: var(--spacing-8);
+  --page-header-decorator-size: 16px;
+  
+  /* 装饰元素系统 */
+  --fluid-ring-size-lg: 400px;
+  --fluid-ring-size-md: 300px;
+  --fluid-ring-size-sm: 200px;
+  --content-decoration-width-lg: 300px;
+  --content-decoration-width-md: 200px;
+  --content-decoration-width-sm: 150px;
+  --content-decoration-height: 200px;
+  
   /* 网格布局 */
   --grid-gap: var(--spacing-6);
   --grid-gap-sm: var(--spacing-4);
@@ -165,13 +190,15 @@
 }
 
 /* ========== 媒体查询断点 ========== */
-@media (max-width: 767px) {
+@media (max-width: 768px) {
   :root {
     /* 移动端间距调整 */
     --logo-spacing: var(--spacing-4);
     --powered-by-spacing: var(--spacing-4);
     --timeline-spacing: var(--spacing-6);
     --grid-gap: var(--spacing-4);
+    --layout-content-padding: var(--spacing-8);
+    --layout-timeline-offset: var(--spacing-6);
     
     /* 移动端字体大小调整 */
     --font-size-xs: 0.7rem;
@@ -185,13 +212,15 @@
   }
 }
 
-@media (max-width: 479px) {
+@media (max-width: 480px) {
   :root {
     /* 超小屏间距调整 */
     --logo-spacing: var(--spacing-3);
     --powered-by-spacing: var(--spacing-3);
     --timeline-spacing: var(--spacing-4);
     --grid-gap: var(--spacing-3);
+    --layout-content-padding: var(--spacing-6);
+    --layout-timeline-offset: var(--spacing-4);
   }
 }
 

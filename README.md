@@ -205,7 +205,7 @@ slidev-theme-daocloud/
 ├── components/         # 可复用组件
 │   ├── Logo.vue
 │   ├── PoweredBy.vue
-│   └── ProgressBar.vue
+
 ├── layouts/           # 布局组件
 │   ├── cover.vue
 │   ├── intro.vue

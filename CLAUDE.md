@@ -11,7 +11,7 @@ This is **Slidev Theme DaoCloud** - a custom Slidev presentation theme designed 
 ### Theme Structure
 - **Entry Point**: `index.ts` - defines theme configuration, colors, and registers all layouts/components
 - **Layouts**: 14 specialized layout components in `layouts/` directory for different presentation needs
-- **Components**: 4 reusable components (`Logo.vue`, `PoweredBy.vue`, `ProgressBar.vue`, `AnimationController.vue`)
+- **Components**: 2 reusable components (`Logo.vue`, `PoweredBy.vue`)
 - **Composables**: `useThemeConfig.ts` - centralized theme configuration management
 - **Styles**: Modular CSS architecture with separate files for layouts, code highlighting, and components
 
@@ -58,11 +58,10 @@ The theme supports a global configuration system with three levels of precedence
 - `showLogo: boolean` - Display logo component (default: true)
 - `showPoweredBy: boolean` - Display "Powered by" component (default: true)
 - `logo: string` - Logo image path (default: '/logo.png')
-- `showProgressBar: boolean` - Display progress indicator (default: true)
 - `logoPosition: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right'` - Logo placement (default: 'top-right')
 - `poweredByVariant: 'default' | 'white'` - PoweredBy component style (default: 'default')
-- `progressBarStyle: 'default' | 'thin' | 'hidden'` - Progress bar appearance (default: 'default')
-- `disableAnimations: boolean` - Disable all animations and transitions for serious presentations (default: true)
+- **Progress Bar**: Now uses the official `slidev-component-progress` plugin for better performance and compatibility
+- **Animations**: Now leverages Slidev's built-in animation system instead of custom implementation
 
 #### Configuration Examples
 
@@ -88,15 +87,6 @@ export default {
 layout: cover
 showLogo: true        # Override theme config to show logo
 poweredByVariant: white
-disableAnimations: true  # Disable animations for this slide
----
-```
-
-**Serious presentation mode** (全局禁用动画):
-```yaml
----
-theme: daocloud
-disableAnimations: true  # 禁用所有动画，适合严肃场景
 ---
 ```
 
@@ -106,7 +96,7 @@ disableAnimations: true  # 禁用所有动画，适合严肃场景
 import { useThemeConfig } from '../composables/useThemeConfig'
 
 // Get all config values with proper precedence
-const { showLogo, showPoweredBy, showProgressBar } = useThemeConfig()
+const { showLogo, showPoweredBy } = useThemeConfig()
 </script>
 
 <template>
@@ -115,8 +105,8 @@ const { showLogo, showPoweredBy, showProgressBar } = useThemeConfig()
     <!-- Components automatically respect global config -->
     <Logo v-if="showLogo" />
     <PoweredBy v-if="showPoweredBy" />
-    <ProgressBar v-if="showProgressBar" />
-    <AnimationController />
+    <!-- Progress bar is now handled by the official slidev-component-progress plugin -->
+    <!-- Animations are handled by Slidev's built-in animation system -->
   </div>
 </template>
 ```
@@ -179,14 +169,14 @@ author: "Author Name"
 ### Component Customization
 - **Logo**: Path can be customized via theme configuration, supports different positions
 - **PoweredBy**: Has white and default variants for different backgrounds
-- **ProgressBar**: Display controlled via frontmatter options with multiple styles
-- **AnimationController**: Automatically manages animation states based on `disableAnimations` setting
+- **Progress Bar**: Now handled by the official `slidev-component-progress` plugin
+- **Animations**: Now handled by Slidev's built-in animation system
 
 ## File Organization
 
 - `index.ts` - Theme registration and configuration
 - `layouts/` - All layout Vue components (14 total)
-- `components/` - Reusable UI components (4 total)
+- `components/` - Reusable UI components (2 total)
 - `composables/` - Vue composables for shared logic
 - `styles/` - Modular CSS files and style entry point
 - `public/` - Public assets for presentations

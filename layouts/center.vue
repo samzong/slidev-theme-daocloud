@@ -31,7 +31,7 @@
     
     <Logo v-if="showLogo" />
     <PoweredBy v-if="showPoweredBy" />
-    <ProgressBar v-if="showProgressBar" />
+    <!-- 进度条功能由 slidev-component-progress 插件提供 -->
   </div>
 </template>
 
@@ -41,7 +41,7 @@ import { useThemeConfig } from '../composables/useThemeConfig'
 const { 
   showLogo, 
   showPoweredBy, 
-  showProgressBar
+  
 } = useThemeConfig()
 </script>
 
