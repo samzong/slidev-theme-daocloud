@@ -1,5 +1,5 @@
 <template>
-  <div class="cover-layout">
+  <div class="slidev-layout cover">
     <div class="fluid-ring"></div>
     <div class="cover-content">
       <h1 v-if="$frontmatter.title" class="cover-title">
@@ -17,10 +17,6 @@
         </div>
       </div>
     </div>
-    <Logo v-if="showLogo" />
-    <PoweredBy v-if="showPoweredBy" />
-    <!-- 进度条功能由 slidev-component-progress 插件提供 -->
-    <!-- 动画控制由 Slidev 内置功能提供 -->
   </div>
 </template>
 
@@ -31,7 +27,7 @@ const { showLogo, showPoweredBy,  disableAnimations } = useThemeConfig()
 </script>
 
 <style scoped>
-.cover-layout {
+.cover {
   background: linear-gradient(135deg, var(--daocloud-bg-dark) 0%, var(--daocloud-secondary) 100%);
   color: var(--daocloud-text-light);
   position: relative;

@@ -1,5 +1,5 @@
 <template>
-  <div class="intro-layout">
+  <div class="slidev-layout intro">
     <!-- 背景装饰 -->
     <div class="intro-decoration">
       <div class="floating-circle circle-1"></div>
@@ -87,26 +87,11 @@
         </div>
       </div>
     </div>
-    
-    <Logo v-if="showLogo" />
-    <PoweredBy v-if="showPoweredBy" />
-    <!-- 进度条功能由 slidev-component-progress 插件提供 -->
-    <!-- 动画控制由 Slidev 内置功能提供 -->
   </div>
 </template>
 
-<script setup lang="ts">
-import { useThemeConfig } from '../composables/useThemeConfig'
-
-const { 
-  showLogo, 
-  showPoweredBy, 
-  
-} = useThemeConfig()
-</script>
-
 <style scoped>
-.intro-layout {
+.intro {
   background: linear-gradient(135deg, var(--daocloud-bg-dark) 0%, var(--daocloud-secondary) 100%);
   color: var(--daocloud-text-light);
   position: relative;

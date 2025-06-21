@@ -1,25 +1,23 @@
 <template>
-  <div class="image-right-layout">
-    <PageHeader />
-
+  <div class="slidev-layout image-right">
     <div class="image-right-container">
       <!-- 文字内容区域 -->
-      <div class="content-section">        
+      <div class="content-section">
         <!-- 内容区域 -->
         <div class="content-body">
           <slot />
         </div>
       </div>
-      
+
       <!-- 图片区域 -->
       <div class="image-section">
         <div class="image-wrapper">
-          <img 
-            v-if="$frontmatter.image" 
-            :src="$frontmatter.image" 
+          <img
+            v-if="$frontmatter.image"
+            :src="$frontmatter.image"
             :alt="$frontmatter.imageAlt || 'Image'"
             class="main-image"
-          >
+          />
           <div v-else class="image-placeholder">
             <div class="placeholder-icon">🖼️</div>
             <span class="placeholder-text">图片区域</span>
@@ -31,27 +29,11 @@
         </div>
       </div>
     </div>
-    
-    <Logo v-if="showLogo" />
-    <PoweredBy v-if="showPoweredBy" />
-    <!-- 进度条功能由 slidev-component-progress 插件提供 -->
-    <!-- 动画控制由 Slidev 内置功能提供 -->
   </div>
 </template>
 
-<script setup lang="ts">
-import { useThemeConfig } from '../composables/useThemeConfig'
-import PageHeader from '../components/PageHeader.vue'
-
-const { 
-  showLogo, 
-  showPoweredBy, 
-  
-} = useThemeConfig()
-</script>
-
 <style scoped>
-.image-right-layout {
+.image-right {
   background: var(--daocloud-bg-dark);
   color: var(--daocloud-text-light);
   position: relative;

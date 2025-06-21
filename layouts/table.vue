@@ -1,34 +1,16 @@
 <template>
-  <div class="table-layout">
-    <PageHeader />
-
+  <div class="slidev-layout table">
     <div class="table-content">
       <!-- 自动渲染的表格内容 -->
       <div class="table-wrapper">
         <slot />
       </div>
     </div>
-    
-    <Logo v-if="showLogo" />
-    <PoweredBy v-if="showPoweredBy" />
-    <!-- 进度条功能由 slidev-component-progress 插件提供 -->
-    <!-- 动画控制由 Slidev 内置功能提供 -->
   </div>
 </template>
 
-<script setup lang="ts">
-import { useThemeConfig } from '../composables/useThemeConfig'
-import PageHeader from '../components/PageHeader.vue'
-
-const { 
-  showLogo, 
-  showPoweredBy, 
-  
-} = useThemeConfig()
-</script>
-
 <style scoped>
-.table-layout {
+.table {
   background: var(--daocloud-bg-dark);
   color: var(--daocloud-text-light);
   position: relative;

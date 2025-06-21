@@ -1,7 +1,5 @@
 <template>
-  <div class="two-cols-layout">
-    <PageHeader />
-
+  <div class="slidev-layout two-cols">
     <!-- 双栏内容区域 -->
     <div class="cols-container">
       <!-- 左栏 -->
@@ -26,34 +24,15 @@
           <h3 class="col-title">{{ $frontmatter.rightTitle }}</h3>
         </div>
         <div class="col-content">
-          <slot name="right">
-            <!-- 右栏默认内容 -->
-          </slot>
+          <slot name="right" />
         </div>
       </div>
     </div>
-    
-    <Logo v-if="showLogo" />
-    <PoweredBy v-if="showPoweredBy" />
-    <!-- 进度条功能由 slidev-component-progress 插件提供 -->
-    <!-- 动画控制由 Slidev 内置功能提供 -->
   </div>
 </template>
 
-<script setup lang="ts">
-import { computed } from 'vue'
-import { useThemeConfig } from '../composables/useThemeConfig'
-import PageHeader from '../components/PageHeader.vue'
-
-const { 
-  showLogo, 
-  showPoweredBy, 
-  
-} = useThemeConfig()
-</script>
-
 <style scoped>
-.two-cols-layout {
+.two-cols {
   background: var(--daocloud-bg-dark);
   color: var(--daocloud-text-light);
   position: relative;
@@ -163,8 +142,6 @@ const {
   position: relative;
   animation: growHeight 1s ease-out 0.6s both;
 }
-
-
 
 @keyframes fadeInUp {
   from {

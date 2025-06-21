@@ -1,5 +1,5 @@
 <template>
-  <div class="center-layout">
+  <div class="slidev-layout center">
     <!-- 主要内容区 -->
     <div class="center-content">
       <!-- 图标或表情 -->
@@ -28,25 +28,11 @@
         <div class="note-content">{{ $frontmatter.note }}</div>
       </div>
     </div>
-    
-    <Logo v-if="showLogo" />
-    <PoweredBy v-if="showPoweredBy" />
-    <!-- 进度条功能由 slidev-component-progress 插件提供 -->
   </div>
 </template>
 
-<script setup lang="ts">
-import { useThemeConfig } from '../composables/useThemeConfig'
-
-const { 
-  showLogo, 
-  showPoweredBy, 
-  
-} = useThemeConfig()
-</script>
-
 <style scoped>
-.center-layout {
+.center {
   background: transparent;
   color: var(--daocloud-text-light);
   position: relative;

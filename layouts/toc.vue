@@ -1,5 +1,5 @@
 <template>
-  <div class="slidev-layout toc-layout">
+  <div class="slidev-layout toc">
     <!-- 左侧标题区域 -->
     <div class="toc-left">
       <div class="toc-header">
@@ -14,27 +14,11 @@
         <slot />
       </div>
     </div>
-    
-    <Logo v-if="showLogo" />
-    <PoweredBy v-if="showPoweredBy" />
-    <!-- 进度条功能由 slidev-component-progress 插件提供 -->
-    <!-- 动画控制由 Slidev 内置功能提供 -->
   </div>
 </template>
 
-<script setup lang="ts">
-import { useThemeConfig } from '../composables/useThemeConfig'
-
-const { 
-  showLogo, 
-  showPoweredBy, 
-  
-} = useThemeConfig()
-</script>
-
-
 <style scoped>
-.toc-layout {
+.toc {
   position: relative;
   display: flex;
   align-items: center;
@@ -149,7 +133,7 @@ const {
 
 /* 响应式设计 */
 @media (max-width: 1024px) {
-  .toc-layout {
+  .toc {
     padding: 3rem 2rem;
     flex-direction: column;
     align-items: flex-start;
@@ -182,7 +166,7 @@ const {
 }
 
 @media (max-width: 768px) {
-  .toc-layout {
+  .toc {
     padding: 2rem;
   }
   

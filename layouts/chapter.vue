@@ -1,5 +1,5 @@
 <template>
-  <div class="chapter-layout">
+  <div class="slidev-layout chapter">
     <!-- 主要内容区 -->
     <div class="chapter-content">
       <!-- Part 标记 -->
@@ -19,25 +19,13 @@
       </div>
     </div>
     
-    <Logo v-if="showLogo" />
-    <PoweredBy v-if="showPoweredBy" />
     <!-- 进度条功能由 slidev-component-progress 插件提供 -->
     <!-- 动画控制由 Slidev 内置功能提供 -->
   </div>
 </template>
 
-<script setup lang="ts">
-import { useThemeConfig } from '../composables/useThemeConfig'
-
-const { 
-  showLogo, 
-  showPoweredBy, 
-  
-} = useThemeConfig()
-</script>
-
 <style scoped>
-.chapter-layout {
+.chapter {
   background: transparent;
   color: var(--daocloud-text-light);
   position: relative;
