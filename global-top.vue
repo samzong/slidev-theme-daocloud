@@ -1,5 +1,6 @@
 <template>
   <header class="slidev-global-top">
+    <Logo v-if="showLogo" />
     <PageHeader v-if="showHeader" />
   </header>
   <!-- 使用官方推荐的 slidev-component-progress 插件 -->
@@ -17,10 +18,11 @@
 import { computed } from 'vue'
 import Progress from 'slidev-component-progress/components/Progress.vue'
 import PageHeader from './components/PageHeader.vue'
+import Logo from './components/Logo.vue'
 import { useThemeConfig } from './composables/useThemeConfig'
 
 // 使用主题配置
-const { themeConfig, showHeader } = useThemeConfig()
+const { themeConfig, showHeader, showLogo } = useThemeConfig()
 
 // 计算进度条颜色，使用主题的primary色
 const progressBarColor = computed(() => {

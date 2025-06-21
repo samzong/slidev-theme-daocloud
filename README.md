@@ -1,256 +1,183 @@
 # Slidev Theme DaoCloud
 
-一个为 DaoCloud 公司定制的专业 Slidev 演示主题，提供现代化的设计和丰富的布局选项。
+A professional Slidev theme for DaoCloud, designed with a modern aesthetic and a rich set of layouts.
 
-## 特性
+## Features
 
-- 🎨 **14 种专业布局** - 满足各种演示需求
-- 🌓 **深色/浅色主题** - 自动适应系统偏好
-- 📱 **响应式设计** - 完美适配各种设备
-- ✨ **流体动画效果** - 现代化的视觉体验
-- 🔧 **高度可定制** - 灵活的配置选项
+- ✨ **Centralized Layout System** - Header, footer, and logos are now globally managed for consistency.
+- 🎨 **8 Professional Layouts** - A curated set of layouts for various presentation needs.
+- 🌓 **Dark/Light Mode** - Automatically adapts to your system's preferences.
+- 📱 **Responsive Design** - Looks great on any device.
+- 🔧 **Highly Customizable** - Flexible options via frontmatter.
 
-## 安装
+## Installation
 
 ```bash
 npm install slidev-theme-daocloud
 ```
 
-或在你的 Slidev 项目中直接引用本地主题：
+Or, use it as a local theme in your Slidev project:
 
 ```yaml
----
-theme: ./path-to-theme
----
+# .frontmatter/config.ts
+import { defineSlidevConfig } from 'slidev'
+
+export default defineSlidevConfig({
+  theme: 'daocloud',
+})
 ```
 
-## 使用
+## Usage
 
-### 基础配置
+### Global Components & Configuration
 
-在演示文稿的 frontmatter 中配置主题：
+This theme uses a global layout system. `Logo`, `PageHeader`, `PoweredBy`, and a `ProgressBar` are automatically applied to your slides. You can control their visibility via frontmatter configuration.
 
-```yaml
----
-theme: daocloud
-showLogo: true          # 显示 Logo
-showPoweredBy: true     # 显示品牌归属
----
-```
+**Example:**
+To hide the header on a specific slide (e.g., a cover page), use the following:
 
-### 可用布局
-
-#### 1. cover - 封面页
 ```yaml
 ---
 layout: cover
-title: "演示标题"
-subtitle: "副标题"
-author: "作者名"
-date: "2025-01-01"
+# This will hide the global PageHeader on this slide
+showHeader: false
 ---
 ```
 
-#### 2. intro - 介绍页（已优化）
+Available global options:
+- `showHeader: boolean` (default: `true`) - Toggles the `PageHeader`.
+- `showLogo: boolean` (default: `true`) - Toggles the `Logo`.
+- `showPoweredBy: boolean` (default: `true`) - Toggles the `PoweredBy` footer.
+
+### Available Layouts
+
+#### 1. `cover`
+The title slide.
+```yaml
+---
+layout: cover
+title: "Your Title"
+subtitle: "Your Subtitle"
+author: "Author Name"
+date: "2025-01-01"
+# Hide the header on the cover page for a cleaner look
+showHeader: false
+---
+```
+
+#### 2. `intro`
+An introduction slide for a speaker.
 ```yaml
 ---
 layout: intro
 avatar: https://example.com/avatar.jpg
-title: 姓名
-subtitle: 职位
-tags: ["标签1", "标签2"]
-# 新功能：技术栈可视化
+title: Name
+subtitle: Position
+tags: ["Tag 1", "Tag 2"]
 techStack:
   - name: Kubernetes
-    icon: https://example.com/k8s-icon.svg  # 可选，没有图标会显示文字缩写
   - name: Docker
-    icon: https://example.com/docker-icon.svg
-  - name: Python
-# 新功能：GitHub 贡献图
-github: username  # 你的 GitHub 用户名
-# 新功能：认证徽章
+github: username
 certifications:
   - name: CKA
-    badge: https://example.com/cka-badge.png  # 可选，没有徽章会显示文字
-  - name: AWS Solutions Architect
 ---
 
-你的自我介绍内容...
+Your introduction content...
 ```
 
-**新布局特性**：
-- 左侧保留原有内容（头像、标题、副标题、标签和介绍）
-- 右侧上方显示技术栈网格，支持图标或文字显示
-- 右侧下方显示 GitHub 贡献图（使用 ghchart.rshah.org 服务）
-- 支持展示专业认证徽章
-- 响应式设计，移动端自动切换为单栏布局
-
-#### 3. chapter - 章节页
+#### 3. `chapter`
+A slide to introduce a new section.
 ```yaml
 ---
 layout: chapter
 part: 1
-title: 章节标题
+title: Chapter Title
 ---
 ```
 
-#### 4. toc - 目录页
+#### 4. `toc` - Table of Contents
+Automatically generates a table of contents.
 ```yaml
 ---
 layout: toc
 ---
 ```
 
-#### 5. two-cols - 双栏布局
+#### 5. `two-cols`
+A two-column layout.
 ```yaml
 ---
 layout: two-cols
 ---
 
 ::left::
-左侧内容
+Content for the left column.
 
 ::right::
-右侧内容
+Content for the right column.
 ```
 
-#### 6. image-left / image-right - 图文布局
+#### 6. `image-right`
+Content on the left, image on the right.
 ```yaml
 ---
 layout: image-right
-title: 页面标题
-image: ./path/to/your/image.jpg  # 支持本地路径或网络图片URL
-imageAlt: 图片描述  # 可选：用于无障碍访问
-imageCaption: 图片说明文字  # 可选：显示在图片下方
-tags: ["标签1", "标签2"]  # 可选：显示标签
-action: 了解更多  # 可选：显示操作按钮
+image: ./path/to/your/image.jpg
+imageAlt: "Alt text for image"
+imageCaption: "A caption for the image"
 ---
 
-## 主要内容标题
+## Main Content Title
 
-这里是你的文本内容，支持 Markdown 格式。
-
-- 列表项 1
-- 列表项 2
-- 列表项 3
+Your text content goes here.
 ```
 
-**图片使用说明**：
-- **本地图片**：将图片放在项目目录中，使用相对路径引用，如 `./images/demo.jpg`
-- **网络图片**：直接使用完整的 URL，如 `https://example.com/image.jpg`
-- **支持格式**：JPG、PNG、SVG、WebP 等常见格式
-- **推荐尺寸**：宽度 600-800px，高度不限（会自动适应）
-- **图片优化**：建议使用压缩后的图片以提升加载速度
-
-#### 7. table - 表格布局
+#### 7. `table`
+A layout for displaying tables.
 ```yaml
 ---
 layout: table
-title: "数据对比"
+title: "Data Comparison"
 ---
 
-## 功能特性
-
-| 特性 | Kueue | Volcano |
-|------|-------|---------|
-| 多集群调度 | ✓ | ✓ |
-| AI 工作负载优化 | ✓ | ✓ |
-| 资源配额管理 | ✓ | ✓ |
+| Feature         | Kueue | Volcano |
+| --------------- | ----- | ------- |
+| Multi-cluster   | ✓     | ✓       |
+| AI Workloads    | ✓     | ✓       |
 ```
 
-#### 8. center - 居中布局
+#### 8. `center`
+A layout for centered content.
 ```yaml
 ---
 layout: center
+title: "Centered Title"
 ---
+
+Your content goes here.
 ```
+## Development
 
-#### 9. quote - 引用布局
-```yaml
----
-layout: quote
-author: "作者"
----
-引用内容
-```
+### Project Structure
 
-#### 10. default - 默认深色布局
-```yaml
----
-layout: default
----
-```
+The project follows a standard Slidev theme structure. Key directories include:
+- `components/`: Reusable Vue components (`Logo`, `PageHeader`, etc.).
+- `layouts/`: The slide layouts (`cover`, `default`, etc.).
+- `styles/`: Global styles and CSS variables.
+- `global-top.vue`: Manages global components at the top of slides (Header, Logo, Progress).
+- `global-bottom.vue`: Manages global components at the bottom (Footer).
 
-#### 11. white - 浅色布局
-```yaml
----
-layout: white
----
-```
+### Adding a New Layout
 
-## 颜色系统
+1.  Create a new `.vue` file in the `layouts/` directory.
+2.  Define your layout structure. You no longer need to manually add headers or footers.
+3.  The new layout is automatically available to use.
 
-主题使用以下颜色方案：
-
-- **主色**: `#00ff7f` (亮绿色)
-- **主色深色**: `#00cc66`
-- **辅助色**: `#1a1a2e` (深蓝色)
-
-## 开发
-
-### 项目结构
-
-```
-slidev-theme-daocloud/
-├── components/         # 可复用组件
-│   ├── Logo.vue
-│   ├── PoweredBy.vue
-
-├── layouts/           # 布局组件
-│   ├── cover.vue
-│   ├── intro.vue
-│   ├── chapter.vue
-│   ├── toc.vue
-│   └── ...
-├── styles/            # 样式文件
-│   ├── index.ts
-│   ├── layout.css
-│   ├── components.css
-│   └── code.css
-├── index.ts           # 主题入口
-└── package.json
-```
-
-### 添加新布局
-
-1. 在 `layouts/` 目录创建新的 Vue 组件
-2. 在 `index.ts` 中注册布局
-3. 添加相应的样式
-
-### 本地开发
-
-```bash
-# 安装依赖
-npm install
-
-# 开发模式
-npm run dev
-
-# 构建
-npm run build
-```
-
-## 技术栈
+## Tech Stack
 
 - Slidev >= 0.48.0
-- Vue 3 Composition API
-- TypeScript
+- Vue 3 & TypeScript
 - CSS Variables
 
-## 许可
-
-MIT License
-
-## 贡献
-
-欢迎提交 Issue 和 Pull Request！ 
+## License
+MIT 
