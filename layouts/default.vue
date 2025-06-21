@@ -1,16 +1,6 @@
 <template>
-  <div class="default-layout">
-    <!-- 页面标题区域 -->
-    <PageHeader />
-
-    <div class="default-content">
-      <slot />
-    </div>
-    
-    <Logo v-if="showLogo" />
-    <PoweredBy v-if="showPoweredBy" />
-      <!-- 进度条功能由 slidev-component-progress 插件提供 -->
-  <!-- 动画控制由 Slidev 内置功能提供 -->
+  <div class="slidev-layout default">
+    <slot />
   </div>
 </template>
 

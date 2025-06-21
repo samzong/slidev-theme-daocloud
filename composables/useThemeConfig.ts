@@ -2,55 +2,54 @@ import { computed, reactive, toRefs, watchEffect } from 'vue'
 import { objectKeys } from '@antfu/utils'
 
 /**
- * 主题全局配置接口
+ * Theme Global Configurations
  */
 export interface ThemeGlobalConfig {
-  // Logo 配置
-  showLogo?: boolean;
-  logo?: string;
-  logoPosition?: "top-left" | "top-right" | "bottom-left" | "bottom-right";
-  logoSize?: "sm" | "md" | "lg" | "xl";
-  logoVariant?: "default" | "white" | "dark" | "minimal";
+  // Website base URL
+  website?: string
 
-  // PoweredBy 配置
-  showPoweredBy?: boolean;
-  poweredByVariant?: "default" | "white" | "dark" | "minimal";
-  poweredByPosition?: "top-left" | "top-right" | "bottom-left" | "bottom-right";
-  poweredBySize?: "sm" | "md" | "lg";
-  poweredByType?: 'image' | 'svg' | 'text';
-  poweredBySvg?: string;
-  poweredByText?: string;
-  poweredByImage?: string;
+  // Author
+  author?: {
+    name: string
+    avatar?: string
+    url?: string
+  }
+
+  // Footer
+  poweredBy?: boolean
+  poweredByText?: string
+  poweredByImage?: string
+  
+  // Header
+  showHeader?: boolean
 }
 
-/**
- * 默认全局配置
- */
-const DEFAULT_CONFIG: Readonly<Required<ThemeGlobalConfig>> = {
-  // Logo 默认配置
-  showLogo: true,
-  logo: "/logo.png",
-  logoPosition: "top-left",
-  logoSize: "md",
-  logoVariant: "default",
-
-  // PoweredBy 默认配置
-  showPoweredBy: true,
-  poweredByVariant: "default",
-  poweredByPosition: "bottom-right",
-  poweredBySize: "sm",
-  poweredByType: 'image',
-  poweredBySvg: '',
+// 默认配置
+export const DEFAULT_CONFIG: Required<ThemeGlobalConfig> = {
+  website: 'https://www.daocloud.io/',
+  author: {
+    name: 'DaoCloud',
+  },
+  poweredBy: true,
   poweredByText: 'Powered by DaoCloud',
   poweredByImage: '/powerby-default.png',
+  
+  // Header 默认配置
+  showHeader: true,
 };
 
 // 创建一个响应式的、类型安全的状态存储
 const themeConfigState = reactive<Required<ThemeGlobalConfig>>({ ...DEFAULT_CONFIG });
 
 /**
- * 主题配置组合函数
- * @returns 响应式的主题配置对象
+ * Composable for theme configurations.
+ * 
+ * @example
+ * const {
+ *   website,
+ *   author,
+ *   poweredBy,
+ * } = useThemeConfig();
  */
 export function useThemeConfig() {
   // 使用 watchEffect 来响应式地更新配置

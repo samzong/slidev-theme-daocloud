@@ -22,7 +22,8 @@
   },
   "dependencies": {
     "@slidev/cli": "*",
-    "@slidev/types": "^0.49.0"
+    "@slidev/types": "^0.49.0",
+    "valibot": "^1.1.0"
   },
   "devDependencies": {
     "@unocss/reset": "^0.58.0",
