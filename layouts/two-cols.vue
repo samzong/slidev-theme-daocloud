@@ -1,5 +1,11 @@
 <template>
   <div class="slidev-layout two-cols">
+    <PageHeader />
+    <!-- 副标题区域 -->
+    <div class="subtitle-header" v-if="$frontmatter.subtitle">
+      <h2 class="cols-subtitle">{{ $frontmatter.subtitle }}</h2>
+    </div>
+    
     <!-- 双栏内容区域 -->
     <div class="cols-container">
       <!-- 左栏 -->
@@ -30,6 +36,10 @@
     </div>
   </div>
 </template>
+
+<script setup lang="ts">
+import PageHeader from '../components/PageHeader.vue';
+</script>
 
 <style scoped>
 .two-cols {

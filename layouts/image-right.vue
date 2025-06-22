@@ -1,5 +1,6 @@
 <template>
   <div class="slidev-layout image-right">
+    <PageHeader />
     <div class="image-right-container">
       <!-- 文字内容区域 -->
       <div class="content-section">
@@ -31,6 +32,10 @@
     </div>
   </div>
 </template>
+
+<script setup lang="ts">
+import PageHeader from '../components/PageHeader.vue'
+</script>
 
 <style scoped>
 .image-right {

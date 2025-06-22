@@ -1,12 +1,13 @@
 <template>
   <div class="slidev-layout default">
+    <PageHeader />
     <slot />
   </div>
 </template>
 
 <script setup lang="ts">
-import { useThemeConfig } from '../composables/useThemeConfig'
 import PageHeader from '../components/PageHeader.vue'
+import { useThemeConfig } from '../composables/useThemeConfig'
 
 const { 
   showLogo, 

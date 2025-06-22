@@ -1,21 +1,22 @@
 <template>
   <div class="boxes-layout">
     <PageHeader />
-
-    <div class="boxes-container" ref="containerRef">
-      <!-- 初始内容用于解析 -->
-      <div class="original-content" ref="originalContent">
-        <slot />
-      </div>
-      <!-- 解析后的框 -->
-      <div 
-        v-for="(box, index) in boxes" 
-        :key="index" 
-        class="box-item"
-        :style="{ width: boxWidth }"
-      >
-        <h2 class="box-title">{{ box.title }}</h2>
-        <div class="box-content" v-html="box.content"></div>
+    <div class="content-container">
+      <div class="boxes-container" ref="containerRef">
+        <!-- 初始内容用于解析 -->
+        <div class="original-content" ref="originalContent">
+          <slot />
+        </div>
+        <!-- 解析后的框 -->
+        <div 
+          v-for="(box, index) in boxes" 
+          :key="index" 
+          class="box-item"
+          :style="{ width: boxWidth }"
+        >
+          <h2 class="box-title">{{ box.title }}</h2>
+          <div class="box-content" v-html="box.content"></div>
+        </div>
       </div>
     </div>
     
@@ -97,9 +98,13 @@ onMounted(async () => {
   height: 100%;
 }
 
+.content-container {
+  padding: 120px 30px 60px 30px;
+  height: 100%;
+}
+
 /* 框容器 */
 .boxes-container {
-  padding: 120px 30px 60px 30px;
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
@@ -210,8 +215,10 @@ onMounted(async () => {
 }
 
 @media (max-width: 1024px) {
-  .boxes-container {
+  .content-container {
     padding: 100px 20px 40px 20px;
+  }
+  .boxes-container {
     gap: 15px;
   }
   
@@ -221,8 +228,10 @@ onMounted(async () => {
 }
 
 @media (max-width: 768px) {
-  .boxes-container {
+  .content-container {
     padding: 90px 20px 30px 20px;
+  }
+  .boxes-container {
     gap: 15px;
   }
   

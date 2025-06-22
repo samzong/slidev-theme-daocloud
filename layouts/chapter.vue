@@ -24,6 +24,15 @@
   </div>
 </template>
 
+<script setup lang="ts">
+import { useThemeConfig } from '../composables/useThemeConfig'
+
+const {
+  showLogo,
+  showPoweredBy
+} = useThemeConfig()
+</script>
+
 <style scoped>
 .chapter {
   background: transparent;

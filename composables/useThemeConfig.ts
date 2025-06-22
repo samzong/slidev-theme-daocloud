@@ -32,7 +32,7 @@ export const DEFAULT_CONFIG: Required<ThemeGlobalConfig> = {
   },
   poweredBy: true,
   poweredByText: 'Powered by DaoCloud',
-  poweredByImage: '/powerby-default.png',
+  poweredByImage: 'powerby-default.png',
   
   // Header 默认配置
   showHeader: true,

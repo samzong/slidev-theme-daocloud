@@ -1,5 +1,6 @@
 <template>
   <div class="slidev-layout table">
+    <PageHeader />
     <div class="table-content">
       <!-- 自动渲染的表格内容 -->
       <div class="table-wrapper">
@@ -8,6 +9,10 @@
     </div>
   </div>
 </template>
+
+<script setup lang="ts">
+import PageHeader from '../components/PageHeader.vue'
+</script>
 
 <style scoped>
 .table {
