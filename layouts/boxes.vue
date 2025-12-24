@@ -92,20 +92,23 @@ onMounted(async () => {
 
 /* 框容器 */
 .boxes-container {
-  padding: 120px 30px 60px 30px;
+  padding: 100px 30px 60px 30px;
   display: flex;
   flex-wrap: wrap;
-  gap: 20px;
+  gap: 16px;
   align-items: stretch;
+  align-content: stretch;
   height: 100%;
-  overflow-y: auto;
+  max-height: 100%;
+  overflow: hidden;
+  box-sizing: border-box;
 }
 
 /* 单个框样式 */
 .box-item {
   border: 2px solid var(--daocloud-primary);
   border-radius: 8px;
-  padding: 20px;
+  padding: 14px;
   background: rgba(26, 26, 46, 0.5);
   box-shadow:
     0 0 20px rgba(0, 255, 127, 0.1),
@@ -113,7 +116,9 @@ onMounted(async () => {
   transition: all 0.3s ease;
   display: flex;
   flex-direction: column;
-  min-height: 100px;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden;
 }
 
 .box-item:hover {
@@ -139,10 +144,12 @@ onMounted(async () => {
 /* 框内容 */
 .box-content {
   flex: 1;
-  font-size: 0.85rem;
-  line-height: 1.6;
+  font-size: 0.8rem;
+  line-height: 1.5;
   color: var(--daocloud-text-light);
   letter-spacing: 0.02em;
+  overflow-y: auto;
+  min-height: 0;
 }
 
 .box-content :deep(p) {
