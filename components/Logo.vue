@@ -16,6 +16,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { useThemeConfig } from "../composables/useThemeConfig";
+import { useBase } from "../composables/useBase";
 
 interface Props {
   /** Logo类型：image(图片) | svg(SVG) | text(文本) | slot(插槽) */
@@ -49,6 +50,7 @@ const props = withDefaults(defineProps<Props>(), {
 
 const { logo, logoPosition, logoSize, logoVariant, showLogo } =
   useThemeConfig();
+const { withBase } = useBase();
 
 // 检查 frontmatter 是否显式设置了 logoPosition
 const frontmatterPosition = computed(
@@ -56,7 +58,8 @@ const frontmatterPosition = computed(
 );
 
 // 优先级: frontmatter显式设置 > props(布局默认) > 全局配置
-const finalSrc = computed(() => props.src || logo.value);
+// 使用 withBase 处理路径
+const finalSrc = computed(() => withBase(props.src || logo.value));
 const finalPosition = computed(
   () => frontmatterPosition.value || props.position || logoPosition.value,
 );

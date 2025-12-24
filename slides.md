@@ -243,7 +243,7 @@ title: AI/ML 的 GPU 网络需求 (default)
 ---
 
 ```mermaid
-graph TD
+graph LR
     subgraph "训练集群拓扑"
         A[Spine Switch<br/>400Gbps] --> B[Leaf Switch 1<br/>100Gbps]
         A --> C[Leaf Switch 2<br/>100Gbps]
@@ -884,7 +884,7 @@ title: Kueue 源码分析 - 核心模块划分 (default)
 ---
 
 ```mermaid
-graph TB
+graph LR
     subgraph "API 层"
         A[Workload API]
         B[Queue APIs]
@@ -1882,7 +1882,7 @@ title: Volcano 特性：AI/ML 生态集成 (default)
 - **案例**: 华为云 AI 平台
 
 ```mermaid
-graph TD
+graph LR
     A[Volcano] --> B[TensorFlow]
     A --> C[PyTorch]
     A --> D[MPI]
@@ -2365,7 +2365,7 @@ title: 性能测试对比 - 调度吞吐量对比 (default)
 ---
 
 ```mermaid
-graph TD
+graph LR
     subgraph "10K 并发作业提交"
         A[Native Scheduler<br/>320 jobs/min<br/>P99: 5.2s]
         B[Kueue<br/>850 jobs/min<br/>P99: 1.8s]
@@ -2668,7 +2668,7 @@ title: 混部调度策略 - 架构设计 (default)
 ---
 
 ```mermaid
-graph TD
+graph LR
     subgraph "资源池管理"
         A[统一资源池<br/>1000 GPU]
         B[训练资源池<br/>600 GPU]
@@ -3909,7 +3909,7 @@ title: 未来展望：架构演进 - 统一调度平面 (default)
 ---
 
 ```mermaid
-graph TD
+graph LR
     A[统一调度控制器] --> B[传统批处理]
     A --> C[AI训练]
     A --> D[AI推理]

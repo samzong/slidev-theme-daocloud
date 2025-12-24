@@ -20,6 +20,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { useThemeConfig } from "../composables/useThemeConfig";
+import { useBase } from "../composables/useBase";
 
 interface Props {
   /** 内容类型：image(图片) | text(文本) | slot(插槽) */
@@ -53,6 +54,7 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const { poweredByVariant, poweredByPosition, showPoweredBy } = useThemeConfig();
+const { withBase } = useBase();
 
 // 检查 frontmatter 是否显式设置了 poweredByPosition
 const frontmatterPosition = computed(
@@ -74,12 +76,12 @@ const finalAlt = computed(() => {
   return `Powered By ${props.brand}`;
 });
 const finalImage = computed(() => {
-  if (props.src) return props.src;
-  // 默认图片路径逻辑
+  if (props.src) return withBase(props.src);
+  // 默认图片路径逻辑 - 使用 withBase 处理 base 路径
   const variant = finalVariant.value;
-  if (variant === "white") return "/powerby-white.png";
-  if (variant === "dark") return "/powerby-dark.png";
-  return "/powerby-default.png";
+  if (variant === "white") return withBase("/powerby-white.png");
+  if (variant === "dark") return withBase("/powerby-dark.png");
+  return withBase("/powerby-default.png");
 });
 
 // 样式类
