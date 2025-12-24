@@ -10,6 +10,10 @@ export function useBase() {
     const slidevBase = (globalThis as any)?.$slidev?.configs?.base;
     if (slidevBase) return slidevBase;
 
+    // Vite 构建时注入的 BASE_URL（GitHub Pages 等子路径部署）
+    const viteBase = import.meta.env.BASE_URL;
+    if (viteBase) return viteBase;
+
     // 默认返回根路径
     return '/';
   });
