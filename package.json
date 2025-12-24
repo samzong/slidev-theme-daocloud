@@ -2,6 +2,10 @@
   "name": "slidev-theme-daocloud",
   "version": "1.0.0",
   "description": "DaoCloud themed Slidev presentation",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/samzong/slidev-theme-daocloud.git"
+  },
   "main": "index.ts",
   "keywords": [
     "slidev-theme",
@@ -14,6 +18,9 @@
   "engines": {
     "slidev": ">=0.48.0"
   },
+  "scripts": {
+    "release": "bumpp --commit --push --tag"
+  },
   "slidev": {
     "colorSchema": "both"
   },
@@ -22,11 +29,14 @@
     "components",
     "composables",
     "styles",
-    "index.ts"
+    "setup",
+    "index.ts",
+    "README.md"
   ],
   "devDependencies": {
     "@slidev/cli": "^52.11.1",
     "@slidev/types": "^52.11.1",
+    "bumpp": "^10.3.2",
     "playwright-chromium": "^1.53.1"
   },
   "peerDependencies": {
