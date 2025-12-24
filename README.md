@@ -5,7 +5,7 @@
 ## 安装
 
 ```bash
-npm install https://github.com/samzong/slidev-theme-daocloud/releases/download/vX.Y.Z/slidev-theme-daocloud-X.Y.Z.tgz
+npm install https://github.com/samzong/slidev-theme-daocloud/releases/download/v0.0.1/slidev-theme-daocloud-0.0.1.tgz
 ```
 
 > 说明：将 URL 中的版本号替换为实际发布版本。
