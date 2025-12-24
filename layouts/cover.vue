@@ -1,5 +1,5 @@
 <template>
-  <div class="cover-layout">
+  <div class="cover-layout" :style="layoutStyle">
     <div class="fluid-ring"></div>
     <div class="cover-content">
       <h1 v-if="$frontmatter.title" class="cover-title">
@@ -17,22 +17,25 @@
         </div>
       </div>
     </div>
-    <Logo v-if="showLogo" />
-    <PoweredBy v-if="showPoweredBy" />
-    <ProgressBar v-if="showProgressBar" />
-    <AnimationController />
+    <LayoutOverlay defaultLogoPosition="top-left" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { useThemeConfig } from '../composables/useThemeConfig'
+import { useBackground } from "../composables/useBackground";
 
-const { showLogo, showPoweredBy, showProgressBar, disableAnimations } = useThemeConfig()
+const { layoutStyle } = useBackground(
+  "linear-gradient(135deg, var(--daocloud-bg-dark) 0%, var(--daocloud-secondary) 100%)",
+);
 </script>
 
 <style scoped>
 .cover-layout {
-  background: linear-gradient(135deg, var(--daocloud-bg-dark) 0%, var(--daocloud-secondary) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--daocloud-bg-dark) 0%,
+    var(--daocloud-secondary) 100%
+  );
   color: var(--daocloud-text-light);
   position: relative;
   overflow: hidden;
@@ -59,7 +62,8 @@ const { showLogo, showPoweredBy, showProgressBar, disableAnimations } = useTheme
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  animation: fadeInUp var(--daocloud-animation-duration) var(--daocloud-animation-timing);
+  animation: fadeInUp var(--daocloud-animation-duration)
+    var(--daocloud-animation-timing);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -71,11 +75,13 @@ const { showLogo, showPoweredBy, showProgressBar, disableAnimations } = useTheme
   margin-bottom: 3rem;
   opacity: 0.9;
   line-height: 1.4;
-  animation: fadeInUp var(--daocloud-animation-duration) var(--daocloud-animation-timing) 0.3s both;
+  animation: fadeInUp var(--daocloud-animation-duration)
+    var(--daocloud-animation-timing) 0.3s both;
 }
 
 .cover-meta {
-  animation: fadeInUp var(--daocloud-animation-duration) var(--daocloud-animation-timing) 0.6s both;
+  animation: fadeInUp var(--daocloud-animation-duration)
+    var(--daocloud-animation-timing) 0.6s both;
 }
 
 .cover-author {
@@ -87,16 +93,5 @@ const { showLogo, showPoweredBy, showProgressBar, disableAnimations } = useTheme
 .cover-date {
   font-size: 1rem;
   opacity: 0.6;
-}
-
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
 </style>

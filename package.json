@@ -15,21 +15,13 @@
     "slidev": ">=0.48.0"
   },
   "slidev": {
-    "colorSchema": "both",
-    "highlighter": "shiki",
-    "defaults": {
-      "showLogo": false,
-      "showPoweredBy": false,
-      "themeConfig": {
-        "primary": "#00ff7f"
-      }
-    }
+    "colorSchema": "both"
   },
   "files": [
     "layouts",
     "components",
+    "composables",
     "styles",
-    "setup",
     "index.ts"
   ],
   "devDependencies": {

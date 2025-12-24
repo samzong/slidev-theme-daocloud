@@ -9,7 +9,7 @@
 }
 
 /* 禁用动画时的配置 */
-:root[data-disable-animations="true"] {
+:root[data-disable-animations='true'] {
   --daocloud-animation-duration: 0s;
   --daocloud-animation-timing: linear;
   --daocloud-transition-duration: 0s;
@@ -22,7 +22,9 @@
  * 这是为了支持对动作敏感的用户的可访问性需求
  */
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
+  *,
+  *::before,
+  *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
@@ -31,18 +33,20 @@
 }
 
 /* 手动禁用动画时的样式 */
-[data-disable-animations="true"] {
+[data-disable-animations='true'] {
   /* 使用单一规则减少重复 */
-  *, *::before, *::after {
+  *,
+  *::before,
+  *::after {
     animation: none !important;
     transition: none !important;
   }
-  
+
   /* 禁用滚动动画 */
   & {
     scroll-behavior: auto !important;
   }
-  
+
   /* 重置 will-change 以提高性能 */
   * {
     will-change: auto !important;
@@ -103,42 +107,64 @@
   }
 }
 
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 0.8;
+  }
+  50% {
+    transform: translateY(-20px) rotate(180deg);
+    opacity: 1;
+  }
+}
+
+/* 通用 float 动画类 */
+.animate-float {
+  animation: float 8s ease-in-out infinite;
+}
+
 /* 通用动画类 */
 .animate-fadeIn {
-  animation: fadeIn var(--daocloud-animation-duration) var(--daocloud-animation-timing);
+  animation: fadeIn var(--daocloud-animation-duration)
+    var(--daocloud-animation-timing);
 }
 
 .animate-fadeInUp {
-  animation: fadeInUp var(--daocloud-animation-duration) var(--daocloud-animation-timing);
+  animation: fadeInUp var(--daocloud-animation-duration)
+    var(--daocloud-animation-timing);
 }
 
 .animate-slideInLeft {
-  animation: slideInLeft var(--daocloud-animation-duration) var(--daocloud-animation-timing);
+  animation: slideInLeft var(--daocloud-animation-duration)
+    var(--daocloud-animation-timing);
 }
 
 .animate-slideInRight {
-  animation: slideInRight var(--daocloud-animation-duration) var(--daocloud-animation-timing);
+  animation: slideInRight var(--daocloud-animation-duration)
+    var(--daocloud-animation-timing);
 }
 
 .animate-scaleIn {
-  animation: scaleIn var(--daocloud-animation-duration) var(--daocloud-animation-timing);
+  animation: scaleIn var(--daocloud-animation-duration)
+    var(--daocloud-animation-timing);
 }
 
 /* 特别针对主题自定义动画 */
-[data-disable-animations="true"] .cover-title,
-[data-disable-animations="true"] .cover-subtitle,
-[data-disable-animations="true"] .cover-meta,
-[data-disable-animations="true"] .intro-content,
-[data-disable-animations="true"] .intro-title,
-[data-disable-animations="true"] .intro-subtitle,
-[data-disable-animations="true"] .intro-body,
-[data-disable-animations="true"] .intro-tags,
-[data-disable-animations="true"] .floating-circle {
+[data-disable-animations='true'] .cover-title,
+[data-disable-animations='true'] .cover-subtitle,
+[data-disable-animations='true'] .cover-meta,
+[data-disable-animations='true'] .intro-content,
+[data-disable-animations='true'] .intro-title,
+[data-disable-animations='true'] .intro-subtitle,
+[data-disable-animations='true'] .intro-body,
+[data-disable-animations='true'] .intro-tags,
+[data-disable-animations='true'] .floating-circle {
   animation: none !important;
   transition: none !important;
 }
 
 /* 禁用悬停效果 */
-[data-disable-animations="true"] .tag:hover {
+[data-disable-animations='true'] .tag:hover {
   transition: none !important;
 }

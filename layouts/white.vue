@@ -1,21 +1,23 @@
 <template>
-  <div class="white-layout">
+  <div class="white-layout" :style="layoutStyle">
     <PageHeader />
 
     <div class="white-content">
       <slot />
     </div>
-    <Logo v-if="showLogo" class="logo-dark" />
-    <PoweredBy v-if="showPoweredBy" class="powered-by-dark" />
-    <ProgressBar v-if="showProgressBar" />
+    <LayoutOverlay
+      logoClass="logo-dark"
+      poweredByClass="powered-by-dark"
+      hideAnimationController
+    />
   </div>
 </template>
 
 <script setup lang="ts">
-import { useThemeConfig } from '../composables/useThemeConfig'
-import PageHeader from '../components/PageHeader.vue'
+import { useBackground } from "../composables/useBackground";
+import PageHeader from "../components/PageHeader.vue";
 
-const { showLogo, showPoweredBy, showProgressBar } = useThemeConfig()
+const { layoutStyle } = useBackground("var(--daocloud-bg-light)");
 </script>
 
 <style scoped>
@@ -79,7 +81,7 @@ const { showLogo, showPoweredBy, showProgressBar } = useThemeConfig()
 }
 
 .white-content li::before {
-  content: '—';
+  content: "—";
   position: absolute;
   left: 0;
   color: var(--daocloud-primary-dark);

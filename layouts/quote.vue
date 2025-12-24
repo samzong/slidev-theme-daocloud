@@ -1,5 +1,5 @@
 <template>
-  <div class="quote-layout">
+  <div class="quote-layout" :style="layoutStyle">
     <!-- 背景装饰 -->
     <div class="quote-decoration">
       <div class="quote-marks">
@@ -8,60 +8,74 @@
       </div>
       <div class="flowing-line"></div>
     </div>
-    
+
     <!-- 主要内容区 -->
     <div class="quote-content">
       <!-- 引用内容 -->
       <blockquote class="quote-text">
         <slot />
       </blockquote>
-      
+
       <!-- 作者信息 -->
-      <div class="quote-attribution" v-if="$frontmatter.author || $frontmatter.source">
+      <div
+        class="quote-attribution"
+        v-if="$frontmatter.author || $frontmatter.source"
+      >
         <!-- 作者头像 -->
         <div class="author-avatar" v-if="$frontmatter.avatar">
-          <img :src="$frontmatter.avatar" :alt="$frontmatter.author" class="avatar-img">
+          <img
+            :src="$frontmatter.avatar"
+            :alt="$frontmatter.author"
+            class="avatar-img"
+          />
         </div>
-        
+
         <!-- 作者信息 -->
         <div class="author-info">
-          <div v-if="$frontmatter.author" class="author-name">{{ $frontmatter.author }}</div>
-          <div v-if="$frontmatter.title" class="author-title">{{ $frontmatter.title }}</div>
-          <div v-if="$frontmatter.source" class="quote-source">{{ $frontmatter.source }}</div>
+          <div v-if="$frontmatter.author" class="author-name">
+            {{ $frontmatter.author }}
+          </div>
+          <div v-if="$frontmatter.title" class="author-title">
+            {{ $frontmatter.title }}
+          </div>
+          <div v-if="$frontmatter.source" class="quote-source">
+            {{ $frontmatter.source }}
+          </div>
         </div>
       </div>
-      
+
       <!-- 标签或分类 -->
       <div class="quote-tags" v-if="$frontmatter.tags">
-        <span v-for="tag in $frontmatter.tags" :key="tag" class="tag">{{ tag }}</span>
+        <span v-for="tag in $frontmatter.tags" :key="tag" class="tag">{{
+          tag
+        }}</span>
       </div>
-      
+
       <!-- 附加说明 -->
       <div class="quote-note" v-if="$frontmatter.note">
         <div class="note-content">{{ $frontmatter.note }}</div>
       </div>
     </div>
-    
-    <Logo v-if="showLogo" />
-    <PoweredBy v-if="showPoweredBy" />
-    <ProgressBar v-if="showProgressBar" />
-    <AnimationController />
+
+    <LayoutOverlay defaultLogoPosition="bottom-right" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { useThemeConfig } from '../composables/useThemeConfig'
+import { useBackground } from "../composables/useBackground";
 
-const { 
-  showLogo, 
-  showPoweredBy, 
-  showProgressBar
-} = useThemeConfig()
+const { layoutStyle } = useBackground(
+  "linear-gradient(135deg, var(--daocloud-bg-dark) 0%, var(--daocloud-secondary) 100%)",
+);
 </script>
 
 <style scoped>
 .quote-layout {
-  background: linear-gradient(135deg, var(--daocloud-bg-dark) 0%, var(--daocloud-secondary) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--daocloud-bg-dark) 0%,
+    var(--daocloud-secondary) 100%
+  );
   color: var(--daocloud-text-light);
   position: relative;
   overflow: hidden;
@@ -130,19 +144,9 @@ const {
   animation: flowingGlow 3s ease-in-out infinite;
 }
 
-@keyframes float {
-  0%, 100% {
-    transform: translateY(0px);
-    opacity: 0.1;
-  }
-  50% {
-    transform: translateY(-20px);
-    opacity: 0.15;
-  }
-}
-
 @keyframes flowingGlow {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 0.3;
     transform: translateY(-50%) scaleX(1);
   }
@@ -174,14 +178,18 @@ const {
 }
 
 .quote-text::before {
-  content: '';
+  content: "";
   position: absolute;
   left: 50%;
   bottom: -1rem;
   transform: translateX(-50%);
   width: 60px;
   height: 3px;
-  background: linear-gradient(90deg, var(--daocloud-primary), var(--daocloud-primary-dark));
+  background: linear-gradient(
+    90deg,
+    var(--daocloud-primary),
+    var(--daocloud-primary-dark)
+  );
   border-radius: 2px;
 }
 
@@ -269,17 +277,6 @@ const {
   line-height: 1.6;
 }
 
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(40px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
 /* 特殊情况：没有作者信息时的样式调整 */
 .quote-content:not(:has(.quote-attribution)) .quote-text {
   margin-bottom: 2rem;
@@ -290,34 +287,34 @@ const {
   .quote-layout {
     padding: 2rem;
   }
-  
+
   .quote-text {
     font-size: 1.8rem;
   }
-  
+
   .quote-mark {
     font-size: 12rem;
   }
-  
+
   .quote-left {
     top: 5%;
     left: 2%;
   }
-  
+
   .quote-right {
     bottom: 5%;
     right: 2%;
   }
-  
+
   .quote-attribution {
     flex-direction: column;
     text-align: center;
   }
-  
+
   .author-info {
     text-align: center;
   }
-  
+
   .avatar-img {
     width: 60px;
     height: 60px;
@@ -332,4 +329,4 @@ const {
 .quote-attribution:not(:has(.author-avatar)) .author-info {
   text-align: center;
 }
-</style> 
+</style>

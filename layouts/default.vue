@@ -1,28 +1,21 @@
 <template>
-  <div class="default-layout">
+  <div class="default-layout" :style="layoutStyle">
     <!-- 页面标题区域 -->
     <PageHeader />
 
     <div class="default-content">
       <slot />
     </div>
-    
-    <Logo v-if="showLogo" />
-    <PoweredBy v-if="showPoweredBy" />
-    <ProgressBar v-if="showProgressBar" />
-    <AnimationController />
+
+    <LayoutOverlay />
   </div>
 </template>
 
 <script setup lang="ts">
-import { useThemeConfig } from '../composables/useThemeConfig'
-import PageHeader from '../components/PageHeader.vue'
+import { useBackground } from "../composables/useBackground";
+import PageHeader from "../components/PageHeader.vue";
 
-const { 
-  showLogo, 
-  showPoweredBy, 
-  showProgressBar
-} = useThemeConfig()
+const { layoutStyle } = useBackground();
 </script>
 
 <style scoped>
@@ -86,7 +79,7 @@ const {
 }
 
 .default-content li::before {
-  content: '—';
+  content: "—";
   position: absolute;
   left: 0;
   color: var(--daocloud-primary);

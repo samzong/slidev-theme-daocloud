@@ -1,5 +1,5 @@
 <template>
-  <div class="two-cols-layout">
+  <div class="two-cols-layout" :style="layoutStyle">
     <PageHeader />
 
     <!-- 双栏内容区域 -->
@@ -16,10 +16,10 @@
           </slot>
         </div>
       </div>
-      
+
       <!-- 分隔线 -->
       <div class="cols-divider"></div>
-      
+
       <!-- 右栏 -->
       <div class="col-right">
         <div class="col-header" v-if="$frontmatter.rightTitle">
@@ -32,24 +32,16 @@
         </div>
       </div>
     </div>
-    
-    <Logo v-if="showLogo" />
-    <PoweredBy v-if="showPoweredBy" />
-    <ProgressBar v-if="showProgressBar" />
-    <AnimationController />
+
+    <LayoutOverlay />
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
-import { useThemeConfig } from '../composables/useThemeConfig'
-import PageHeader from '../components/PageHeader.vue'
+import { useBackground } from "../composables/useBackground";
+import PageHeader from "../components/PageHeader.vue";
 
-const { 
-  showLogo, 
-  showPoweredBy, 
-  showProgressBar
-} = useThemeConfig()
+const { layoutStyle } = useBackground();
 </script>
 
 <style scoped>
@@ -85,7 +77,8 @@ const {
   align-items: start;
 }
 
-.col-left, .col-right {
+.col-left,
+.col-right {
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -114,7 +107,7 @@ const {
 }
 
 .col-title::after {
-  content: '';
+  content: "";
   position: absolute;
   bottom: 0;
   left: 0;
@@ -164,19 +157,6 @@ const {
   animation: growHeight 1s ease-out 0.6s both;
 }
 
-
-
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
 @keyframes slideInUp {
   from {
     opacity: 0;
@@ -208,9 +188,9 @@ const {
     grid-template-columns: 1fr;
     gap: 2rem;
   }
-  
+
   .cols-divider {
     display: none;
   }
 }
-</style> 
+</style>

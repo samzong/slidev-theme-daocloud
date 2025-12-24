@@ -1,17 +1,17 @@
 <template>
-  <div class="image-left-layout">
+  <div class="image-left-layout" :style="layoutStyle">
     <PageHeader />
 
     <div class="image-left-container">
       <!-- 图片区域 -->
       <div class="image-section">
         <div class="image-wrapper">
-          <img 
-            v-if="$frontmatter.image" 
-            :src="$frontmatter.image" 
+          <img
+            v-if="$frontmatter.image"
+            :src="$frontmatter.image"
             :alt="$frontmatter.imageAlt || 'Image'"
             class="main-image"
-          >
+          />
           <div v-else class="image-placeholder">
             <div class="placeholder-icon">🖼️</div>
             <span class="placeholder-text">图片区域</span>
@@ -22,7 +22,7 @@
           {{ $frontmatter.imageCaption }}
         </div>
       </div>
-      
+
       <!-- 文字内容区域 -->
       <div class="content-section">
         <!-- 内容区域 -->
@@ -31,23 +31,16 @@
         </div>
       </div>
     </div>
-    
-    <Logo v-if="showLogo" />
-    <PoweredBy v-if="showPoweredBy" />
-    <ProgressBar v-if="showProgressBar" />
-    <AnimationController />
+
+    <LayoutOverlay defaultLogoPosition="top-right" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { useThemeConfig } from '../composables/useThemeConfig'
-import PageHeader from '../components/PageHeader.vue'
+import { useBackground } from "../composables/useBackground";
+import PageHeader from "../components/PageHeader.vue";
 
-const { 
-  showLogo, 
-  showPoweredBy, 
-  showProgressBar
-} = useThemeConfig()
+const { layoutStyle } = useBackground();
 </script>
 
 <style scoped>
@@ -186,7 +179,7 @@ const {
 }
 
 .content-body li::before {
-  content: '—';
+  content: "—";
   position: absolute;
   left: 0;
   color: var(--daocloud-primary);
@@ -234,17 +227,17 @@ const {
     gap: 2rem;
     padding: 90px 30px 30px 30px;
   }
-  
+
   .content-body {
     font-size: 1.1rem;
   }
-  
+
   .image-section {
     padding-left: 0;
   }
-  
+
   .content-section {
     padding-left: 0;
   }
 }
-</style> 
+</style>

@@ -1,48 +1,46 @@
 <template>
-  <div class="center-layout">
+  <div class="center-layout" :style="layoutStyle">
     <!-- 主要内容区 -->
     <div class="center-content">
       <!-- 图标或表情 -->
       <div class="center-icon" v-if="$frontmatter.icon">
         <div class="icon-wrapper" v-html="$frontmatter.icon"></div>
       </div>
-      
+
       <!-- 标题区域 -->
       <div class="center-header">
-        <h1 v-if="$frontmatter.title" class="center-title">{{ $frontmatter.title }}</h1>
-        <h2 v-if="$frontmatter.subtitle" class="center-subtitle">{{ $frontmatter.subtitle }}</h2>
+        <h1 v-if="$frontmatter.title" class="center-title">
+          {{ $frontmatter.title }}
+        </h1>
+        <h2 v-if="$frontmatter.subtitle" class="center-subtitle">
+          {{ $frontmatter.subtitle }}
+        </h2>
       </div>
-      
+
       <!-- 内容区域 -->
       <div class="center-body">
         <slot />
       </div>
-      
+
       <!-- 强调信息 -->
       <div class="center-highlight" v-if="$frontmatter.highlight">
         <div class="highlight-content">{{ $frontmatter.highlight }}</div>
       </div>
-      
+
       <!-- 底部信息 -->
       <div class="center-footer" v-if="$frontmatter.note">
         <div class="note-content">{{ $frontmatter.note }}</div>
       </div>
     </div>
-    
-    <Logo v-if="showLogo" />
-    <PoweredBy v-if="showPoweredBy" />
-    <ProgressBar v-if="showProgressBar" />
+
+    <LayoutOverlay defaultLogoPosition="top-right" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { useThemeConfig } from '../composables/useThemeConfig'
+import { useBackground } from "../composables/useBackground";
 
-const { 
-  showLogo, 
-  showPoweredBy, 
-  showProgressBar
-} = useThemeConfig()
+const { layoutStyle } = useBackground();
 </script>
 
 <style scoped>
@@ -158,11 +156,11 @@ const {
   .center-title {
     font-size: 3rem;
   }
-  
+
   .center-subtitle {
     font-size: 1.5rem;
   }
-  
+
   .icon-wrapper {
     width: 100px;
     height: 100px;
@@ -174,19 +172,19 @@ const {
   .center-content {
     padding: 2rem;
   }
-  
+
   .center-title {
     font-size: 2.5rem;
   }
-  
+
   .center-subtitle {
     font-size: 1.3rem;
   }
-  
+
   .center-body {
     font-size: 1.2rem;
   }
-  
+
   .icon-wrapper {
     width: 80px;
     height: 80px;
@@ -198,15 +196,15 @@ const {
   .center-content {
     padding: 1.5rem;
   }
-  
+
   .center-title {
     font-size: 2rem;
   }
-  
+
   .center-subtitle {
     font-size: 1.1rem;
   }
-  
+
   .center-body {
     font-size: 1rem;
   }

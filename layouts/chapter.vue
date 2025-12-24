@@ -1,39 +1,36 @@
 <template>
-  <div class="chapter-layout">
+  <div class="chapter-layout" :style="layoutStyle">
     <!-- 主要内容区 -->
     <div class="chapter-content">
       <!-- Part 标记 -->
       <div class="part-indicator" v-if="$frontmatter.part">
         <span class="part-text">Part</span>
-        <span class="part-number">{{ String($frontmatter.part).padStart(2, '0') }}</span>
+        <span class="part-number">{{
+          String($frontmatter.part).padStart(2, "0")
+        }}</span>
       </div>
-      
+
       <!-- 章节标题 -->
       <div class="chapter-header">
-        <h1 v-if="$frontmatter.title" class="chapter-title">{{ $frontmatter.title }}</h1>
+        <h1 v-if="$frontmatter.title" class="chapter-title">
+          {{ $frontmatter.title }}
+        </h1>
       </div>
-      
+
       <!-- 内容区域 -->
       <div class="chapter-body">
         <slot />
       </div>
     </div>
-    
-    <Logo v-if="showLogo" />
-    <PoweredBy v-if="showPoweredBy" />
-    <ProgressBar v-if="showProgressBar" />
-    <AnimationController />
+
+    <LayoutOverlay defaultLogoPosition="top-left" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { useThemeConfig } from '../composables/useThemeConfig'
+import { useBackground } from "../composables/useBackground";
 
-const { 
-  showLogo, 
-  showPoweredBy, 
-  showProgressBar
-} = useThemeConfig()
+const { layoutStyle } = useBackground();
 </script>
 
 <style scoped>
@@ -112,12 +109,12 @@ const {
     width: 60%;
     margin-left: 40%;
   }
-  
+
   .part-text,
   .part-number {
     font-size: 2.5rem;
   }
-  
+
   .chapter-title {
     font-size: 2.8rem;
   }
@@ -130,12 +127,12 @@ const {
     margin-left: 30%;
     padding: 2rem;
   }
-  
+
   .part-text,
   .part-number {
     font-size: 2rem;
   }
-  
+
   .chapter-title {
     font-size: 2.2rem;
   }
@@ -148,20 +145,20 @@ const {
     margin-left: 10%;
     padding: 1.5rem;
   }
-  
+
   .part-text,
   .part-number {
     font-size: 1.8rem;
     display: block;
     margin-bottom: 0.5rem;
   }
-  
+
   .part-text {
     margin-right: 0;
   }
-  
+
   .chapter-title {
     font-size: 1.8rem;
   }
 }
-</style> 
+</style>

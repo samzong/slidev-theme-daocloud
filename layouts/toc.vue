@@ -1,5 +1,5 @@
 <template>
-  <div class="slidev-layout toc-layout">
+  <div class="slidev-layout toc-layout" :style="layoutStyle">
     <!-- 左侧标题区域 -->
     <div class="toc-left">
       <div class="toc-header">
@@ -14,24 +14,16 @@
         <slot />
       </div>
     </div>
-    
-    <Logo v-if="showLogo" />
-    <PoweredBy v-if="showPoweredBy" />
-    <ProgressBar v-if="showProgressBar" />
-    <AnimationController />
+
+    <LayoutOverlay defaultLogoPosition="top-right" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { useThemeConfig } from '../composables/useThemeConfig'
+import { useBackground } from "../composables/useBackground";
 
-const { 
-  showLogo, 
-  showPoweredBy, 
-  showProgressBar
-} = useThemeConfig()
+const { layoutStyle } = useBackground("var(--daocloud-bg)");
 </script>
-
 
 <style scoped>
 .toc-layout {
@@ -79,7 +71,7 @@ const {
 }
 
 .toc-title-en::after {
-  content: '';
+  content: "";
   position: absolute;
   bottom: -0.5rem;
   left: 0;
@@ -154,28 +146,28 @@ const {
     flex-direction: column;
     align-items: flex-start;
   }
-  
+
   .toc-left {
     flex: none;
     width: 100%;
     padding-right: 0;
     margin-bottom: 3rem;
   }
-  
+
   .toc-right {
     flex: none;
     width: 100%;
     padding-left: 0;
   }
-  
+
   .toc-title-en {
     font-size: 3rem;
   }
-  
+
   .toc-title-cn {
     font-size: 2.5rem;
   }
-  
+
   .toc-list {
     font-size: 1.1rem;
   }
@@ -185,27 +177,27 @@ const {
   .toc-layout {
     padding: 2rem;
   }
-  
+
   .toc-title-en {
     font-size: 2.5rem;
   }
-  
+
   .toc-title-cn {
     font-size: 2rem;
   }
-  
+
   .toc-list {
     font-size: 1rem;
   }
-  
+
   .toc-list :deep(li) {
     padding-left: 2.5rem;
   }
-  
+
   .toc-list :deep(li::before) {
     font-size: 1.3rem;
     width: 2rem;
     height: 1.6rem;
   }
 }
-</style> 
+</style>

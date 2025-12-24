@@ -1,5 +1,5 @@
 <template>
-  <div class="table-layout">
+  <div class="table-layout" :style="layoutStyle">
     <PageHeader />
 
     <div class="table-content">
@@ -8,23 +8,16 @@
         <slot />
       </div>
     </div>
-    
-    <Logo v-if="showLogo" />
-    <PoweredBy v-if="showPoweredBy" />
-    <ProgressBar v-if="showProgressBar" />
-    <AnimationController />
+
+    <LayoutOverlay />
   </div>
 </template>
 
 <script setup lang="ts">
-import { useThemeConfig } from '../composables/useThemeConfig'
-import PageHeader from '../components/PageHeader.vue'
+import { useBackground } from "../composables/useBackground";
+import PageHeader from "../components/PageHeader.vue";
 
-const { 
-  showLogo, 
-  showPoweredBy, 
-  showProgressBar
-} = useThemeConfig()
+const { layoutStyle } = useBackground();
 </script>
 
 <style scoped>
@@ -65,13 +58,17 @@ const {
   width: 100%;
   border-collapse: collapse;
   font-size: 0.8rem;
-  line-height: 1.0;
+  line-height: 1;
   margin: 0;
   background: transparent;
 }
 
 .table-wrapper :deep(thead) {
-  background: linear-gradient(135deg, var(--daocloud-primary) 0%, var(--daocloud-primary-dark) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--daocloud-primary) 0%,
+    var(--daocloud-primary-dark) 100%
+  );
   position: sticky;
   top: 0;
   z-index: 5;
@@ -91,7 +88,7 @@ const {
 }
 
 .table-wrapper :deep(thead th:not(:last-child))::after {
-  content: '';
+  content: "";
   position: absolute;
   right: 0;
   top: 25%;
@@ -119,7 +116,7 @@ const {
   padding: 16px 20px;
   color: var(--daocloud-text-light);
   font-size: 0.8rem;
-  line-height: 1.0;
+  line-height: 1;
   vertical-align: top;
   border: none;
   word-wrap: break-word;
@@ -134,7 +131,7 @@ const {
 
 .table-wrapper :deep(tbody td p) {
   margin: 0 0 0.6rem 0;
-  line-height: 1.0;
+  line-height: 1;
 }
 
 .table-wrapper :deep(tbody td p:last-child) {
@@ -159,7 +156,7 @@ const {
   padding: 0.2rem 0.4rem;
   border-radius: 4px;
   font-size: 0.95em;
-  font-family: 'Fira Code', 'Monaco', monospace;
+  font-family: "Fira Code", "Monaco", monospace;
   border: 1px solid rgba(0, 255, 127, 0.3);
 }
 
@@ -208,13 +205,13 @@ const {
   .table-content {
     padding: 100px 40px 40px 40px;
   }
-  
+
   .table-wrapper :deep(thead th),
   .table-wrapper :deep(tbody td) {
     padding: 16px 20px;
     font-size: 1rem;
   }
-  
+
   .table-wrapper :deep(thead th) {
     font-size: 1.1rem;
   }
@@ -224,24 +221,24 @@ const {
   .table-content {
     padding: 90px 30px 30px 30px;
   }
-  
+
   .table-wrapper {
     border-radius: 8px;
   }
-  
+
   .table-wrapper :deep(thead th),
   .table-wrapper :deep(tbody td) {
     padding: 12px 16px;
     font-size: 0.95rem;
   }
-  
+
   .table-wrapper :deep(thead th) {
     font-size: 1rem;
   }
-  
+
   /* 移动端表格滚动提示 */
   .table-wrapper::after {
-    content: '← 滑动查看更多 →';
+    content: "← 滑动查看更多 →";
     position: absolute;
     bottom: -30px;
     left: 50%;
@@ -261,7 +258,7 @@ const {
     font-size: 0.9rem;
     line-height: 1.5;
   }
-  
+
   .table-wrapper :deep(thead th) {
     font-size: 0.95rem;
   }
@@ -273,27 +270,27 @@ const {
     background: white;
     color: black;
   }
-  
+
   .table-wrapper {
     background: white;
     border: 1px solid #ddd;
     box-shadow: none;
   }
-  
+
   .table-wrapper :deep(thead) {
     background: #f5f5f5;
   }
-  
+
   .table-wrapper :deep(thead th) {
     color: black;
   }
-  
+
   .table-wrapper :deep(tbody tr:hover) {
     background: transparent;
     transform: none;
     box-shadow: none;
   }
-  
+
   .table-wrapper :deep(tbody td) {
     color: black;
   }
@@ -304,7 +301,7 @@ const {
   .table-wrapper :deep(tbody tr) {
     transition: none;
   }
-  
+
   .table-wrapper :deep(tbody tr:hover) {
     transform: none;
   }
@@ -315,11 +312,11 @@ const {
   .table-wrapper {
     border: 2px solid var(--daocloud-primary);
   }
-  
+
   .table-wrapper :deep(tbody tr) {
     border-bottom: 1px solid rgba(255, 255, 255, 0.3);
   }
-  
+
   .table-wrapper :deep(tbody td code) {
     background: rgba(0, 255, 127, 0.25);
     border: 2px solid var(--daocloud-primary);

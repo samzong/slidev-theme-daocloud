@@ -1,5 +1,5 @@
 <template>
-  <div class="boxes-layout">
+  <div class="boxes-layout" :style="layoutStyle">
     <PageHeader />
 
     <div class="boxes-container" ref="containerRef">
@@ -8,9 +8,9 @@
         <slot />
       </div>
       <!-- 解析后的框 -->
-      <div 
-        v-for="(box, index) in boxes" 
-        :key="index" 
+      <div
+        v-for="(box, index) in boxes"
+        :key="index"
         class="box-item"
         :style="{ width: boxWidth }"
       >
@@ -18,73 +18,66 @@
         <div class="box-content" v-html="box.content"></div>
       </div>
     </div>
-    
-    <Logo v-if="showLogo" />
-    <PoweredBy v-if="showPoweredBy" />
-    <ProgressBar v-if="showProgressBar" />
-    <AnimationController />
+
+    <LayoutOverlay />
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, computed, nextTick } from 'vue'
-import { useThemeConfig } from '../composables/useThemeConfig'
-import PageHeader from '../components/PageHeader.vue'
+import { ref, onMounted, computed, nextTick } from "vue";
+import { useBackground } from "../composables/useBackground";
+import PageHeader from "../components/PageHeader.vue";
 
-const { 
-  showLogo, 
-  showPoweredBy, 
-  showProgressBar
-} = useThemeConfig()
+const { layoutStyle } = useBackground();
 
 interface Box {
-  title: string
-  content: string
+  title: string;
+  content: string;
 }
 
-const boxes = ref<Box[]>([])
-const originalContent = ref<HTMLElement>()
+const boxes = ref<Box[]>([]);
+const originalContent = ref<HTMLElement>();
 
 // 计算每个框的宽度
 const boxWidth = computed(() => {
-  const count = boxes.value.length
-  if (count === 0) return '100%'
-  if (count === 1) return '100%'
-  if (count === 2) return 'calc(50% - 15px)'
-  if (count === 3) return 'calc(33.333% - 13.333px)'
-  if (count === 4) return 'calc(25% - 15px)'
+  const count = boxes.value.length;
+  if (count === 0) return "100%";
+  if (count === 1) return "100%";
+  if (count === 2) return "calc(50% - 15px)";
+  if (count === 3) return "calc(33.333% - 13.333px)";
+  if (count === 4) return "calc(25% - 15px)";
   // 超过4个时，每行显示4个
-  return 'calc(25% - 15px)'
-})
+  return "calc(25% - 15px)";
+});
 
 onMounted(async () => {
-  await nextTick()
-  
+  await nextTick();
+
   // 获取原始内容
-  if (!originalContent.value) return
-  
+  if (!originalContent.value) return;
+
   // 查找所有 h2 标签
-  const h2Elements = originalContent.value.querySelectorAll('h2')
-  
-  const parsedBoxes: Box[] = []
-  
+  const h2Elements = originalContent.value.querySelectorAll("h2");
+
+  const parsedBoxes: Box[] = [];
+
   h2Elements.forEach((h2) => {
-    const title = h2.textContent || ''
-    let content = ''
-    
+    const title = h2.textContent || "";
+    let content = "";
+
     // 获取 h2 后面的所有内容，直到下一个 h2
-    let nextSibling = h2.nextElementSibling
-    
-    while (nextSibling && nextSibling.tagName !== 'H2') {
-      content += nextSibling.outerHTML
-      nextSibling = nextSibling.nextElementSibling
+    let nextSibling = h2.nextElementSibling;
+
+    while (nextSibling && nextSibling.tagName !== "H2") {
+      content += nextSibling.outerHTML;
+      nextSibling = nextSibling.nextElementSibling;
     }
-    
-    parsedBoxes.push({ title, content })
-  })
-  
-  boxes.value = parsedBoxes
-})
+
+    parsedBoxes.push({ title, content });
+  });
+
+  boxes.value = parsedBoxes;
+});
 </script>
 
 <style scoped>
@@ -114,7 +107,7 @@ onMounted(async () => {
   border-radius: 8px;
   padding: 20px;
   background: rgba(26, 26, 46, 0.5);
-  box-shadow: 
+  box-shadow:
     0 0 20px rgba(0, 255, 127, 0.1),
     0 4px 12px rgba(0, 0, 0, 0.3);
   transition: all 0.3s ease;
@@ -125,7 +118,7 @@ onMounted(async () => {
 
 .box-item:hover {
   transform: translateY(-4px);
-  box-shadow: 
+  box-shadow:
     0 0 30px rgba(0, 255, 127, 0.2),
     0 8px 20px rgba(0, 0, 0, 0.4);
   border-color: rgba(0, 255, 127, 0.9);
@@ -175,7 +168,7 @@ onMounted(async () => {
 }
 
 .box-content :deep(li::before) {
-  content: '•';
+  content: "•";
   position: absolute;
   left: 0;
   color: var(--daocloud-primary);
@@ -193,7 +186,7 @@ onMounted(async () => {
   padding: 0.2rem 0.4rem;
   border-radius: 4px;
   font-size: 0.95rem;
-  font-family: 'Fira Code', monospace;
+  font-family: "Fira Code", monospace;
   border: 1px solid rgba(0, 255, 127, 0.3);
 }
 
@@ -214,7 +207,7 @@ onMounted(async () => {
     padding: 100px 20px 40px 20px;
     gap: 15px;
   }
-  
+
   .box-item {
     width: calc(50% - 7.5px) !important;
   }
@@ -225,14 +218,14 @@ onMounted(async () => {
     padding: 90px 20px 30px 20px;
     gap: 15px;
   }
-  
+
   .box-item {
     width: 100% !important;
     padding: 20px;
   }
-  
+
   .box-title {
     font-size: 1.4rem;
   }
 }
-</style> 
+</style>

@@ -1,3 +1,5 @@
+import { computed } from "vue";
+
 /**
  * 主题全局配置接口
  */
@@ -21,6 +23,9 @@ export interface ThemeGlobalConfig {
 
   // 动画配置
   disableAnimations?: boolean;
+
+  // 背景配置
+  background?: string;
 }
 
 /**
@@ -30,7 +35,7 @@ const DEFAULT_CONFIG: Required<ThemeGlobalConfig> = {
   // Logo 默认配置
   showLogo: true,
   logo: "/logo.png",
-  logoPosition: "top-left",
+  logoPosition: "top-right",
   logoSize: "md",
   logoVariant: "default",
 
@@ -46,10 +51,10 @@ const DEFAULT_CONFIG: Required<ThemeGlobalConfig> = {
 
   // 动画默认配置
   disableAnimations: true,
+
+  // 背景默认配置 (深色主题)
+  background: "var(--daocloud-bg-dark)",
 };
-
-import { computed } from 'vue'
-
 /**
  * 获取合并后的主题配置
  * 优先级: frontmatter > themeConfig.globalConfig > DEFAULT_CONFIG
@@ -83,13 +88,16 @@ export function useThemeConfig() {
 
       // 动画配置
       disableAnimations: frontmatter.disableAnimations,
+
+      // 背景配置
+      background: frontmatter.background,
     };
 
     // 过滤掉 undefined 值
     const filteredFrontmatterConfig = Object.fromEntries(
       Object.entries(frontmatterConfig).filter(
-        ([_, value]) => value !== undefined
-      )
+        ([_, value]) => value !== undefined,
+      ),
     );
 
     // 合并配置：frontmatter > themeConfig > default
@@ -122,5 +130,8 @@ export function useThemeConfig() {
 
     // 动画配置
     disableAnimations: computed(() => config.value.disableAnimations),
+
+    // 背景配置
+    background: computed(() => config.value.background),
   };
 }

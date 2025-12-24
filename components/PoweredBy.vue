@@ -7,81 +7,95 @@
       {{ finalText }}
     </div>
     <!-- 图片内容（默认） -->
-    <img v-else :src="finalImage" :alt="finalAlt" class="powered-by-img" :class="imageClass" />
+    <img
+      v-else
+      :src="finalImage"
+      :alt="finalAlt"
+      class="powered-by-img"
+      :class="imageClass"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
-import { useThemeConfig } from '../composables/useThemeConfig'
+import { computed } from "vue";
+import { useThemeConfig } from "../composables/useThemeConfig";
 
 interface Props {
   /** 内容类型：image(图片) | text(文本) | slot(插槽) */
-  type?: 'image' | 'text' | 'slot'
+  type?: "image" | "text" | "slot";
   /** 样式变体 */
-  variant?: 'default' | 'white' | 'dark' | 'minimal'
+  variant?: "default" | "white" | "dark" | "minimal";
   /** 自定义图片路径 */
-  src?: string
+  src?: string;
   /** 自定义文本内容 */
-  text?: string
+  text?: string;
   /** 图片描述 */
-  alt?: string
+  alt?: string;
   /** 组件位置 */
-  position?: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right'
+  position?: "top-left" | "top-right" | "bottom-left" | "bottom-right";
   /** 组件尺寸 */
-  size?: 'sm' | 'md' | 'lg'
+  size?: "sm" | "md" | "lg";
   /** 是否隐藏 */
-  hidden?: boolean
+  hidden?: boolean;
   /** 品牌名称（用于文本模式） */
-  brand?: string
+  brand?: string;
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  type: 'image',
+  type: "image",
   variant: undefined, // 使用配置系统默认值
-  alt: 'Powered By',
-  position: 'bottom-right',
-  size: 'md',
+  alt: "Powered By",
+  position: undefined, // 布局级默认值
+  size: "md",
   hidden: false,
-  brand: 'DaoCloud'
-})
+  brand: "DaoCloud",
+});
 
-const { poweredByVariant, showPoweredBy } = useThemeConfig()
+const { poweredByVariant, poweredByPosition, showPoweredBy } = useThemeConfig();
 
-// 最终使用的配置
-const finalVariant = computed(() => props.variant || poweredByVariant.value)
-const finalHidden = computed(() => props.hidden || !showPoweredBy.value)
+// 检查 frontmatter 是否显式设置了 poweredByPosition
+const frontmatterPosition = computed(
+  () => (globalThis as any).$frontmatter?.poweredByPosition,
+);
+
+// 优先级: frontmatter显式设置 > props(布局默认) > 全局配置
+const finalPosition = computed(
+  () => frontmatterPosition.value || props.position || poweredByPosition.value,
+);
+const finalVariant = computed(() => props.variant || poweredByVariant.value);
+const finalHidden = computed(() => props.hidden || !showPoweredBy.value);
 const finalText = computed(() => {
-  if (props.text) return props.text
-  return `Powered by ${props.brand}`
-})
+  if (props.text) return props.text;
+  return `Powered by ${props.brand}`;
+});
 const finalAlt = computed(() => {
-  if (props.alt !== 'Powered By') return props.alt
-  return `Powered By ${props.brand}`
-})
+  if (props.alt !== "Powered By") return props.alt;
+  return `Powered By ${props.brand}`;
+});
 const finalImage = computed(() => {
-  if (props.src) return props.src
+  if (props.src) return props.src;
   // 默认图片路径逻辑
-  const variant = finalVariant.value
-  if (variant === 'white') return '/powerby-white.png'
-  if (variant === 'dark') return '/powerby-dark.png'
-  return '/powerby-default.png'
-})
+  const variant = finalVariant.value;
+  if (variant === "white") return "/powerby-white.png";
+  if (variant === "dark") return "/powerby-dark.png";
+  return "/powerby-default.png";
+});
 
 // 样式类
 const containerClass = computed(() => [
-  `powered-by-position-${props.position}`,
+  `powered-by-position-${finalPosition.value}`,
   `powered-by-size-${props.size}`,
-  `powered-by-variant-${finalVariant.value}`
-])
+  `powered-by-variant-${finalVariant.value}`,
+]);
 
 const imageClass = computed(() => [
-  'powered-by-image',
-  `powered-by-image-${finalVariant.value}`
-])
+  "powered-by-image",
+  `powered-by-image-${finalVariant.value}`,
+]);
 
 const textClass = computed(() => [
   `powered-by-text-${finalVariant.value}`,
-  `powered-by-text-${props.size}`
-])
+  `powered-by-text-${props.size}`,
+]);
 </script>

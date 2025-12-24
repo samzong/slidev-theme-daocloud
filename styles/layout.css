@@ -61,18 +61,6 @@
   opacity: 0.4;
 }
 
-@keyframes float {
-  0%,
-  100% {
-    transform: rotate(0deg) scale(1);
-    opacity: 0.8;
-  }
-  50% {
-    transform: rotate(180deg) scale(1.1);
-    opacity: 1;
-  }
-}
-
 /* 内容页装饰线条 */
 .content-decoration {
   position: absolute;

@@ -1,32 +1,34 @@
 <template>
-  <div class="image-layout">
+  <div class="image-layout" :style="layoutStyle">
     <!-- 页面标题（可选） -->
     <div class="image-header" v-if="$frontmatter.title">
       <h1 class="image-title">{{ $frontmatter.title }}</h1>
-      <p v-if="$frontmatter.subtitle" class="image-subtitle">{{ $frontmatter.subtitle }}</p>
+      <p v-if="$frontmatter.subtitle" class="image-subtitle">
+        {{ $frontmatter.subtitle }}
+      </p>
     </div>
 
     <!-- 图片容器 -->
     <div class="image-container">
-      <img 
-        v-if="$frontmatter.image" 
-        :src="$frontmatter.image" 
+      <img
+        v-if="$frontmatter.image"
+        :src="$frontmatter.image"
         :alt="$frontmatter.alt || $frontmatter.title || 'Image'"
         class="main-image"
         :style="{
-          objectFit: $frontmatter.objectFit || 'cover'
+          objectFit: $frontmatter.objectFit || 'cover',
         }"
       />
       <div v-else class="image-placeholder">
         <div class="placeholder-icon">🖼️</div>
         <p class="placeholder-text">请在 frontmatter 中设置 image 属性</p>
         <code class="placeholder-example">
-          ---<br>
-          layout: image<br>
-          image: /path/to/image.png<br>
-          title: 可选标题<br>
-          caption: 可选说明文字<br>
-          objectFit: cover # 可选: cover | contain | fill | scale-down<br>
+          ---<br />
+          layout: image<br />
+          image: /path/to/image.png<br />
+          title: 可选标题<br />
+          caption: 可选说明文字<br />
+          objectFit: cover # 可选: cover | contain | fill | scale-down<br />
           ---
         </code>
       </div>
@@ -42,21 +44,14 @@
       <slot />
     </div>
 
-    <Logo v-if="showLogo" />
-    <PoweredBy v-if="showPoweredBy" />
-    <ProgressBar v-if="showProgressBar" />
-    <AnimationController />
+    <LayoutOverlay defaultLogoPosition="top-right" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { useThemeConfig } from '../composables/useThemeConfig'
+import { useBackground } from "../composables/useBackground";
 
-const { 
-  showLogo, 
-  showPoweredBy, 
-  showProgressBar
-} = useThemeConfig()
+const { layoutStyle } = useBackground();
 </script>
 
 <style scoped>
@@ -256,4 +251,4 @@ const {
     max-height: 50vh;
   }
 }
-</style> 
+</style>
