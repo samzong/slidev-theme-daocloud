@@ -1,6 +1,6 @@
 # Slidev Theme DaoCloud
 
-一个为 DaoCloud 定制的专业 Slidev 演示主题，内置品牌色、统一的排版体系与多个常用布局。
+一个为 DaoCloud 定制的 Slidev 演示主题，内置品牌色、统一的排版体系与多个常用布局。
 
 ## 安装
 
