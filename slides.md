@@ -2,10 +2,10 @@
 theme: ./
 disableAnimations: true
 layout: cover
-title: 'Kueue & Volcano 调度实战 (cover)'
+title: 'Kueue&Volcano 调度实战'
 subtitle: '深入对比与应用'
 date: '2025-06-18'
-author: "船长"
+author: '船长'
 showLogo: false
 showPoweredBy: false
 fonts:
@@ -18,36 +18,39 @@ fonts:
 ---
 
 ---
+
 layout: intro
 avatar: https://avatars.githubusercontent.com/u/13782141?v=4
 title: 船长 @samzong (intro)
 subtitle: 资深云原生 及 AI 平台产品架构与布道师
 tags:
-  - "Cloud-Native"
-  - "Kubernetes"
-  - "LLM Infra"
-github: samzong
-techStack:
-  - name: Kubernetes
-    icon: https://raw.githubusercontent.com/kubernetes/kubernetes/master/logo/logo.svg
-  - name: Docker
-    icon: https://www.docker.com/wp-content/uploads/2022/03/Moby-logo.png
-  - name: Go
-    icon: https://go.dev/images/go-logo-blue.svg
-  - name: Python
-    icon: https://www.python.org/static/community_logos/python-logo-master-v3-TM.png
-certifications:
-  - name: CKA
-    badge: https://images.credly.com/size/680x680/images/8b8ed108-e77d-4396-ac59-2504583b9d54/cka_from_cncfsite__281_29.png
-  - name: CKAD
-    badge: https://images.credly.com/size/680x680/images/cc8adc83-1dc6-4d57-8e20-22171247e052/blob
+
+- "Cloud-Native"
+- "Kubernetes"
+- "LLM Infra"
+  github: samzong
+  techStack:
+- name: Kubernetes
+  icon: https://raw.githubusercontent.com/kubernetes/kubernetes/master/logo/logo.svg
+- name: Docker
+  icon: https://www.docker.com/wp-content/uploads/2022/03/Moby-logo.png
+- name: Go
+  icon: https://go.dev/images/go-logo-blue.svg
+- name: Python
+  icon: https://www.python.org/static/community_logos/python-logo-master-v3-TM.png
+  certifications:
+- name: CKA
+  badge: https://images.credly.com/size/680x680/images/8b8ed108-e77d-4396-ac59-2504583b9d54/cka_from_cncfsite__281_29.png
+- name: CKAD
+  badge: https://images.credly.com/size/680x680/images/cc8adc83-1dc6-4d57-8e20-22171247e052/blob
+
 ---
 
 精通云原生技术栈，专注于 Kubernetes 生态系统和 AI 基础设施建设；拥有丰富的大规模分布式系统架构经验，在容器化、微服务、DevOps 和 MLOps 领域有深入研究。
 
 ---
-layout: toc
----
+
+## layout: toc
 
 1.  **背景**: Kubernetes 批处理调度的挑战与演进
 2.  **Kueue 深度解析**: 设计理念、核心架构与实战
@@ -59,9 +62,11 @@ layout: toc
 8.  **总结与展望**
 
 ---
+
 layout: chapter
 part: 1
 title: Kubernetes 原生调度 (chapter)
+
 ---
 
 <!-- 演讲内容补充
@@ -79,9 +84,11 @@ title: Kubernetes 原生调度 (chapter)
 -->
 
 ---
+
 layout: image-right
 title: Kubernetes 原生调度的局限性 (image-right)
 image: scheduling-framework-extensions.png
+
 ---
 
 `default-scheduler` 为通用场景设计，但在批处理领域力不从心
@@ -111,17 +118,19 @@ image: scheduling-framework-extensions.png
 -->
 
 ---
+
 layout: table
 title: 批处理调度的核心挑战与业界解决方案 (table)
+
 ---
 
-| 核心挑战 | 问题描述 | Kueue 方案 | Volcano 方案 | 其他方案 |
-|:---------|:---------|:-----------|:-------------|:----------|
-| **资源竞争** | 如何在多租户间公平分配资源？ | ClusterQueue + LocalQueue<br/>分层队列管理 | Queue 权重机制<br/>弹性资源借用 | **Apache YuniKorn**:<br/>层次化队列，最大/最小资源保证 |
-| **优先级管理** | 如何确保关键作业优先执行？ | WorkloadPriorityClass<br/>资源抢占机制 | PriorityClass<br/>作业优先级排序 | **Slurm**:<br/>多级优先级队列 + 公平共享算法 |
-| **资源利用率** | 如何减少碎片化，提升集群效率？ | 资源借用 (lendingLimit)<br/>动态回收机制 | Gang Scheduling<br/>资源批量分配 | **K8s Scheduler**:<br/>Bin Packing + 节点亲和性 |
-| **复杂依赖** | 如何处理作业间的依赖关系？ | 基础支持<br/>需外部编排工具 | 原生支持作业依赖图<br/>任务拓扑管理 | **Argo Workflows**: DAG编排<br/>**Apache Airflow**: 条件触发 |
-| **异构资源** | 如何支持 GPU、TPU 等特殊硬件？ | ResourceFlavor<br/>抽象硬件类型 | Device Plugin 集成<br/>拓扑感知调度 | **NVIDIA GPU Operator**:<br/>GPU 自动发现和管理 |
+| 核心挑战       | 问题描述                       | Kueue 方案                                 | Volcano 方案                        | 其他方案                                                      |
+| :------------- | :----------------------------- | :----------------------------------------- | :---------------------------------- | :------------------------------------------------------------ |
+| **资源竞争**   | 如何在多租户间公平分配资源？   | ClusterQueue + LocalQueue<br/>分层队列管理 | Queue 权重机制<br/>弹性资源借用     | **Apache YuniKorn**:<br/>层次化队列，最大/最小资源保证        |
+| **优先级管理** | 如何确保关键作业优先执行？     | WorkloadPriorityClass<br/>资源抢占机制     | PriorityClass<br/>作业优先级排序    | **Slurm**:<br/>多级优先级队列 + 公平共享算法                  |
+| **资源利用率** | 如何减少碎片化，提升集群效率？ | 资源借用 (lendingLimit)<br/>动态回收机制   | Gang Scheduling<br/>资源批量分配    | **K8s Scheduler**:<br/>Bin Packing + 节点亲和性               |
+| **复杂依赖**   | 如何处理作业间的依赖关系？     | 基础支持<br/>需外部编排工具                | 原生支持作业依赖图<br/>任务拓扑管理 | **Argo Workflows**: DAG 编排<br/>**Apache Airflow**: 条件触发 |
+| **异构资源**   | 如何支持 GPU、TPU 等特殊硬件？ | ResourceFlavor<br/>抽象硬件类型            | Device Plugin 集成<br/>拓扑感知调度 | **NVIDIA GPU Operator**:<br/>GPU 自动发现和管理               |
 
 <!--
 演讲内容补充
@@ -138,8 +147,10 @@ title: 批处理调度的核心挑战与业界解决方案 (table)
 -->
 
 ---
+
 layout: timeline
 title: 批处理调度器的演进 (timeline)
+
 ---
 
 ## 2015-2017
@@ -184,8 +195,10 @@ Kueue 和 Volcano 成为主流批处理调度方案
 -->
 
 ---
+
 layout: boxes
 title: AI/ML 工作负载的管理要求 (boxes)
+
 ---
 
 ## 大规模并行
@@ -193,7 +206,8 @@ title: AI/ML 工作负载的管理要求 (boxes)
 训练作业需要数百 GPU 同步工作，要求调度器能够同时分配大量资源
 
 **技术挑战**：
-- **All-Reduce 通信瓶颈**：8卡训练需 200Gbps InfiniBand，延迟 < 10μs
+
+- **All-Reduce 通信瓶颈**：8 卡训练需 200Gbps InfiniBand，延迟 < 10μs
 - **拓扑感知调度**：同机架 GPU 通信带宽比跨机架高 10x
 - **资源碎片化**：95% 的调度失败源于无法找到连续的 GPU 资源块
 
@@ -202,6 +216,7 @@ title: AI/ML 工作负载的管理要求 (boxes)
 训练可能持续数周，需要稳定调度和资源保障，避免中断
 
 **生产数据**：
+
 - **GPT-3 训练**：175B 参数，需要 1024 个 A100 GPU 运行 34 天
 - **故障率**：大规模集群每天约 2-3% 节点故障率
 - **检查点开销**：每 4 小时保存检查点，单次耗时 15-30 分钟
@@ -211,6 +226,7 @@ title: AI/ML 工作负载的管理要求 (boxes)
 需动态调整资源以应对峰值需求，支持弹性扩缩容
 
 **弹性策略**：
+
 - **预热池设计**：保持 10-20% 温备容量，启动时间从 5min 降至 30s
 - **优先级队列**：推理任务 P0，在线训练 P1，离线训练 P2
 - **潮汐调度**：白天推理资源 70%，夜间训练资源 80%
@@ -220,7 +236,8 @@ title: AI/ML 工作负载的管理要求 (boxes)
 需支持检查点和作业恢复，确保训练进度不丢失
 
 **容错机制**：
-- **三级检查点**：内存级(秒级)、SSD级(分钟级)、对象存储(小时级)
+
+- **三级检查点**：内存级(秒级)、SSD 级(分钟级)、对象存储(小时级)
 - **弹性训练**：基于 Horovod Elastic，支持动态增减 Worker
 - **快速恢复**：使用 RDMA 加速检查点恢复，降低恢复时间 70%
 
@@ -238,8 +255,10 @@ title: AI/ML 工作负载的管理要求 (boxes)
 -->
 
 ---
+
 layout: default
 title: AI/ML 的 GPU 网络需求 (default)
+
 ---
 
 ```mermaid
@@ -255,6 +274,7 @@ graph LR
 ```
 
 **关键指标**：
+
 - **节点内通信**：NVLink 3.0 提供 600GB/s 带宽
 - **跨节点通信**：RoCE v2 提供 200Gbps，延迟 < 2μs
 - **梯度同步开销**：占总训练时间的 15-25%
@@ -275,8 +295,10 @@ graph LR
 -->
 
 ---
+
 layout: default
 title: AI/ML 的 GPU 资源调度算法 (default)
+
 ---
 
 ```go
@@ -284,7 +306,7 @@ title: AI/ML 的 GPU 资源调度算法 (default)
 func (s *Scheduler) findBestGPUPlacement(workload *Workload) (*Placement, error) {
     // 1. 收集可用 GPU 拓扑信息
     topology := s.clusterTopology.GetGPUTopology()
-    
+
     // 2. 计算最优放置策略
     for _, node := range topology.Nodes {
         if node.AvailableGPUs >= workload.RequiredGPUs {
@@ -297,7 +319,7 @@ func (s *Scheduler) findBestGPUPlacement(workload *Workload) (*Placement, error)
             }
         }
     }
-    
+
     // 3. 降级到跨节点调度
     return s.findCrossNodePlacement(workload)
 }
@@ -319,9 +341,11 @@ func (s *Scheduler) findBestGPUPlacement(workload *Workload) (*Placement, error)
 -->
 
 ---
+
 layout: chapter
 part: 2
 title: Kueue 深度解析 (chapter)
+
 ---
 
 <!-- 演讲内容补充
@@ -339,8 +363,10 @@ Kueue 是 Kubernetes 社区官方的批处理调度解决方案，由 Google 和
 -->
 
 ---
+
 layout: timeline
 title: Kueue 起源 (timeline)
+
 ---
 
 ## 2021
@@ -379,9 +405,11 @@ Kueue 的起源可以追溯到 2021 年的 Kubernetes SIG-Batch 工作组。当�
 -->
 
 ---
+
 layout: image-right
 title: Kueue 核心架构 (image-right)
 image: kueue.png
+
 ---
 
 - **LocalQueue**: 租户级队列，组织作业
@@ -404,8 +432,10 @@ image: kueue.png
 -->
 
 ---
+
 layout: default
 title: Kueue 核心概念：Workload (default)
+
 ---
 
 - **定义**: 代表一个完整的批处理作业
@@ -420,13 +450,13 @@ metadata:
 spec:
   queueName: user-queue
   podSets:
-  - name: main
-    replicas: 3
-    template:
-      spec:
-        containers:
-        - name: app
-          image: busybox
+    - name: main
+      replicas: 3
+      template:
+        spec:
+          containers:
+            - name: app
+              image: busybox
 ```
 
 **源码解析**：Kueue 的核心调度器在 `pkg/scheduler/scheduler.go` 中处理 workload 调度决策，采用公平共享算法确保资源分配公平性。
@@ -445,8 +475,10 @@ Workload 的生命周期包括五个阶段：提交、排队、准入、执行�
 -->
 
 ---
+
 layout: default
 title: Kueue 核心概念：LocalQueue (default)
+
 ---
 
 - **作用**: 租户或团队的作业队列
@@ -464,8 +496,10 @@ spec:
 ```
 
 ---
+
 layout: default
 title: Kueue 核心概念：ClusterQueue (default)
+
 ---
 
 - **作用**: 定义集群级资源池和策略
@@ -480,19 +514,21 @@ metadata:
 spec:
   namespaceSelector: {}
   resourceGroups:
-  - coveredResources: ["cpu", "memory"]
-    flavors:
-    - name: default-flavor
-      resources:
-      - name: cpu
-        nominalQuota: 10
-      - name: memory
-        nominalQuota: 10Gi
+    - coveredResources: ['cpu', 'memory']
+      flavors:
+        - name: default-flavor
+          resources:
+            - name: cpu
+              nominalQuota: 10
+            - name: memory
+              nominalQuota: 10Gi
 ```
 
 ---
+
 layout: default
 title: Kueue 核心概念：ResourceFlavor (default)
+
 ---
 
 - **作用**: 抽象异构资源类型
@@ -510,8 +546,10 @@ spec:
 ```
 
 ---
+
 layout: default
 title: Kueue 核心概念：TAS (default)
+
 ---
 
 - **作用**: 拓扑感知调度
@@ -526,16 +564,17 @@ metadata:
 spec:
   nodeLabels:
     cloud.provider.com/node-group: tas
-  topologyName: default  # 新特性：关联拓扑
+  topologyName: default # 新特性：关联拓扑
 ```
 
 ---
+
 layout: default
 title: Kueue 调度流程 (default)
+
 ---
 
 **调度器核心代码分析**：scheduler.go:712 中的 `connectToServer` 函数
-
 
 ```mermaid
 sequenceDiagram
@@ -552,8 +591,10 @@ sequenceDiagram
 ```
 
 ---
+
 layout: boxes
 title: Kueue 设计理念 (boxes)
+
 ---
 
 ## Job First
@@ -561,6 +602,7 @@ title: Kueue 设计理念 (boxes)
 以作业为调度核心，而非单个 Pod
 
 **核心实现**：
+
 - **Workload 抽象层**：将 Job、MPIJob、RayJob 统一为 Workload
 - **批量资源预留**：通过 `AdmissionCheck` 确保资源原子性分配
 - **源码位置**：`apis/kueue/v1beta1/workload_types.go`
@@ -570,6 +612,7 @@ title: Kueue 设计理念 (boxes)
 增强而非替代默认调度器
 
 **技术架构**：
+
 - **双层调度**：Kueue 负责准入控制，kube-scheduler 负责实际调度
 - **Webhook 注入**：通过 MutatingWebhook 动态修改 Pod 调度器名称
 - **性能影响**：增加 5-10ms 调度延迟，可接受范围内
@@ -579,6 +622,7 @@ title: Kueue 设计理念 (boxes)
 通过队列实现资源排队和公平性
 
 **算法实现**：
+
 - **公平共享算法**：基于 DRF (Dominant Resource Fairness)
 - **优先级反转处理**：通过 `workloadpriority` 包实现
 - **队列状态机**：Pending → Admitted → Finished 三态转换
@@ -588,6 +632,7 @@ title: Kueue 设计理念 (boxes)
 动态借用和归还资源，提升利用率
 
 **借用机制源码**：
+
 ```go
 // pkg/cache/clusterqueue.go
 func (c *ClusterQueue) borrowingLimit(rName corev1.ResourceName) *resource.Quantity {
@@ -607,8 +652,10 @@ Kueue 的设计理念体现了四个核心原则，这些原则共同构成了�
 -->
 
 ---
+
 layout: default
 title: Kueue 设计理念深度解析 - Workload 生命周期状态机 (default)
+
 ---
 
 ```mermaid
@@ -622,7 +669,7 @@ stateDiagram-v2
     Running --> Failed: 作业失败
     Succeeded --> [*]
     Failed --> [*]
-    
+
     note right of CheckingAdmission
         AdmissionController 决策点
         - 检查 ClusterQueue 配额
@@ -632,8 +679,10 @@ stateDiagram-v2
 ```
 
 ---
+
 layout: default
 title: Kueue 设计理念深度解析 - 公平性算法 (default)
+
 ---
 
 ```go
@@ -647,7 +696,7 @@ type DRFShare struct {
 func (d *DRFScheduler) ComputeShares(queue *ClusterQueue) []DRFShare {
     shares := make([]DRFShare, 0, len(queue.Workloads))
     totalResources := queue.TotalResources()
-    
+
     for _, wl := range queue.Workloads {
         maxShare := 0.0
         for rName, allocated := range wl.AllocatedResources {
@@ -662,7 +711,7 @@ func (d *DRFScheduler) ComputeShares(queue *ClusterQueue) []DRFShare {
             share:    maxShare,
         })
     }
-    
+
     // 按份额排序，实现公平调度
     sort.Slice(shares, func(i, j int) bool {
         return shares[i].share < shares[j].share
@@ -672,20 +721,24 @@ func (d *DRFScheduler) ComputeShares(queue *ClusterQueue) []DRFShare {
 ```
 
 ---
+
 layout: table
 title: Kueue 设计理念深度解析 - 性能优化 (table)
----
-
-| 优化项 | 实现方式 | 性能提升 |
-|--------|---------|----------|
-| **缓存机制** | 使用 informer 缓存，减少 API Server 压力 | QPS 提升 10x |
-| **批量处理** | 聚合 10ms 内的事件统一处理 | 延迟降低 50% |
-| **并发控制** | WorkQueue 限流，默认 50 并发 | CPU 使用降低 30% |
-| **索引优化** | 为 ClusterQueue 建立多维索引 | 查询速度提升 5x |
 
 ---
+
+| 优化项       | 实现方式                                 | 性能提升         |
+| ------------ | ---------------------------------------- | ---------------- |
+| **缓存机制** | 使用 informer 缓存，减少 API Server 压力 | QPS 提升 10x     |
+| **批量处理** | 聚合 10ms 内的事件统一处理               | 延迟降低 50%     |
+| **并发控制** | WorkQueue 限流，默认 50 并发             | CPU 使用降低 30% |
+| **索引优化** | 为 ClusterQueue 建立多维索引             | 查询速度提升 5x  |
+
+---
+
 layout: default
 title: Kueue 设计理念深度解析 - 与 kube-scheduler 的协作机制 (default)
+
 ---
 
 ```yaml
@@ -695,14 +748,16 @@ kind: Pod
 metadata:
   annotations:
     kueue.x-k8s.io/admission: '{"clusterQueue":"prod-queue","resourceFlavor":"gpu-a100"}'
-    scheduler.alpha.kubernetes.io/preferred-node-selector: "gpu-type=a100"
+    scheduler.alpha.kubernetes.io/preferred-node-selector: 'gpu-type=a100'
 spec:
-  schedulerName: default-scheduler  # 仍使用默认调度器
+  schedulerName: default-scheduler # 仍使用默认调度器
 ```
 
 ---
+
 layout: boxes
 title: Kueue 核心组件 (boxes)
+
 ---
 
 ## Controller
@@ -710,6 +765,7 @@ title: Kueue 核心组件 (boxes)
 协调作业生命周期
 
 **控制器架构**：
+
 - **工作队列**：基于 k8s.io/client-go/util/workqueue
 - **并发处理**：默认 10 个 worker 协程
 - **重试机制**：指数退避，最大重试 10 次
@@ -719,6 +775,7 @@ title: Kueue 核心组件 (boxes)
 决定作业是否进入执行
 
 **准入逻辑**：
+
 - **配额检查**：O(1) 时间复杂度的资源计算
 - **优先级抢占**：基于堆的优先队列实现
 - **事务保证**：使用乐观锁避免资源超卖
@@ -728,6 +785,7 @@ title: Kueue 核心组件 (boxes)
 与 K8s 调度器协作分配资源
 
 **调度策略**：
+
 - **两阶段提交**：先预留资源，后创建 Pod
 - **亲和性传播**：将 ResourceFlavor 转换为节点选择器
 - **失败回滚**：30s 超时自动释放预留资源
@@ -737,13 +795,16 @@ title: Kueue 核心组件 (boxes)
 定义异构资源类型
 
 **实现机制**：
+
 - **标签映射**：自动生成 nodeSelector 和 tolerations
 - **多维匹配**：支持 CPU 架构、GPU 型号等多维度
 - **动态发现**：通过 Node 标签自动识别可用资源
 
 ---
+
 layout: default
 title: Kueue 核心组件解析 - 组件间通信架构 (default)
+
 ---
 
 ```mermaid
@@ -753,20 +814,20 @@ graph LR
         B[ClusterQueue CRD]
         C[LocalQueue CRD]
     end
-    
+
     subgraph "Kueue Controller Manager"
         D[Workload Controller]
         E[Queue Controller]
         F[Admission Controller]
         G[Scheduler]
     end
-    
+
     subgraph "Data Flow"
         H[Informer Cache]
         I[Work Queue]
         J[Event Bus]
     end
-    
+
     A --> H
     B --> H
     C --> H
@@ -781,8 +842,10 @@ graph LR
 ```
 
 ---
+
 layout: default
 title: Kueue 核心组件解析 - 并发控制实现 (default)
+
 ---
 
 ```go
@@ -814,26 +877,28 @@ func (c *Controller) processNextItem(ctx context.Context) bool {
         return false
     }
     defer c.queue.Done(key)
-    
+
     // 处理带超时控制
     ctx, cancel := context.WithTimeout(ctx, 30*time.Second)
     defer cancel()
-    
+
     err := c.reconcile(ctx, key.(string))
     if err != nil {
         // 指数退避重试
         c.queue.AddRateLimited(key)
         return true
     }
-    
+
     c.queue.Forget(key)
     return true
 }
 ```
 
 ---
+
 layout: default
 title: Kueue 核心组件解析 - 资源预留与释放机制 (default)
+
 ---
 
 ```go
@@ -848,17 +913,17 @@ type Snapshot struct {
 func (s *Snapshot) Reserve(cq string, r Resources) error {
     s.Lock()
     defer s.Unlock()
-    
+
     queue := s.queues[cq]
     if queue == nil {
         return fmt.Errorf("queue %s not found", cq)
     }
-    
+
     // 原子性检查和预留
     if !queue.CanReserve(r) {
         return ErrInsufficientResources
     }
-    
+
     queue.Reserve(r)
     s.generation++
     return nil
@@ -866,21 +931,25 @@ func (s *Snapshot) Reserve(cq string, r Resources) error {
 ```
 
 ---
+
 layout: table
 title: Kueue 核心组件解析 - 性能监控指标 (table)
----
-
-| 指标名称 | 描述 | 告警阈值 |
-|---------|------|----------|
-| `kueue_admission_latency_seconds` | 准入决策延迟 | > 1s |
-| `kueue_workload_queue_depth` | 等待队列深度 | > 1000 |
-| `kueue_resource_usage_ratio` | 资源使用率 | > 95% |
-| `kueue_scheduler_throughput` | 调度吞吐量 | < 100/s |
-| `kueue_controller_sync_errors` | 同步错误率 | > 1% |
 
 ---
+
+| 指标名称                          | 描述         | 告警阈值 |
+| --------------------------------- | ------------ | -------- |
+| `kueue_admission_latency_seconds` | 准入决策延迟 | > 1s     |
+| `kueue_workload_queue_depth`      | 等待队列深度 | > 1000   |
+| `kueue_resource_usage_ratio`      | 资源使用率   | > 95%    |
+| `kueue_scheduler_throughput`      | 调度吞吐量   | < 100/s  |
+| `kueue_controller_sync_errors`    | 同步错误率   | > 1%     |
+
+---
+
 layout: default
 title: Kueue 源码分析 - 核心模块划分 (default)
+
 ---
 
 ```mermaid
@@ -890,25 +959,25 @@ graph LR
         B[Queue APIs]
         C[ResourceFlavor API]
     end
-    
+
     subgraph "控制器层"
         D[Workload Controller]
         E[Queue Controller]
         F[Jobs Controller]
     end
-    
+
     subgraph "核心调度层"
         G[Scheduler]
         H[Cache Manager]
         I[Flavorassigner]
     end
-    
+
     subgraph "工具层"
         J[Metrics]
         K[Webhooks]
         L[Utils]
     end
-    
+
     A --> D
     B --> E
     C --> I
@@ -920,8 +989,10 @@ graph LR
 ```
 
 ---
+
 layout: default
 title: Kueue 源码分析 - 关键数据结构 (default)
+
 ---
 
 ```go
@@ -936,7 +1007,7 @@ type Info struct {
     SchedulingContext *SchedulingContext
 }
 
-// pkg/cache/clusterqueue.go  
+// pkg/cache/clusterqueue.go
 type ClusterQueue struct {
     Name              string
     Cohort            *Cohort
@@ -944,11 +1015,11 @@ type ClusterQueue struct {
     NamespaceSelector labels.Selector
     Preemption        kueue.ClusterQueuePreemption
     FairWeight        resource.Quantity
-    
+
     // 运行时状态
     PendingWorkloads  map[string]*workload.Info
     AdmittedWorkloads map[string]*workload.Info
-    
+
     // 资源使用统计
     Usage         Resources
     GuaranteedQuota Resources
@@ -964,8 +1035,10 @@ type Scheduler struct {
 ```
 
 ---
+
 layout: default
 title: Kueue 源码分析 - 调度核心算法 (default)
+
 ---
 
 ```go
@@ -973,10 +1046,10 @@ title: Kueue 源码分析 - 调度核心算法 (default)
 func (s *Scheduler) schedule(ctx context.Context) wait.ContextFunc {
     return func(ctx context.Context) {
         log := ctrl.LoggerFrom(ctx)
-        
+
         // 1. 获取待调度工作负载
         snapshot := s.cache.Snapshot()
-        
+
         // 2. 执行调度循环
         for {
             // 获取下一个工作负载
@@ -984,7 +1057,7 @@ func (s *Scheduler) schedule(ctx context.Context) wait.ContextFunc {
             if wl == nil {
                 break
             }
-            
+
             // 3. 尝试分配资源
             assignment := s.flavorAssigner.Assign(log, wl, cq)
             if assignment.PodSets == nil {
@@ -995,7 +1068,7 @@ func (s *Scheduler) schedule(ctx context.Context) wait.ContextFunc {
                 }
                 continue
             }
-            
+
             // 4. 提交准入决策
             s.admit(ctx, wl, assignment)
         }
@@ -1016,20 +1089,24 @@ func (fa *FlavorAssigner) Assign(log logr.Logger, wl *workload.Info, cq *cache.C
 ```
 
 ---
+
 layout: table
 title: Kueue 源码分析 - 性能优化 (table)
----
-
-| 优化技术 | 实现位置 | 效果 |
-|---------|---------|------|
-| **增量更新** | cache/cache.go | 减少 90% 不必要的计算 |
-| **快照机制** | cache/snapshot.go | 避免锁竞争，提升并发 |
-| **索引加速** | 使用 informer 索引 | O(1) 查询复杂度 |
-| **批处理** | webhooks/workload_webhook.go | 减少 API 调用 50% |
 
 ---
+
+| 优化技术     | 实现位置                     | 效果                  |
+| ------------ | ---------------------------- | --------------------- |
+| **增量更新** | cache/cache.go               | 减少 90% 不必要的计算 |
+| **快照机制** | cache/snapshot.go            | 避免锁竞争，提升并发  |
+| **索引加速** | 使用 informer 索引           | O(1) 查询复杂度       |
+| **批处理**   | webhooks/workload_webhook.go | 减少 API 调用 50%     |
+
+---
+
 layout: default
 title: Kueue 特性：资源借用与回收 (default)
+
 ---
 
 - **借用**: 当资源不足时，可临时借用其他队列资源
@@ -1039,20 +1116,22 @@ title: Kueue 特性：资源借用与回收 (default)
 ```yaml
 spec:
   resourceGroups:
-  - coveredResources: ["cpu"]
-    flavors:
-    - name: default
-      resources:
-      - name: cpu
-        nominalQuota: 10
-        lendingLimit: 5
+    - coveredResources: ['cpu']
+      flavors:
+        - name: default
+          resources:
+            - name: cpu
+              nominalQuota: 10
+              lendingLimit: 5
 ```
 
 **源码实现**：调度器在 `scheduler.go` 中通过 `netUsage` 算法动态计算可借用资源量，确保不会超出 `lendingLimit` 限制。最新提交 "Simplify scheduler.netUsage" 优化了这一机制。
 
 ---
+
 layout: default
 title: Kueue 特性：公平性与优先级 (default)
+
 ---
 
 - **公平性**: 基于资源使用量动态调整优先级
@@ -1068,9 +1147,11 @@ value: 1000
 ```
 
 ---
+
 layout: image-right
 title: Kueue 特性：MultiKueue (新) (image-right)
 image: kueue-multikueue.png
+
 ---
 
 - **目标**: 跨集群作业调度
@@ -1078,9 +1159,11 @@ image: kueue-multikueue.png
 - **场景**: 大规模分布式训练
 
 ---
+
 layout: image-right
 title: Kueue 特性： TAS（拓扑感知调度） (新) (image-right)
 image: kueue-tas.png
+
 ---
 
 TAS 调度算法分两个主要阶段运行：
@@ -1095,8 +1178,10 @@ TAS 调度算法分两个主要阶段运行：
 这种两阶段方法可确保最佳放置，同时尊重拓扑约束，同时最大限度地提高资源利用率。
 
 ---
+
 layout: boxes
 title: Kueue 优势 (boxes)
+
 ---
 
 ## **原生集成**
@@ -1104,6 +1189,7 @@ title: Kueue 优势 (boxes)
 与 Kubernetes API 无缝协作
 
 **技术优势**：
+
 - **零侵入**：不需要修改现有 Job 定义
 - **API 兼容**：支持 batch/v1、kubeflow.org/v1 等
 - **升级平滑**：可与现有调度器并存，逐步迁移
@@ -1113,6 +1199,7 @@ title: Kueue 优势 (boxes)
 仅增强调度，不替代核心组件
 
 **资源开销**：
+
 - **内存占用**：管理 10K workload 仅需 2GB
 - **CPU 使用**：稳定运行 < 0.5 Core
 - **部署简单**：单个 Deployment，无状态设计
@@ -1122,6 +1209,7 @@ title: Kueue 优势 (boxes)
 支持多种资源类型和策略
 
 **扩展能力**：
+
 - **自定义资源**：支持 GPU、RDMA、FPGA 等
 - **插件化策略**：准入、抢占、公平性算法可替换
 - **多集群支持**：MultiKueue 实现跨集群调度
@@ -1131,6 +1219,7 @@ title: Kueue 优势 (boxes)
 Kubernetes 官方项目
 
 **生态优势**：
+
 - **SIG-Batch 主导**：与 K8s 路线图同步
 - **广泛采用**：Google、Microsoft、Red Hat 生产使用
 - **活跃开发**：月均 100+ PR，50+ 贡献者
@@ -1149,8 +1238,10 @@ Kueue 的四大优势构成了其在批处理调度领域的竞争优势。
 -->
 
 ---
+
 layout: boxes
 title: Kueue 适用场景 (boxes)
+
 ---
 
 ## **AI/ML 训练**
@@ -1158,6 +1249,7 @@ title: Kueue 适用场景 (boxes)
 动态分配 GPU 资源
 
 **最佳实践**：
+
 - **GPU 分时复用**：训练任务夜间运行，白天释放给推理
 - **弹性训练**：支持 ElasticHorovod，动态调整 worker 数
 - **成本优化**：Spot 实例 + 抢占式调度，成本降低 70%
@@ -1167,6 +1259,7 @@ title: Kueue 适用场景 (boxes)
 批量作业管理
 
 **典型配置**：
+
 - **Spark on K8s**：每个 executor 作为一个 pod
 - **队列隔离**：生产/开发环境资源隔离
 - **自动扩缩**：根据作业积压情况触发集群扩容
@@ -1176,6 +1269,7 @@ title: Kueue 适用场景 (boxes)
 资源受限环境下的任务排队
 
 **集成方案**：
+
 - **Jenkins X**：通过 Kueue 管理构建资源
 - **Tekton**：PipelineRun 自动排队
 - **优先级保证**：生产发布 > 集成测试 > 单元测试
@@ -1185,13 +1279,16 @@ title: Kueue 适用场景 (boxes)
 资源公平分配
 
 **隔离策略**：
+
 - **命名空间队列**：每个租户独立 LocalQueue
 - **资源配额**：硬性限制 + 弹性借用
 - **计费集成**：基于实际使用量的 chargeback
 
 ---
+
 layout: default
 title: Kueue 性能测试 - 调度吞吐量测试 (default)
+
 ---
 
 ```mermaid
@@ -1204,20 +1301,24 @@ graph LR
 ```
 
 ---
+
 layout: table
 title: Kueue 性能测试 - 性能基准测试结果 (table)
----
-
-| 指标 | Kueue | 原生 K8s | 提升 |
-|------|-------|---------|------|
-| **调度吞吐量** | 850 jobs/min | 320 jobs/min | 2.66x |
-| **准入延迟 P50** | 12ms | 45ms | 73% ↓ |
-| **准入延迟 P99** | 89ms | 523ms | 83% ↓ |
-| **资源利用率** | 94% | 67% | 40% ↑ |
 
 ---
+
+| 指标             | Kueue        | 原生 K8s     | 提升  |
+| ---------------- | ------------ | ------------ | ----- |
+| **调度吞吐量**   | 850 jobs/min | 320 jobs/min | 2.66x |
+| **准入延迟 P50** | 12ms         | 45ms         | 73% ↓ |
+| **准入延迟 P99** | 89ms         | 523ms        | 83% ↓ |
+| **资源利用率**   | 94%          | 67%          | 40% ↑ |
+
+---
+
 layout: default
 title: Kueue 生产高可用架构 - 高可用部署 (default)
+
 ---
 
 ```yaml
@@ -1227,7 +1328,7 @@ metadata:
   name: kueue-controller-manager
   namespace: kueue-system
 spec:
-  replicas: 3  # 高可用配置
+  replicas: 3 # 高可用配置
   selector:
     matchLabels:
       control-plane: kueue-controller-manager
@@ -1236,46 +1337,48 @@ spec:
       affinity:
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
-          - labelSelector:
-              matchLabels:
-                control-plane: kueue-controller-manager
-            topologyKey: kubernetes.io/hostname
+            - labelSelector:
+                matchLabels:
+                  control-plane: kueue-controller-manager
+              topologyKey: kubernetes.io/hostname
       containers:
-      - name: manager
-        image: kueue:v0.8.0
-        args:
-        - --health-probe-bind-address=:8081
-        - --metrics-bind-address=:8080
-        - --leader-elect
-        - --leader-election-id=kueue-controller-leader
-        - --zap-log-level=info
-        - --zap-stacktrace-level=error
-        - --workload-workers=20  # 生产环境增加并发
-        - --cluster-queue-workers=10
-        resources:
-          limits:
-            cpu: 2
-            memory: 4Gi
-          requests:
-            cpu: 1
-            memory: 2Gi
-        livenessProbe:
-          httpGet:
-            path: /healthz
-            port: 8081
-          initialDelaySeconds: 15
-          periodSeconds: 20
-        readinessProbe:
-          httpGet:
-            path: /readyz
-            port: 8081
-          initialDelaySeconds: 5
-          periodSeconds: 10
+        - name: manager
+          image: kueue:v0.8.0
+          args:
+            - --health-probe-bind-address=:8081
+            - --metrics-bind-address=:8080
+            - --leader-elect
+            - --leader-election-id=kueue-controller-leader
+            - --zap-log-level=info
+            - --zap-stacktrace-level=error
+            - --workload-workers=20 # 生产环境增加并发
+            - --cluster-queue-workers=10
+          resources:
+            limits:
+              cpu: 2
+              memory: 4Gi
+            requests:
+              cpu: 1
+              memory: 2Gi
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 8081
+            initialDelaySeconds: 15
+            periodSeconds: 20
+          readinessProbe:
+            httpGet:
+              path: /readyz
+              port: 8081
+            initialDelaySeconds: 5
+            periodSeconds: 10
 ```
 
 ---
+
 layout: default
 title: Kueue 生产高可用架构 - 监控与可观测性 (default)
+
 ---
 
 Prometheus 集成
@@ -1292,18 +1395,20 @@ spec:
     matchLabels:
       control-plane: kueue-controller-manager
   endpoints:
-  - path: /metrics
-    port: metrics
-    interval: 30s
-    relabelings:
-    - sourceLabels: [__name__]
-      regex: '(kueue_admission_.*|kueue_pending_.*|kueue_quota_.*)'
-      action: keep
+    - path: /metrics
+      port: metrics
+      interval: 30s
+      relabelings:
+        - sourceLabels: [__name__]
+          regex: '(kueue_admission_.*|kueue_pending_.*|kueue_quota_.*)'
+          action: keep
 ```
 
 ---
+
 layout: default
 title: Kueue 生产高可用架构 - 监控与可观测性 (default)
+
 ---
 
 Grafana Dashboard
@@ -1315,21 +1420,27 @@ Grafana Dashboard
     "panels": [
       {
         "title": "Scheduling Rate",
-        "targets": [{
-          "expr": "rate(kueue_admitted_workloads_total[5m])"
-        }]
+        "targets": [
+          {
+            "expr": "rate(kueue_admitted_workloads_total[5m])"
+          }
+        ]
       },
       {
         "title": "Queue Depth",
-        "targets": [{
-          "expr": "kueue_pending_workloads"
-        }]
+        "targets": [
+          {
+            "expr": "kueue_pending_workloads"
+          }
+        ]
       },
       {
         "title": "Resource Utilization",
-        "targets": [{
-          "expr": "sum(kueue_quota_used) / sum(kueue_quota_total)"
-        }]
+        "targets": [
+          {
+            "expr": "sum(kueue_quota_used) / sum(kueue_quota_total)"
+          }
+        ]
       }
     ]
   }
@@ -1337,8 +1448,10 @@ Grafana Dashboard
 ```
 
 ---
+
 layout: default
 title: Kueue 生产高可用架构 - 安全加固 (default)
+
 ---
 
 RBAC 配置
@@ -1350,15 +1463,15 @@ kind: ClusterRole
 metadata:
   name: kueue-user-role
 rules:
-- apiGroups: ["kueue.x-k8s.io"]
-  resources: ["localqueues"]
-  verbs: ["get", "list", "watch"]
-- apiGroups: ["kueue.x-k8s.io"]
-  resources: ["workloads"]
-  verbs: ["get", "list", "watch", "create", "update", "patch"]
-- apiGroups: ["kueue.x-k8s.io"]
-  resources: ["workloads/status"]
-  verbs: ["get"]
+  - apiGroups: ['kueue.x-k8s.io']
+    resources: ['localqueues']
+    verbs: ['get', 'list', 'watch']
+  - apiGroups: ['kueue.x-k8s.io']
+    resources: ['workloads']
+    verbs: ['get', 'list', 'watch', 'create', 'update', 'patch']
+  - apiGroups: ['kueue.x-k8s.io']
+    resources: ['workloads/status']
+    verbs: ['get']
 ---
 # 管理员角色
 apiVersion: rbac.authorization.k8s.io/v1
@@ -1366,14 +1479,16 @@ kind: ClusterRole
 metadata:
   name: kueue-admin-role
 rules:
-- apiGroups: ["kueue.x-k8s.io"]
-  resources: ["*"]
-  verbs: ["*"]
+  - apiGroups: ['kueue.x-k8s.io']
+    resources: ['*']
+    verbs: ['*']
 ```
 
 ---
+
 layout: default
 title: Kueue 生产高可用架构 - 安全加固 (default)
+
 ---
 
 NetworkPolicy
@@ -1390,46 +1505,50 @@ spec:
     matchLabels:
       control-plane: kueue-controller-manager
   policyTypes:
-  - Ingress
-  - Egress
+    - Ingress
+    - Egress
   ingress:
-  - from:
-    - namespaceSelector:
-        matchLabels:
-          name: kube-system
-    - podSelector:
-        matchLabels:
-          app: prometheus
-    ports:
-    - protocol: TCP
-      port: 8080  # metrics
-    - protocol: TCP
-      port: 9443  # webhook
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              name: kube-system
+        - podSelector:
+            matchLabels:
+              app: prometheus
+      ports:
+        - protocol: TCP
+          port: 8080 # metrics
+        - protocol: TCP
+          port: 9443 # webhook
   egress:
-  - to:
-    - namespaceSelector: {}
-    ports:
-    - protocol: TCP
-      port: 443  # API server
+    - to:
+        - namespaceSelector: {}
+      ports:
+        - protocol: TCP
+          port: 443 # API server
 ```
 
 ---
+
 layout: table
 title: Kueue 生产高可用架构 - 性能调优 (table)
----
-
-| 组件 | 参数 | 生产推荐值 | 说明 |
-|------|------|-----------|------|
-| **Kueue Controller** | `--workload-workers` | 20-50 | 根据作业提交频率调整 |
-| | `--cluster-queue-workers` | 10-20 | 队列数量多时增加 |
-| | `--fair-sharing-interval` | 1m | 公平性检查间隔 |
-| **API Server** | `--max-requests-inflight` | 800 | 提高并发处理能力 |
-| | `--max-mutating-requests` | 400 | 提高写入吞吐量 |
 
 ---
+
+| 组件                 | 参数                      | 生产推荐值 | 说明                 |
+| -------------------- | ------------------------- | ---------- | -------------------- |
+| **Kueue Controller** | `--workload-workers`      | 20-50      | 根据作业提交频率调整 |
+|                      | `--cluster-queue-workers` | 10-20      | 队列数量多时增加     |
+|                      | `--fair-sharing-interval` | 1m         | 公平性检查间隔       |
+| **API Server**       | `--max-requests-inflight` | 800        | 提高并发处理能力     |
+|                      | `--max-mutating-requests` | 400        | 提高写入吞吐量       |
+
+---
+
 layout: chapter
 part: 3
 title: Volcano 深度解析 (chapter)
+
 ---
 
 <!--
@@ -1444,13 +1563,15 @@ Volcano 最大的特点是插件化架构。它提供了丰富的调度插件，
 -->
 
 ---
+
 layout: timeline
 title: Volcano 起源 (timeline)
+
 ---
 
 ## 2019
 
-华为2019年发起，开源项目： 高性能计算(HPC)和批处理调度
+华为 2019 年发起，开源项目： 高性能计算(HPC)和批处理调度
 
 ## 2021
 
@@ -1480,9 +1601,11 @@ Volcano 的设计目标很明确：支持高性能计算和批处理工作负载
 -->
 
 ---
+
 layout: image-right
 title: Volcano 设计理念 (image-right)
 image: volcano.png
+
 ---
 
 - **HPC 优先**: 借鉴传统高性能计算调度
@@ -1504,8 +1627,10 @@ Volcano 的设计理念体现了四个核心原则，这些原则构成了其独
 -->
 
 ---
+
 layout: default
 title: Volcano 核心概念：VolcanoJob (default)
+
 ---
 
 - **定义**: 自定义作业资源
@@ -1519,13 +1644,13 @@ metadata:
 spec:
   minAvailable: 3
   tasks:
-  - replicas: 3
-    name: task1
-    template:
-      spec:
-        containers:
-        - name: app
-          image: busybox
+    - replicas: 3
+      name: task1
+      template:
+        spec:
+          containers:
+            - name: app
+              image: busybox
 ```
 
 **源码解析**：Volcano 的作业管理器在 `vc-controller` 中处理 VolcanoJob 的生命周期，通过 `OnSessionOpen` 和 `OnSessionClose` 回调函数协调作业的创建和销毁。
@@ -1544,8 +1669,10 @@ VolcanoJob 还支持作业依赖关系，可以定义作业间的 DAG 依赖。�
 -->
 
 ---
+
 layout: default
 title: Volcano 核心概念：PodGroup (default)
+
 ---
 
 - **作用**: 将作业的 Pod 组织为一个调度单位
@@ -1561,8 +1688,10 @@ spec:
 ```
 
 ---
+
 layout: default
 title: Volcano 核心概念：Queue (default)
+
 ---
 
 - **作用**: 作业排队和资源分配单位
@@ -1578,8 +1707,10 @@ spec:
 ```
 
 ---
+
 layout: default
 title: Volcano 核心概念：Queue （资源预留） (default)
+
 ---
 
 ```yaml
@@ -1589,16 +1720,18 @@ metadata:
   name: guaranteed-queue
 spec:
   weight: 10
-  guarantee:  # 新特性：资源预留
+  guarantee: # 新特性：资源预留
     resource:
       cpu: 2
       memory: 4Gi
 ```
 
 ---
+
 layout: boxes
 title: Volcano 核心组件 - CRD (boxes)
 image: volcano-arch.png
+
 ---
 
 ## **VolcanoJob**
@@ -1606,6 +1739,7 @@ image: volcano-arch.png
 自定义作业类型
 
 **实现细节**：
+
 - **状态机管理**：Pending → Running → Completed/Failed
 - **任务拓扑**：支持 DAG 依赖关系
 - **生命周期钩子**：支持 PreRun、PostRun 等扩展点
@@ -1615,6 +1749,7 @@ image: volcano-arch.png
 作业队列
 
 **队列算法**：
+
 - **权重分配**：基于 DRF 的加权公平共享
 - **层级队列**：支持树形队列结构
 - **资源预留**：guarantee 字段确保最小资源
@@ -1624,6 +1759,7 @@ image: volcano-arch.png
 作业内 Pod 集合
 
 **协调机制**：
+
 - **原子调度**：All-or-Nothing 语义保证
 - **容错设计**：支持 minAvailable < replicas
 - **亲和性继承**：自动传播到成员 Pod
@@ -1640,9 +1776,11 @@ PodGroup 是 Gang 调度的基础。它将一组相关的 Pod 作为调度单元
 -->
 
 ---
+
 layout: boxes
 title: Volcano 核心组件 - Control (boxes)
 image: volcano-arch.png
+
 ---
 
 ## **vc-scheduler**
@@ -1650,6 +1788,7 @@ image: volcano-arch.png
 核心调度器
 
 **插件化架构**：
+
 - **Action 插件**：enqueue、allocate、preempt、reclaim
 - **Plugin 插件**：gang、priority、drf、nodeorder
 - **扩展接口**：自定义调度逻辑注入
@@ -1659,6 +1798,7 @@ image: volcano-arch.png
 管理作业生命周期
 
 **控制循环**：
+
 - **作业同步**：监听 VolcanoJob 变化
 - **Pod 管理**：创建、更新、删除 Pod
 - **事件处理**：状态转换和错误恢复
@@ -1668,14 +1808,17 @@ image: volcano-arch.png
 准入控制
 
 **验证逻辑**：
+
 - **资源校验**：检查请求资源合理性
 - **配置注入**：自动添加调度相关标签
 - **冲突检测**：防止资源超卖
 
 ---
+
 layout: boxes
 title: Volcano 核心组件 - Extension (boxes)
 image: volcano-arch.png
+
 ---
 
 ## **插件系统**
@@ -1683,6 +1826,7 @@ image: volcano-arch.png
 支持扩展功能
 
 **核心插件**：
+
 - **Gang**：组调度实现
 - **Priority**：优先级管理
 - **DRF**：公平性算法
@@ -1693,14 +1837,17 @@ image: volcano-arch.png
 Prometheus 指标
 
 **关键指标**：
+
 - 作业调度延迟
 - 资源利用率
 - 调度失败率
 - 插件执行耗时
 
 ---
+
 layout: default
 title: Volcano 调度流程 (default)
+
 ---
 
 **调度器核心代码**：`vc-scheduler` 使用插件化架构，Gang 插件通过 `AddJobValidFn` 注册作业验证函数，确保只有满足条件的作业才能进入调度队列。
@@ -1720,8 +1867,10 @@ sequenceDiagram
 ```
 
 ---
+
 layout: default
 title: Volcano 插件架构解析 (default)
+
 ---
 
 ```go
@@ -1730,10 +1879,10 @@ type Session struct {
     UID         types.UID
     Kubeconfig  string
     Cache       cache.Cache
-    
+
     TierQueue   []queue.Queue      // 多级队列
     JobQueue    *jobqueue.JobQueue // 作业队列
-    
+
     Plugins     map[string]Plugin  // 已注册插件
     Actions     map[string]Action  // 调度动作
 }
@@ -1755,8 +1904,10 @@ type Action interface {
 ```
 
 ---
+
 layout: default
 title: Volcano 插件架构解析 - Gang 插件 (default)
+
 ---
 
 ```go
@@ -1774,13 +1925,13 @@ func (gp *gangPlugin) OnSessionOpen(ssn *framework.Session) {
         return nil
     }
     ssn.AddJobValidFn(gp.Name(), validJobFn)
-    
+
     // 2. 注册抢占判断函数
     preemptableFn := func(preemptor *api.TaskInfo, preemptees []*api.TaskInfo) ([]*api.TaskInfo, int) {
         return gp.calculateVictims(preemptor, preemptees, ssn)
     }
     ssn.AddPreemptableFn(gp.Name(), preemptableFn)
-    
+
     // 3. 注册作业就绪函数
     jobReadyFn := func(obj interface{}) bool {
         job := obj.(*api.JobInfo)
@@ -1791,8 +1942,10 @@ func (gp *gangPlugin) OnSessionOpen(ssn *framework.Session) {
 ```
 
 ---
+
 layout: default
 title: Volcano 插件架构解析 - Action 执行流程 (default)
+
 ---
 
 ```mermaid
@@ -1802,27 +1955,29 @@ sequenceDiagram
     participant A as Allocate Action
     participant P as Preempt Action
     participant R as Reclaim Action
-    
+
     S->>E: 1. Execute Enqueue
     Note over E: 将作业加入调度队列
     E-->>S: 返回可调度作业
-    
+
     S->>A: 2. Execute Allocate
     Note over A: 为作业分配资源
     A-->>S: 返回分配结果
-    
+
     S->>P: 3. Execute Preempt
     Note over P: 高优先级抢占
     P-->>S: 返回抢占决策
-    
+
     S->>R: 4. Execute Reclaim
     Note over R: 回收空闲资源
     R-->>S: 返回回收结果
 ```
 
 ---
+
 layout: default
 title: Volcano 特性：Gang Scheduling (default)
+
 ---
 
 - **定义**: 组调度，确保作业满足最小 Pod 数才执行
@@ -1843,7 +1998,7 @@ validJobFn := func(obj interface{}) *api.ValidateResult {
         return &api.ValidateResult{
             Pass:   false,
             Reason: v1beta1.NotEnoughPodsReason,
-            Message: fmt.Sprintf("Not enough valid tasks for gang-scheduling, valid: %d, min: %d", 
+            Message: fmt.Sprintf("Not enough valid tasks for gang-scheduling, valid: %d, min: %d",
                 vtn, job.MinAvailable),
         }
     }
@@ -1854,8 +2009,10 @@ validJobFn := func(obj interface{}) *api.ValidateResult {
 关键算法：检查 `ValidTaskNum()` 是否达到 `MinAvailable` 阈值，保证 Gang 调度的 All-or-Nothing 特性
 
 ---
+
 layout: default
 title: Volcano 特性：作业依赖 (default)
+
 ---
 
 - **作用**: 定义作业间依赖关系
@@ -1864,17 +2021,19 @@ title: Volcano 特性：作业依赖 (default)
 ```yaml
 spec:
   policies:
-  - event: TaskCompleted
-    action: Enqueue
-    condition:
-      taskName: preprocess
+    - event: TaskCompleted
+      action: Enqueue
+      condition:
+        taskName: preprocess
 ```
 
 **源码解析**：依赖管理在 `vc-controller` 中实现，通过监听 Pod 事件来触发后续作业的执行。
 
 ---
+
 layout: default
 title: Volcano 特性：AI/ML 生态集成 (default)
+
 ---
 
 - **支持**: TensorFlow, PyTorch, MPI
@@ -1891,11 +2050,14 @@ graph LR
 **调度算法源码**：在 `OnSessionClose` 中，调度器通过 `metrics.RegisterJobRetries` 记录未调度作业，并通过 `UpdateUnscheduleTaskCount` 更新指标，为 AI/ML 作业提供进度监控。
 
 ---
+
 layout: default
 title: Volcano 特性 - 抢占机制 (default)
+
 ---
 
 **Gang 插件中的抢占算法** - `gang.go:108-130`：
+
 > 这个算法确保 Gang 调度的安全性：不会破坏正在运行作业的 MinAvailable 约束。
 
 ```go
@@ -1903,13 +2065,13 @@ title: Volcano 特性 - 抢占机制 (default)
 preemptableFn := func(preemptor *api.TaskInfo, preemptees []*api.TaskInfo) ([]*api.TaskInfo, int) {
     var victims []*api.TaskInfo
     jobOccupiedMap := map[api.JobID]int32{}
-    
+
     for _, preemptee := range preemptees {
         job := ssn.Jobs[preemptee.Job]
         if _, found := jobOccupiedMap[job.UID]; !found {
             jobOccupiedMap[job.UID] = job.ReadyTaskNum()
         }
-        
+
         // 关键逻辑：只有当作业的 Ready 任务数 > MinAvailable 时才可抢占
         if jobOccupiedMap[job.UID] > job.MinAvailable {
             jobOccupiedMap[job.UID]--
@@ -1924,8 +2086,10 @@ preemptableFn := func(preemptor *api.TaskInfo, preemptees []*api.TaskInfo) ([]*a
 ```
 
 ---
+
 layout: default
 title: Volcano 特性 - NUMA 感知调度 (default)
+
 ---
 
 ```go
@@ -1939,12 +2103,12 @@ func (np *NUMAPlugin) OnSessionOpen(ssn *framework.Session) {
     ssn.AddNodeOrderFn(np.Name(), func(task *api.TaskInfo, node *api.NodeInfo) (float64, error) {
         // 获取节点 NUMA 拓扑
         topology := np.topologyCache[node.Name]
-        
+
         // 计算 NUMA 亲和性得分
         score := 0.0
         requiredCPU := task.Resreq.MilliCPU
         requiredMem := task.Resreq.Memory
-        
+
         for _, numa := range topology.NUMANodes {
             if numa.AvailableCPU >= requiredCPU && numa.AvailableMemory >= requiredMem {
                 // 单 NUMA 节点可满足，最优
@@ -1952,21 +2116,23 @@ func (np *NUMAPlugin) OnSessionOpen(ssn *framework.Session) {
                 break
             }
         }
-        
+
         // 跨 NUMA 调度惩罚
         if score < 100 {
             crossNUMAPenalty := np.calculateCrossNUMAPenalty(task, topology)
             score = math.Max(0, 50.0 - crossNUMAPenalty)
         }
-        
+
         return score, nil
     })
 }
 ```
 
 ---
+
 layout: default
 title: Volcano 特性 - GPU 拓扑感知调度 (default)
+
 ---
 
 ```yaml
@@ -1996,8 +2162,10 @@ data:
 ```
 
 ---
+
 layout: default
 title: Volcano 特性 - 弹性队列与资源借用 (default)
+
 ---
 
 ```go
@@ -2006,16 +2174,16 @@ type QueueInfo struct {
     UID    QueueID
     Name   string
     Weight int32
-    
+
     // 弹性配额
     Guarantee   *Resource  // 保证资源
     Allocated   *Resource  // 已分配资源
     Capability  *Resource  // 最大能力
-    
+
     // 借用控制
     Borrowing   *Resource  // 当前借用量
     Lending     *Resource  // 当前借出量
-    
+
     // 弹性策略
     ElasticPolicy *ElasticPolicy
 }
@@ -2031,8 +2199,10 @@ type ElasticPolicy struct {
 ```
 
 ---
+
 layout: default
 title: Volcano 特性 - 作业迁移与容错 (default)
+
 ---
 
 Live Migration 实现
@@ -2045,35 +2215,37 @@ func (cc *jobController) migrateTask(task *batch.Task, targetNode string) error 
     if err != nil {
         return err
     }
-    
+
     // 2. 在目标节点预分配资源
     reservation := cc.reserveResources(targetNode, task.Resources)
     defer reservation.Release()
-    
+
     // 3. 启动新实例
     newPod := cc.createPodOnNode(task, targetNode)
     if err := cc.waitForPodReady(newPod); err != nil {
         return err
     }
-    
+
     // 4. 恢复检查点
     if err := cc.restoreCheckpoint(newPod, checkpoint); err != nil {
         return err
     }
-    
+
     // 5. 切换流量（如果是服务）
     if task.Type == "service" {
         cc.switchTraffic(task.OldPod, newPod)
     }
-    
+
     // 6. 清理旧实例
     return cc.cleanupOldPod(task.OldPod)
 }
 ```
 
 ---
+
 layout: default
 title: Volcano 特性 - 作业迁移与容错 (default)
+
 ---
 
 故障检测与自愈
@@ -2089,7 +2261,7 @@ spec:
     - event: PodFailed
       action: RestartTask
       timeout: 30s
-    - event: NodeFailed  
+    - event: NodeFailed
       action: MigrateTask
       timeout: 60s
     - event: TaskStuck
@@ -2101,15 +2273,17 @@ spec:
       template:
         spec:
           tolerations:
-          - key: node.kubernetes.io/unreachable
-            operator: Exists
-            effect: NoExecute
-            tolerationSeconds: 30
+            - key: node.kubernetes.io/unreachable
+              operator: Exists
+              effect: NoExecute
+              tolerationSeconds: 30
 ```
 
 ---
+
 layout: default
 title: Volcano 特性 - 高级调度策略 (default)
+
 ---
 
 时间窗口调度
@@ -2123,23 +2297,25 @@ func (tw *TimeWindowPlugin) OnSessionOpen(ssn *framework.Session) {
         if job.TimeWindow == nil {
             return true
         }
-        
+
         now := time.Now()
         inWindow := now.After(job.TimeWindow.Start) && now.Before(job.TimeWindow.End)
-        
+
         // 支持周期性时间窗口
         if job.TimeWindow.Periodic {
             return tw.inPeriodicWindow(now, job.TimeWindow)
         }
-        
+
         return inWindow
     })
 }
 ```
 
 ---
+
 layout: default
 title: Volcano 特性 - 高级调度策略 (default)
+
 ---
 
 成本感知调度
@@ -2155,16 +2331,16 @@ func (ca *CostAwarePlugin) OnSessionOpen(ssn *framework.Session) {
         // 计算在该节点运行的成本
         instanceType := node.Labels["node.kubernetes.io/instance-type"]
         hourlyCost := ca.pricing[instanceType]
-        
+
         // 考虑 Spot 实例折扣
         if node.Labels["lifecycle"] == "spot" {
             hourlyCost *= 0.3 // 70% 折扣
         }
-        
+
         // 预估任务运行时间
         estimatedHours := ca.estimateTaskDuration(task) / 3600.0
         totalCost := hourlyCost * estimatedHours
-        
+
         // 成本越低，得分越高
         score := 100.0 / (1.0 + totalCost)
         return score, nil
@@ -2173,8 +2349,10 @@ func (ca *CostAwarePlugin) OnSessionOpen(ssn *framework.Session) {
 ```
 
 ---
+
 layout: boxes
 title: Volcano 优势 (boxes)
+
 ---
 
 ## **高性能**
@@ -2182,6 +2360,7 @@ title: Volcano 优势 (boxes)
 针对 HPC 和 AI 优化
 
 **性能指标**：
+
 - **调度吞吐量**：1500+ jobs/min (8000 节点集群)
 - **Gang 调度延迟**：P99 < 100ms
 - **资源碎片率**：< 5% (vs 原生 15-20%)
@@ -2192,6 +2371,7 @@ title: Volcano 优势 (boxes)
 支持复杂作业依赖
 
 **高级特性**：
+
 - **拓扑感知**：NUMA、GPU NVLink 拓扑优化
 - **作业工作流**：内置 DAG 执行引擎
 - **弹性伸缩**：支持动态增减任务数
@@ -2202,6 +2382,7 @@ title: Volcano 优势 (boxes)
 可完全替代默认调度器
 
 **架构优势**：
+
 - **插件化设计**：20+ 内置插件，易于扩展
 - **调度策略热更新**：无需重启调度器
 - **多调度器共存**：支持与原生调度器混部
@@ -2212,14 +2393,17 @@ title: Volcano 优势 (boxes)
 与 AI 框架深度结合
 
 **集成项目**：
+
 - **Kubeflow**：Training Operator 原生支持
 - **PaddlePaddle**：EDL 弹性训练
 - **MindSpore**：分布式训练优化
 - **Ray**：Gang 调度支持
 
 ---
+
 layout: boxes
 title: Volcano 适用场景 (boxes)
+
 ---
 
 ## **大规模 AI 训练**
@@ -2227,6 +2411,7 @@ title: Volcano 适用场景 (boxes)
 分布式训练优化
 
 **典型案例**：
+
 - **LLM 训练**：千卡并行，支持 3D 并行策略
 - **自动混合精度**：与 NVIDIA Apex 深度集成
 - **梯度累积**：支持大 batch 训练优化
@@ -2237,6 +2422,7 @@ title: Volcano 适用场景 (boxes)
 科学计算
 
 **应用领域**：
+
 - **气象模拟**：WRF 模型千核并行
 - **分子动力学**：GROMACS 作业调度
 - **金融建模**：Monte Carlo 模拟
@@ -2247,6 +2433,7 @@ title: Volcano 适用场景 (boxes)
 作业依赖管理
 
 **工作流能力**：
+
 - **DAG 编排**：支持复杂依赖关系
 - **条件分支**：基于任务结果的动态路由
 - **失败重试**：任务级重试策略
@@ -2257,15 +2444,18 @@ title: Volcano 适用场景 (boxes)
 高资源利用率
 
 **优化策略**：
+
 - **Binpack 调度**：最大化节点资源利用
 - **亲和性调度**：数据本地性优化
 - **NUMA 感知**：内存访问延迟优化
 - **GPU 共享**：细粒度 GPU 资源分配
 
 ---
+
 layout: chapter
 part: 4
 title: Kueue vs. Volcano (chapter)
+
 ---
 
 <!-- 演讲内容补充
@@ -2283,15 +2473,17 @@ title: Kueue vs. Volcano (chapter)
 -->
 
 ---
+
 layout: table
 title: 设计理念对比 (table)
+
 ---
 
-| 维度          | Kueue                          | Volcano                       |
-|:--------------------|:----------------------|:----------------------|
-| **设计目标**  | 增强 K8s 原生调度             | 替代默认调度器，HPC 优先     |
-| **集成方式**  | 与默认调度器协作              | 独立调度器                   |
-| **核心关注**  | Job 级队列管理               | 复杂批处理和高性能计算        |
+| 维度         | Kueue             | Volcano                  |
+| :----------- | :---------------- | :----------------------- |
+| **设计目标** | 增强 K8s 原生调度 | 替代默认调度器，HPC 优先 |
+| **集成方式** | 与默认调度器协作  | 独立调度器               |
+| **核心关注** | Job 级队列管理    | 复杂批处理和高性能计算   |
 
 <!--
 演讲内容补充
@@ -2305,18 +2497,20 @@ title: 设计理念对比 (table)
 -->
 
 ---
+
 layout: table
 title: 功能特性对比 (table)
+
 ---
 
-| 特性          | Kueue                          | Volcano                       |
-|:--------------------|:----------------------|:----------------------|
-| **队列管理**  | LocalQueue + ClusterQueue     | Queue                       |
-| **组调度**    | 通过 Workload 实现            | Gang Scheduling (PodGroup)  |
-| **资源借用**  | 支持动态借用与回收            | 通过队列权重分配            |
-| **作业依赖**  | 基础支持                      | 强大，支持复杂依赖          |
-| **AI 优化**   | 通用支持                      | 深度集成 TF, PyTorch 等     |
-| **多集群**    | MultiKueue (实验性)           | 暂无原生支持                |
+| 特性         | Kueue                     | Volcano                    |
+| :----------- | :------------------------ | :------------------------- |
+| **队列管理** | LocalQueue + ClusterQueue | Queue                      |
+| **组调度**   | 通过 Workload 实现        | Gang Scheduling (PodGroup) |
+| **资源借用** | 支持动态借用与回收        | 通过队列权重分配           |
+| **作业依赖** | 基础支持                  | 强大，支持复杂依赖         |
+| **AI 优化**  | 通用支持                  | 深度集成 TF, PyTorch 等    |
+| **多集群**   | MultiKueue (实验性)       | 暂无原生支持               |
 
 <!--
 演讲内容补充
@@ -2336,17 +2530,19 @@ AI 优化方面，Kueue 提供通用的支持，主要通过 ResourceFlavor 管�
 -->
 
 ---
+
 layout: table
 title: 性能测试对比 (table)
+
 ---
 
-| 项目 | 配置 |
-|------|------|
-| **Kubernetes 版本** | v1.29.0 |
-| **节点规模** | 1000 nodes (800 CPU nodes + 200 GPU nodes) |
-| **硬件配置** | CPU: 96 cores, Memory: 384GB, GPU: 8x A100 |
-| **网络** | 100Gbps InfiniBand |
-| **测试工具** | K8s-bench, Kubemark, Custom workload generator |
+| 项目                | 配置                                           |
+| ------------------- | ---------------------------------------------- |
+| **Kubernetes 版本** | v1.29.0                                        |
+| **节点规模**        | 1000 nodes (800 CPU nodes + 200 GPU nodes)     |
+| **硬件配置**        | CPU: 96 cores, Memory: 384GB, GPU: 8x A100     |
+| **网络**            | 100Gbps InfiniBand                             |
+| **测试工具**        | K8s-bench, Kubemark, Custom workload generator |
 
 <!--
 演讲内容补充
@@ -2360,8 +2556,10 @@ title: 性能测试对比 (table)
 -->
 
 ---
+
 layout: default
 title: 性能测试对比 - 调度吞吐量对比 (default)
+
 ---
 
 ```mermaid
@@ -2387,22 +2585,26 @@ Volcano 的表现最为出色：1580 作业/分钟，P99 延迟 0.9 秒。吞吐
 -->
 
 ---
+
 layout: table
 title: 性能测试对比 - 调度吞吐量测试结果 (table)
----
-
-| 指标 | Native K8s | Kueue | Volcano | 测试说明 |
-|------|-----------|-------|---------|----------|
-| **调度吞吐量** | 320/min | 850/min | 1580/min | 10K jobs, 8 Pod/job |
-| **调度延迟 P50** | 1.2s | 0.3s | 0.15s | 从提交到 Running |
-| **调度延迟 P99** | 5.2s | 1.8s | 0.9s | 包含队列等待 |
-| **CPU 使用率** | 45% | 12% | 18% | Scheduler 组件 |
-| **内存使用** | 8GB | 2.5GB | 4GB | 稳定运行时 |
-| **API QPS** | 2000 | 500 | 800 | 对 API Server 压力 |
 
 ---
+
+| 指标             | Native K8s | Kueue   | Volcano  | 测试说明            |
+| ---------------- | ---------- | ------- | -------- | ------------------- |
+| **调度吞吐量**   | 320/min    | 850/min | 1580/min | 10K jobs, 8 Pod/job |
+| **调度延迟 P50** | 1.2s       | 0.3s    | 0.15s    | 从提交到 Running    |
+| **调度延迟 P99** | 5.2s       | 1.8s    | 0.9s     | 包含队列等待        |
+| **CPU 使用率**   | 45%        | 12%     | 18%      | Scheduler 组件      |
+| **内存使用**     | 8GB        | 2.5GB   | 4GB      | 稳定运行时          |
+| **API QPS**      | 2000       | 500     | 800      | 对 API Server 压力  |
+
+---
+
 layout: default
 title: 性能测试对比 - Gang 调度性能对比 (default)
+
 ---
 
 ```yaml
@@ -2412,34 +2614,38 @@ kind: Job
 metadata:
   name: gang-perf-test
 spec:
-  parallelism: 64  # 64 个 worker
+  parallelism: 64 # 64 个 worker
   completions: 64
   template:
     spec:
       containers:
-      - name: worker
-        resources:
-          limits:
-            nvidia.com/gpu: 1
-            cpu: 12
-            memory: 48Gi
+        - name: worker
+          resources:
+            limits:
+              nvidia.com/gpu: 1
+              cpu: 12
+              memory: 48Gi
 ```
 
 ---
+
 layout: table
 title: 性能测试对比 - Gang 调度测试结果 (table)
----
-
-| 场景 | Native K8s | Kueue | Volcano |
-|------|-----------|-------|---------|
-| **64 GPU 作业调度成功率** | 23% | 87% | 98% |
-| **资源死锁发生率** | 45% | 8% | 0.5% |
-| **平均等待时间** | 18min | 3.5min | 45s |
-| **资源碎片率** | 35% | 12% | 3% |
 
 ---
+
+| 场景                      | Native K8s | Kueue  | Volcano |
+| ------------------------- | ---------- | ------ | ------- |
+| **64 GPU 作业调度成功率** | 23%        | 87%    | 98%     |
+| **资源死锁发生率**        | 45%        | 8%     | 0.5%    |
+| **平均等待时间**          | 18min      | 3.5min | 45s     |
+| **资源碎片率**            | 35%        | 12%    | 3%      |
+
+---
+
 layout: default
 title: 压力测试对比 - 压测代码示例 (default)
+
 ---
 
 ```go
@@ -2447,7 +2653,7 @@ title: 压力测试对比 - 压测代码示例 (default)
 func StressTest(scheduler string, jobCount int) {
     start := time.Now()
     var wg sync.WaitGroup
-    
+
     // 并发提交作业
     for i := 0; i < jobCount; i++ {
         wg.Add(1)
@@ -2457,35 +2663,39 @@ func StressTest(scheduler string, jobCount int) {
             submitAndWait(job)
         }(i)
     }
-    
+
     wg.Wait()
     duration := time.Since(start)
-    
+
     // 收集指标
     metrics := collectMetrics(scheduler)
-    fmt.Printf("Scheduler: %s, Jobs: %d, Duration: %v\n", 
+    fmt.Printf("Scheduler: %s, Jobs: %d, Duration: %v\n",
                scheduler, jobCount, duration)
 }
 ```
 
 ---
+
 layout: table
 title: 压力测试对比 - 极限测试结果 (table)
----
-
-| 测试规模 | Native K8s | Kueue | Volcano |
-|----------|-----------|-------|---------|
-| **1K 并发** | ✓ 正常 | ✓ 正常 | ✓ 正常 |
-| **5K 并发** | ⚠️ 延迟增加 | ✓ 正常 | ✓ 正常 |
-| **10K 并发** | ❌ 部分失败 | ✓ 正常 | ✓ 正常 |
-| **20K 并发** | ❌ 系统过载 | ⚠️ 轻微延迟 | ✓ 正常 |
-| **50K 并发** | - | ❌ 队列积压 | ⚠️ 需调优 |
 
 ---
+
+| 测试规模     | Native K8s  | Kueue       | Volcano   |
+| ------------ | ----------- | ----------- | --------- |
+| **1K 并发**  | ✓ 正常      | ✓ 正常      | ✓ 正常    |
+| **5K 并发**  | ⚠️ 延迟增加 | ✓ 正常      | ✓ 正常    |
+| **10K 并发** | ❌ 部分失败 | ✓ 正常      | ✓ 正常    |
+| **20K 并发** | ❌ 系统过载 | ⚠️ 轻微延迟 | ✓ 正常    |
+| **50K 并发** | -           | ❌ 队列积压 | ⚠️ 需调优 |
+
+---
+
 layout: two-cols
 title: 资源利用率对比 (two-cols)
 leftTitle: GPU 利用率追踪
 rightTitle: 可视化对比
+
 ---
 
 ::left::
@@ -2523,23 +2733,25 @@ graph LR
         A --> C[Kueue: 较平稳]
         A --> D[Volcano: 最平稳]
     end
-    
+
     B --> E[碎片化严重]
     C --> F[动态借用有效]
     D --> G[Gang调度优化]
 ```
 
 ---
+
 layout: table
 title: 适用场景对比 (table)
+
 ---
 
-| 场景                | Kueue          | Volcano        |
-|:--------------------|:----------------------|:----------------------|
-| **AI/ML 训练**     | 中等 (通用场景)      | 高 (大规模分布式)    |
-| **大数据批处理**   | 高 (多租户公平性)    | 中等 (依赖复杂性)    |
-| **CI/CD 流水线**   | 高 (轻量级集成)      | 低 (过于重型)        |
-| **HPC 科学计算**   | 低 (功能不足)        | 高 (性能优化)        |
+| 场景             | Kueue             | Volcano           |
+| :--------------- | :---------------- | :---------------- |
+| **AI/ML 训练**   | 中等 (通用场景)   | 高 (大规模分布式) |
+| **大数据批处理** | 高 (多租户公平性) | 中等 (依赖复杂性) |
+| **CI/CD 流水线** | 高 (轻量级集成)   | 低 (过于重型)     |
+| **HPC 科学计算** | 低 (功能不足)     | 高 (性能优化)     |
 
 <!--
 演讲内容补充
@@ -2555,47 +2767,55 @@ HPC 科学计算是 Volcano 的传统优势领域。它从设计之初就考虑�
 -->
 
 ---
+
 layout: table
 title: 特定场景下性能对比 (table)
----
-
-| 场景 | 最佳选择 | 原因 | 性能差距 |
-|------|---------|------|----------|
-| **小批量作业(<10 pods)** | Native K8s | 开销最小 | 基准 |
-| **中等规模(10-100 pods)** | Kueue | 平衡性好 | +15% |
-| **大规模训练(>100 pods)** | Volcano | Gang 调度 | +45% |
-| **混合负载** | Kueue | 资源借用 | +30% |
-| **HPC 作业** | Volcano | 专门优化 | +60% |
-| **多租户公平性** | Kueue | DRF 算法 | +25% |
 
 ---
+
+| 场景                      | 最佳选择   | 原因      | 性能差距 |
+| ------------------------- | ---------- | --------- | -------- |
+| **小批量作业(<10 pods)**  | Native K8s | 开销最小  | 基准     |
+| **中等规模(10-100 pods)** | Kueue      | 平衡性好  | +15%     |
+| **大规模训练(>100 pods)** | Volcano    | Gang 调度 | +45%     |
+| **混合负载**              | Kueue      | 资源借用  | +30%     |
+| **HPC 作业**              | Volcano    | 专门优化  | +60%     |
+| **多租户公平性**          | Kueue      | DRF 算法  | +25%     |
+
+---
+
 layout: table
 title: 发展路线对比 (table)
----
-
-|发展方向            |Kueue        |Volcano      |
-|:--------------------|:----------------------|:----------------------|
-| **多集群调度**     | 🚀 **MultiKueue 增强**<br/>用户体验优化      | 🆕 **原生支持开发中**<br/>跨云跨集群调度    |
-| **AI 优化**           | 🍀 **通用 AI 支持**<br/>多框架集成      | 🎆 **CNAI 深度特化**<br/>GPU 共享、NUMA 感知    |
-| **资源管理**        | 📊 **智能分配策略**<br/>成本 vs 借用优化   | 📈 **弹性分层队列**<br/>动态资源超卖    |
-| **生态集成**        | 🤝 **广泛集成**<br/>Kubeflow, Spark, Ray  | 💪 **深度集成**<br/>Flink, MindSpore 原生支持 |
-| **统一调度**        | ☮️ **与默认调度器协作** | 🌐 **完全替代 kube-scheduler**<br/>统一微服务+AI 调度 |
 
 ---
+
+| 发展方向       | Kueue                                    | Volcano                                               |
+| :------------- | :--------------------------------------- | :---------------------------------------------------- |
+| **多集群调度** | 🚀 **MultiKueue 增强**<br/>用户体验优化  | 🆕 **原生支持开发中**<br/>跨云跨集群调度              |
+| **AI 优化**    | 🍀 **通用 AI 支持**<br/>多框架集成       | 🎆 **CNAI 深度特化**<br/>GPU 共享、NUMA 感知          |
+| **资源管理**   | 📊 **智能分配策略**<br/>成本 vs 借用优化 | 📈 **弹性分层队列**<br/>动态资源超卖                  |
+| **生态集成**   | 🤝 **广泛集成**<br/>Kubeflow, Spark, Ray | 💪 **深度集成**<br/>Flink, MindSpore 原生支持         |
+| **统一调度**   | ☮️ **与默认调度器协作**                  | 🌐 **完全替代 kube-scheduler**<br/>统一微服务+AI 调度 |
+
+---
+
 layout: two-cols
 title: 最终选型建议 (two-cols)
 leftTitle: Kueue
 rightTitle: Volcano
+
 ---
 
 ::left::
 
 **适合场景**：
+
 - 需要与 Kubernetes 原生深度集成
 - 关注多租户资源公平性
 - 作业规模中等，偏通用场景
 
 **2025 亮点**：
+
 - MultiKueue 跨集群调度成熟
 - 分配策略智能化
 - 生态集成更加广泛
@@ -2603,11 +2823,13 @@ rightTitle: Volcano
 ::right::
 
 **适合场景**：
+
 - 需要高性能计算和 AI 优化
 - 作业依赖复杂
 - 需要完全控制调度逻辑
 
 **2025 亮点**：
+
 - GPU 共享和 NUMA 感知调度
 - 网络拓扑感知和多集群 AI 调度
 - 弹性分层队列和资源超卖
@@ -2626,26 +2848,31 @@ rightTitle: Volcano
 -->
 
 ---
+
 layout: chapter
 part: 5
 title: GPU 资源优化策略 (chapter)
+
 ---
 
 ---
+
 layout: boxes
 title: GPU 资源优化的重要性 (boxes)
+
 ---
 
-**2025年，AI模型规模和数据量激增，资源优化成为关键**
+**2025 年，AI 模型规模和数据量激增，资源优化成为关键**
 
 ## **核心挑战**
 
-- 高计算成本：大型模型训练需要大量GPU资源
+- 高计算成本：大型模型训练需要大量 GPU 资源
 - 负载变化：推理任务需低延迟，训练任务需高吞吐量
 - 资源利用率低：传统调度方式导致资源浪费
 
 **量化分析**：
-- **GPT-4 训练成本**：~$100M，25,000 A100 GPU×3个月
+
+- **GPT-4 训练成本**：~$100M，25,000 A100 GPU×3 个月
 - **推理成本**：每百万 token $0.03-0.12
 - **GPU 空闲率**：平均 35-45%，峰值可达 60%
 - **资源碎片化**：15-25% GPU 因碎片无法分配
@@ -2657,14 +2884,17 @@ title: GPU 资源优化的重要性 (boxes)
 - 资源超卖
 
 **技术突破**：
+
 - **时分复用**：推理白天运行，训练夜间执行
 - **空间复用**：MIG/vGPU 技术实现 GPU 共享
 - **智能调度**：基于负载预测的资源分配
 - **成本优化**：Spot 实例利用率提升至 80%
 
 ---
+
 layout: default
 title: 混部调度策略 - 架构设计 (default)
+
 ---
 
 ```mermaid
@@ -2675,19 +2905,19 @@ graph LR
         C[推理资源池<br/>300 GPU]
         D[弹性资源池<br/>100 GPU]
     end
-    
+
     subgraph "调度决策"
         E[负载预测器]
         F[资源分配器]
         G[优先级管理]
     end
-    
+
     subgraph "工作负载"
         H[训练任务]
         I[推理服务]
         J[开发测试]
     end
-    
+
     A --> E
     E --> F
     F --> B
@@ -2700,8 +2930,10 @@ graph LR
 ```
 
 ---
+
 layout: default
 title: 混部调度策略 - 技术实现 (default)
+
 ---
 
 ```yaml
@@ -2713,52 +2945,56 @@ spec:
   cohort: gpu-cohort
   namespaceSelector: {}
   resourceGroups:
-  - coveredResources: ["nvidia.com/gpu", "cpu", "memory"]
-    flavors:
-    # 训练专用资源
-    - name: training-flavor
-      resources:
-      - name: nvidia.com/gpu
-        nominalQuota: 60
-        lendingLimit: 20  # 可借出33%
-      nodeLabels:
-        workload-type: training
-        gpu-memory: 80gb
-    
-    # 推理专用资源  
-    - name: inference-flavor
-      resources:
-      - name: nvidia.com/gpu
-        nominalQuota: 30
-        borrowingLimit: 10  # 可借入33%
-      nodeLabels:
-        workload-type: inference
-        network-latency: low
-    
-    # 弹性共享资源
-    - name: elastic-flavor
-      resources:
-      - name: nvidia.com/gpu
-        nominalQuota: 10
-      nodeLabels:
-        workload-type: mixed
+    - coveredResources: ['nvidia.com/gpu', 'cpu', 'memory']
+      flavors:
+        # 训练专用资源
+        - name: training-flavor
+          resources:
+            - name: nvidia.com/gpu
+              nominalQuota: 60
+              lendingLimit: 20 # 可借出33%
+          nodeLabels:
+            workload-type: training
+            gpu-memory: 80gb
+
+        # 推理专用资源
+        - name: inference-flavor
+          resources:
+            - name: nvidia.com/gpu
+              nominalQuota: 30
+              borrowingLimit: 10 # 可借入33%
+          nodeLabels:
+            workload-type: inference
+            network-latency: low
+
+        # 弹性共享资源
+        - name: elastic-flavor
+          resources:
+            - name: nvidia.com/gpu
+              nominalQuota: 10
+          nodeLabels:
+            workload-type: mixed
 ```
 
 ---
+
 layout: table
 title: 混部调度策略 - 性能数据对比 (table)
----
-
-| 指标 | 纯训练集群 | 纯推理集群 | 混部集群 | 提升 |
-|:------|:-----------|:-----------|:---------|:------|
-| **GPU 利用率** | 65% | 45% | 85% | +30% |
-| **成本效率** | $1.2/TFLOP | $1.8/TFLOP | $0.9/TFLOP | -40% |
-| **任务等待时间** | 45min | 15min | 8min | -73% |
-| **SLA 达成率** | 95% | 99% | 97% | - |
 
 ---
+
+| 指标             | 纯训练集群 | 纯推理集群 | 混部集群   | 提升 |
+| :--------------- | :--------- | :--------- | :--------- | :--- |
+| **GPU 利用率**   | 65%        | 45%        | 85%        | +30% |
+| **成本效率**     | $1.2/TFLOP | $1.8/TFLOP | $0.9/TFLOP | -40% |
+| **任务等待时间** | 45min      | 15min      | 8min       | -73% |
+| **SLA 达成率**   | 95%        | 99%        | 97%        | -    |
+
+---
+
 layout: default
 title: 混部调度策略 - 风险控制机制 (default)
+
 ---
 
 ```go
@@ -2778,22 +3014,24 @@ func (ms *MixedScheduler) Schedule(workload Workload) error {
         // 推理任务需要独占资源
         return ms.scheduleExclusive(workload)
     }
-    
+
     // 2. 评估资源争用风险
     risk := ms.evaluateContentionRisk(workload)
     if risk > 0.3 {
         // 高风险，使用资源隔离
         return ms.scheduleWithIsolation(workload)
     }
-    
+
     // 3. 正常混部调度
     return ms.scheduleMixed(workload)
 }
 ```
 
 ---
+
 layout: default
 title: 弹性伸缩策略 - 多维度弹性伸缩架构 (default)
+
 ---
 
 ```mermaid
@@ -2804,21 +3042,21 @@ graph LR
         C[响应时间]
         D[成本预算]
     end
-    
+
     subgraph "决策引擎"
         E[HPA Controller]
         F[VPA Controller]
         G[Cluster Autoscaler]
         H[KEDA Scaler]
     end
-    
+
     subgraph "执行动作"
         I[增加 Pod 副本]
         J[调整资源配额]
         K[添加节点]
         L[触发任务]
     end
-    
+
     A --> E
     B --> H
     C --> E
@@ -2830,8 +3068,10 @@ graph LR
 ```
 
 ---
+
 layout: default
 title: 弹性伸缩策略 - HPA + VPA (default)
+
 ---
 
 ```yaml
@@ -2851,33 +3091,33 @@ spec:
     scaleDown:
       stabilizationWindowSeconds: 300
       policies:
-      - type: Percent
-        value: 10
-        periodSeconds: 60
+        - type: Percent
+          value: 10
+          periodSeconds: 60
     scaleUp:
       stabilizationWindowSeconds: 0
       policies:
-      - type: Percent
-        value: 100
-        periodSeconds: 15
-      - type: Pods
-        value: 20
-        periodSeconds: 15
+        - type: Percent
+          value: 100
+          periodSeconds: 15
+        - type: Pods
+          value: 20
+          periodSeconds: 15
       selectPolicy: Max
   metrics:
-  - type: Resource
-    resource:
-      name: gpu
-      target:
-        type: Utilization
-        averageUtilization: 75
-  - type: Pods
-    pods:
-      metric:
-        name: inference_queue_size
-      target:
-        type: AverageValue
-        averageValue: "30"
+    - type: Resource
+      resource:
+        name: gpu
+        target:
+          type: Utilization
+          averageUtilization: 75
+    - type: Pods
+      pods:
+        metric:
+          name: inference_queue_size
+        target:
+          type: AverageValue
+          averageValue: '30'
 ---
 apiVersion: autoscaling.k8s.io/v1
 kind: VerticalPodAutoscaler
@@ -2889,21 +3129,23 @@ spec:
     kind: Deployment
     name: llm-inference-service
   updatePolicy:
-    updateMode: "Auto"
+    updateMode: 'Auto'
   resourcePolicy:
     containerPolicies:
-    - containerName: inference-container
-      minAllowed:
-        nvidia.com/gpu: 1
-        memory: 16Gi
-      maxAllowed:
-        nvidia.com/gpu: 4
-        memory: 64Gi
+      - containerName: inference-container
+        minAllowed:
+          nvidia.com/gpu: 1
+          memory: 16Gi
+        maxAllowed:
+          nvidia.com/gpu: 4
+          memory: 64Gi
 ```
 
 ---
+
 layout: default
 title: 弹性伸缩策略 -KEDA 事件驱动伸缩 (default)
+
 ---
 
 ```yaml
@@ -2917,38 +3159,42 @@ spec:
     template:
       spec:
         containers:
-        - name: trainer
-          image: pytorch-training:latest
-          resources:
-            limits:
-              nvidia.com/gpu: 8
+          - name: trainer
+            image: pytorch-training:latest
+            resources:
+              limits:
+                nvidia.com/gpu: 8
   pollingInterval: 30
   maxReplicaCount: 50
   triggers:
-  - type: kafka
-    metadata:
-      bootstrapServers: kafka:9092
-      consumerGroup: training-jobs
-      topic: model-training-requests
-      lagThreshold: "100"
-      offsetResetPolicy: latest
+    - type: kafka
+      metadata:
+        bootstrapServers: kafka:9092
+        consumerGroup: training-jobs
+        topic: model-training-requests
+        lagThreshold: '100'
+        offsetResetPolicy: latest
 ```
 
 ---
+
 layout: table
-title: 弹性伸缩策略 -  弹性伸缩效果数据 (table)
----
-
-| 场景 | 传统固定资源 | 弹性伸缩 | 改善 |
-|------|-------------|----------|------|
-| **日间推理峰值** | 20% 请求超时 | 0.5% 请求超时 | 97.5% ↓ |
-| **夜间训练** | 40% GPU 空闲 | 5% GPU 空闲 | 87.5% ↓ |
-| **突发流量** | 系统崩溃 | 自动扩容应对 | 100% 可用性 |
-| **成本控制** | $50K/月 | $32K/月 | 36% ↓ |
+title: 弹性伸缩策略 - 弹性伸缩效果数据 (table)
 
 ---
+
+| 场景             | 传统固定资源 | 弹性伸缩      | 改善        |
+| ---------------- | ------------ | ------------- | ----------- |
+| **日间推理峰值** | 20% 请求超时 | 0.5% 请求超时 | 97.5% ↓     |
+| **夜间训练**     | 40% GPU 空闲 | 5% GPU 空闲   | 87.5% ↓     |
+| **突发流量**     | 系统崩溃     | 自动扩容应对  | 100% 可用性 |
+| **成本控制**     | $50K/月      | $32K/月       | 36% ↓       |
+
+---
+
 layout: default
 title: 资源超卖 (default)
+
 ---
 
 ```go
@@ -2967,25 +3213,25 @@ type OversubscriptionManager struct {
 func (om *OversubscriptionManager) CanAllocate(request Resources) bool {
     // 1. 计算实际使用率
     actualUsage := om.calculateActualUsage()
-    
+
     // 2. 评估超卖风险
     for resource, amount := range request {
         physicalCapacity := om.PhysicalResources[resource]
         currentVirtual := om.VirtualAllocated[resource]
         oversubRatio := om.OversubscriptionRatio[resource]
-        
+
         // 检查是否超过安全阈值
         if (currentVirtual + amount) > (physicalCapacity * oversubRatio) {
             return false
         }
-        
+
         // 基于历史使用预测风险
         predictedPeak := om.predictPeakUsage(resource)
         if predictedPeak + amount > physicalCapacity * 0.95 {
             return false
         }
     }
-    
+
     return true
 }
 
@@ -2993,20 +3239,22 @@ func (om *OversubscriptionManager) predictPeakUsage(resource string) float64 {
     // 使用 EWMA 算法预测峰值
     history := om.UsageHistory.GetResourceHistory(resource)
     alpha := 0.3 // 平滑因子
-    
+
     ewma := history[0]
     for i := 1; i < len(history); i++ {
         ewma = alpha*history[i] + (1-alpha)*ewma
     }
-    
+
     // 加上安全边际
     return ewma * 1.2
 }
 ```
 
 ---
+
 layout: default
 title: 资源超卖 - QoS 分级管理 (default)
+
 ---
 
 ```yaml
@@ -3017,12 +3265,12 @@ metadata:
   name: guaranteed-quota
 spec:
   hard:
-    requests.nvidia.com/gpu: "100"
+    requests.nvidia.com/gpu: '100'
   scopeSelector:
     matchExpressions:
-    - scopeName: PriorityClass
-      operator: In
-      values: ["guaranteed"]
+      - scopeName: PriorityClass
+        operator: In
+        values: ['guaranteed']
 ---
 apiVersion: v1
 kind: ResourceQuota
@@ -3030,30 +3278,32 @@ metadata:
   name: burstable-quota
 spec:
   hard:
-    requests.nvidia.com/gpu: "150"  # 150% 超卖
+    requests.nvidia.com/gpu: '150' # 150% 超卖
   scopeSelector:
     matchExpressions:
-    - scopeName: PriorityClass
-      operator: In
-      values: ["burstable"]
+      - scopeName: PriorityClass
+        operator: In
+        values: ['burstable']
 ---
 apiVersion: v1
-kind: ResourceQuota  
+kind: ResourceQuota
 metadata:
   name: besteffort-quota
 spec:
   hard:
-    requests.nvidia.com/gpu: "200"  # 200% 超卖
+    requests.nvidia.com/gpu: '200' # 200% 超卖
   scopeSelector:
     matchExpressions:
-    - scopeName: PriorityClass
-      operator: In
-      values: ["besteffort"]
+      - scopeName: PriorityClass
+        operator: In
+        values: ['besteffort']
 ```
 
 ---
+
 layout: default
 title: 资源超卖 - 智能资源回收（示例） (default)
+
 ---
 
 ```python
@@ -3068,24 +3318,24 @@ class IntelligentReclaimer:
             'current_usage', 'time_of_day', 'day_of_week',
             'workload_type', 'priority', 'duration'
         ]
-    
+
     def train(self, historical_data):
         """训练资源使用预测模型"""
         X = historical_data[self.feature_names]
         y = historical_data['peak_usage']
         self.model.fit(X, y)
-    
+
     def should_reclaim(self, workload):
         """决定是否回收资源"""
         features = self.extract_features(workload)
         predicted_usage = self.model.predict([features])[0]
-        
+
         # 如果预测使用率低于 30%，则回收
         if predicted_usage < 0.3:
             return True, 1.0 - predicted_usage
-        
+
         return False, 0.0
-    
+
     def calculate_reclaim_amount(self, workload, reclaim_ratio):
         """计算回收资源量"""
         allocated = workload.allocated_resources
@@ -3096,61 +3346,72 @@ class IntelligentReclaimer:
 ```
 
 ---
+
 layout: table
 title: 资源超卖 - 示例场景数据 (table)
----
-
-| 指标 | 无超卖 | 保守超卖(1.3x) | 激进超卖(2.0x) |
-|------|--------|---------------|---------------|
-| **资源利用率** | 65% | 84% | 92% |
-| **任务失败率** | 0.1% | 0.3% | 2.1% |
-| **成本节省** | 基准 | 23% | 45% |
-| **SLA 违约** | 0.05% | 0.1% | 0.8% |
 
 ---
+
+| 指标           | 无超卖 | 保守超卖(1.3x) | 激进超卖(2.0x) |
+| -------------- | ------ | -------------- | -------------- |
+| **资源利用率** | 65%    | 84%            | 92%            |
+| **任务失败率** | 0.1%   | 0.3%           | 2.1%           |
+| **成本节省**   | 基准   | 23%            | 45%            |
+| **SLA 违约**   | 0.05%  | 0.1%           | 0.8%           |
+
+---
+
 layout: chapter
 part: 6
 title: 混合调度：训练与推理共存 (chapter)
+
 ---
 
 ---
+
 layout: two-cols
 title: 训练与推理协同调度的挑战 (two-cols)
 leftTitle: 资源需求
 rightTitle: 技术挑战
+
 ---
 
 ::left::
 
-  - 推理任务：低延迟、稳定资源需求
-  - 训练任务：高吞吐量、弹性资源需求
+- 推理任务：低延迟、稳定资源需求
+- 训练任务：高吞吐量、弹性资源需求
 
 ::right::
 
-  - 资源竞争可能影响推理性能
-  - 如何保证推理任务的SLA
-  - 动态负载下的资源分配策略
+- 资源竞争可能影响推理性能
+- 如何保证推理任务的 SLA
+- 动态负载下的资源分配策略
 
 ---
+
 layout: table
 title: 开源生态系统对比 (table)
----
-
-| 项目 | 功能 | 适用场景 |
-|------|------|----------|
-| **KEDA** | 事件驱动自动伸缩 | 推理服务弹性伸缩 |
-| **Ray** | 分布式计算框架 | 训练推理统一调度 |
-| **Pollux** | 协同自适应调度 | 深度学习任务优化 |
-| **Prometheus** | 监控告警 | 资源使用监控 |
 
 ---
+
+| 项目           | 功能             | 适用场景         |
+| -------------- | ---------------- | ---------------- |
+| **KEDA**       | 事件驱动自动伸缩 | 推理服务弹性伸缩 |
+| **Ray**        | 分布式计算框架   | 训练推理统一调度 |
+| **Pollux**     | 协同自适应调度   | 深度学习任务优化 |
+| **Prometheus** | 监控告警         | 资源使用监控     |
+
+---
+
 layout: default
 title: 最佳实践与配置 (default)
+
 ---
 
 **生产环境中的关键配置策略**
 
 - **HPA 配置示例**:
+
 ```yaml
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
@@ -3169,8 +3430,8 @@ spec:
           averageUtilization: 70
 ```
 
-- **优先级管理**: 使用PriorityClass确保推理任务优先级
-- **资源配额**: 合理设置CPU和GPU请求/限制
+- **优先级管理**: 使用 PriorityClass 确保推理任务优先级
+- **资源配额**: 合理设置 CPU 和 GPU 请求/限制
 
 <!--
 建议：添加Kueue waitForPodsReady配置
@@ -3188,9 +3449,11 @@ waitForPodsReady:
 -->
 
 ---
+
 layout: chapter
 part: 7
 title: 实战演练 (chapter)
+
 ---
 
 <!--
@@ -3209,8 +3472,10 @@ title: 实战演练 (chapter)
 -->
 
 ---
+
 layout: default
 title: 环境准备 (default)
+
 ---
 
 - **集群**: Kubernetes v1.27+
@@ -3226,7 +3491,7 @@ title: 环境准备 (default)
     --create-namespace \
     --wait --timeout 300s
   ```
- 
+
  <br />
 
 - **安装 Volcano**:
@@ -3254,8 +3519,10 @@ Volcano 的安装同样使用 Helm，但需要先添加官方的 chart 仓库。
 -->
 
 ---
+
 layout: default
 title: Kueue 实战：配置 ClusterQueue (default)
+
 ---
 
 ```yaml
@@ -3266,17 +3533,17 @@ metadata:
 spec:
   namespaceSelector: {}
   resourceGroups:
-  - coveredResources: ["cpu", "memory", "nvidia.com/gpu"]
-    flavors:
-    - name: gpu-flavor
-      resources:
-      - name: cpu
-        nominalQuota: 16
-      - name: memory
-        nominalQuota: 32Gi
-      - name: nvidia.com/gpu
-        nominalQuota: 4
-        lendingLimit: 2
+    - coveredResources: ['cpu', 'memory', 'nvidia.com/gpu']
+      flavors:
+        - name: gpu-flavor
+          resources:
+            - name: cpu
+              nominalQuota: 16
+            - name: memory
+              nominalQuota: 32Gi
+            - name: nvidia.com/gpu
+              nominalQuota: 4
+              lendingLimit: 2
 ```
 
 <!--
@@ -3295,8 +3562,10 @@ resources 数组定义了具体的资源配额。nominalQuota 是基础配额，
 -->
 
 ---
+
 layout: default
 title: Kueue 实战：提交作业 (default)
+
 ---
 
 ```yaml
@@ -3310,11 +3579,11 @@ spec:
   template:
     spec:
       containers:
-      - name: trainer
-        image: tensorflow/tensorflow:2.12.0-gpu
-        resources:
-          limits:
-            nvidia.com/gpu: 2
+        - name: trainer
+          image: tensorflow/tensorflow:2.12.0-gpu
+          resources:
+            limits:
+              nvidia.com/gpu: 2
       restartPolicy: OnFailure
 ```
 
@@ -3332,21 +3601,27 @@ resources 部分的定义很重要，它决定了作业需要多少资源。这�
 -->
 
 ---
+
 layout: default
 title: Kueue 实战：监控调度 (default)
+
 ---
 
 - **查看队列状态**:
+
   ```bash
   kueuectl list localqueue -n ai-team
-  ``` 
- <br />
+  ```
+
+  <br />
 
 - **查看作业状态**:
+
   ```bash
   kubectl get workload -n ai-team
-  ``` 
-<br />
+  ```
+
+  <br />
 
 - **资源借用情况**:
   ```bash
@@ -3354,13 +3629,16 @@ title: Kueue 实战：监控调度 (default)
   ```
 
 ---
+
 layout: two-cols
 title: Kueue 实战：故障排查 (two-cols)
 leftTitle: Job 调度问题
 rightTitle: 资源问题
+
 ---
 
 ::left::
+
 - **作业卡在排队**:
   - 检查 ClusterQueue 资源是否耗尽
   - 查看是否有更高优先级作业抢占
@@ -3372,8 +3650,10 @@ rightTitle: 资源问题
   - 确认是否有其他队列可用资源
 
 ---
+
 layout: default
 title: Volcano 实战：配置 Queue (default)
+
 ---
 
 ```yaml
@@ -3390,8 +3670,10 @@ spec:
 ```
 
 ---
+
 layout: default
 title: Volcano 实战：提交 VolcanoJob (default)
+
 ---
 
 ```yaml
@@ -3402,35 +3684,41 @@ metadata:
 spec:
   minAvailable: 4
   tasks:
-  - replicas: 4
-    name: trainer
-    template:
-      spec:
-        containers:
-        - name: tf-trainer
-          image: tensorflow/tensorflow:2.12.0-gpu
-          resources:
-            limits:
-              nvidia.com/gpu: 1
-        restartPolicy: OnFailure
+    - replicas: 4
+      name: trainer
+      template:
+        spec:
+          containers:
+            - name: tf-trainer
+              image: tensorflow/tensorflow:2.12.0-gpu
+              resources:
+                limits:
+                  nvidia.com/gpu: 1
+          restartPolicy: OnFailure
 ```
 
 ---
+
 layout: default
 title: Volcano 实战：监控调度 (default)
+
 ---
 
 - **查看队列**:
+
   ```bash
   kubectl get queue -n volcano-system
   ```
-<br />
+
+  <br />
 
 - **查看作业**:
+
   ```bash
   kubectl get job -n ai-team
   ```
-<br />
+
+  <br />
 
 - **查看 PodGroup**:
   ```bash
@@ -3438,37 +3726,46 @@ title: Volcano 实战：监控调度 (default)
   ```
 
 ---
+
 layout: two-cols
 title: Volcano 实战：故障排查 (two-cols)
 leftTitle: Job 调度问题
 rightTitle: 资源问题
+
 ---
 
 ::left::
+
 - **作业未调度**:
   - 检查 Queue 资源配额
   - 确认 minAvailable 是否满足
 
 ::right::
+
 - **PodGroup 卡住**:
   - 查看是否有节点资源碎片
   - 检查是否有更高优先级作业
 
 ---
+
 layout: center
 title: 案例介绍 (center)
+
 ---
 
 ---
+
 layout: two-cols
 title: 性能优化案例 1 - XXX AI 平台 (two-cols)
 leftTitle: 背景
 rightTitle: 挑战
+
 ---
 
 ::left::
 
 **集群规模**：
+
 - 10,00+ GPU (V100/A100/H100 混合)
 - 50,00+ CPU 节点
 - 日均 30K+ 作业提交
@@ -3477,14 +3774,17 @@ rightTitle: 挑战
 ::right::
 
 **核心挑战**：
+
 1. **资源利用率低**：GPU 平均利用率仅 55%
 2. **调度延迟高**：P99 调度延迟达 5 分钟
 3. **成本压力大**：年度 GPU 成本超 $200M
 4. **多框架混部**：TensorFlow、PyTorch、PaddlePaddle 共存
 
 ---
+
 layout: default
 title: 性能优化案例 1 - Kueue 配置优化 (default)
+
 ---
 
 ```yaml
@@ -3495,24 +3795,24 @@ metadata:
   name: bytedance-ai-root
 spec:
   cohort: bytedance-cohort
-  queueingStrategy: BestEffortFIFO  # 改为 BestEffortFIFO
+  queueingStrategy: BestEffortFIFO # 改为 BestEffortFIFO
   namespaceSelector:
     matchLabels:
-      platform: "ai"
+      platform: 'ai'
   resourceGroups:
-  - coveredResources: ["nvidia.com/gpu", "cpu", "memory"]
-    flavors:
-    - name: training-a100
-      resources:
-      - name: nvidia.com/gpu
-        nominalQuota: 2000
-        lendingLimit: 600   # 30% 可借出
-        borrowingLimit: 800 # 40% 可借入
-    - name: inference-v100  
-      resources:
-      - name: nvidia.com/gpu
-        nominalQuota: 1000
-        lendingLimit: 300
+    - coveredResources: ['nvidia.com/gpu', 'cpu', 'memory']
+      flavors:
+        - name: training-a100
+          resources:
+            - name: nvidia.com/gpu
+              nominalQuota: 2000
+              lendingLimit: 600 # 30% 可借出
+              borrowingLimit: 800 # 40% 可借入
+        - name: inference-v100
+          resources:
+            - name: nvidia.com/gpu
+              nominalQuota: 1000
+              lendingLimit: 300
   fairSharing:
     enable: true
     weight: 1
@@ -3524,8 +3824,10 @@ spec:
 ```
 
 ---
+
 layout: default
 title: 性能优化案例 1 - Volcano 调度策略优化 (default)
+
 ---
 
 ```go
@@ -3546,29 +3848,31 @@ func (gap *GPUAffinityPlugin) OnSessionOpen(ssn *framework.Session) {
     // 注册节点打分函数
     ssn.AddNodeOrderFn(gap.Name(), func(task *api.TaskInfo, node *api.NodeInfo) (float64, error) {
         score := 0.0
-        
+
         // 1. 检查 NVLink 连接性
         if gap.hasNVLinkConnectivity(node, task.Requests.ScalarResources["nvidia.com/gpu"]) {
             score += 50.0
         }
-        
+
         // 2. 数据本地性评分
         if gap.hasLocalData(task, node) {
             score += 30.0
         }
-        
+
         // 3. 网络带宽评分
         bandwidth := gap.getNetworkBandwidth(node)
         score += float64(bandwidth) / 100.0 * 20.0
-        
+
         return score, nil
     })
 }
 ```
 
 ---
+
 layout: default
 title: 性能优化案例 1 - 优化效果数据 (default)
+
 ---
 
 ### 资源利用率提升
@@ -3578,61 +3882,67 @@ graph LR
     subgraph "优化前"
         A1[GPU: 55%<br/>CPU: 45%<br/>Memory: 60%]
     end
-    
+
     subgraph "优化后"
         B1[GPU: 87%<br/>CPU: 78%<br/>Memory: 85%]
     end
-    
+
     A1 -->|+58%| B1
 ```
 
 ---
+
 layout: table
 title: 性能优化案例 1 - 关键指标改善 (table)
----
-
-| 指标 | 优化前 | 优化后 | 改善 |
-|:------|:--------|:--------|:------|
-| **GPU 利用率** | 55% | 87% | +58% |
-| **调度延迟 P50** | 30s | 5s | -83% |
-| **调度延迟 P99** | 5min | 30s | -90% |
-| **作业完成时间** | 4.5h | 2.8h | -38% |
-| **资源碎片率** | 22% | 7% | -68% |
-| **年度成本** | $200M | $145M | -27.5% |
 
 ---
+
+| 指标             | 优化前 | 优化后 | 改善   |
+| :--------------- | :----- | :----- | :----- |
+| **GPU 利用率**   | 55%    | 87%    | +58%   |
+| **调度延迟 P50** | 30s    | 5s     | -83%   |
+| **调度延迟 P99** | 5min   | 30s    | -90%   |
+| **作业完成时间** | 4.5h   | 2.8h   | -38%   |
+| **资源碎片率**   | 22%    | 7%     | -68%   |
+| **年度成本**     | $200M  | $145M  | -27.5% |
+
+---
+
 layout: default
 title: 性能优化案例 1 - 监控与告警配置 (default)
+
 ---
 
 ```yaml
 # Prometheus 监控规则
 groups:
-- name: scheduler_performance
-  interval: 30s
-  rules:
-  - alert: HighSchedulingLatency
-    expr: histogram_quantile(0.99, kueue_admission_latency_seconds) > 10
-    for: 5m
-    annotations:
-      summary: "调度延迟过高"
-      
-  - alert: LowGPUUtilization
-    expr: avg(nvidia_gpu_duty_cycle) < 0.7
-    for: 10m
-    annotations:
-      summary: "GPU 利用率低于 70%"
-      
-  - alert: ResourceFragmentation
-    expr: (1 - sum(allocated_resources) / sum(total_resources)) > 0.15
-    for: 15m
-    annotations:
-      summary: "资源碎片率超过 15%"
+  - name: scheduler_performance
+    interval: 30s
+    rules:
+      - alert: HighSchedulingLatency
+        expr: histogram_quantile(0.99, kueue_admission_latency_seconds) > 10
+        for: 5m
+        annotations:
+          summary: '调度延迟过高'
+
+      - alert: LowGPUUtilization
+        expr: avg(nvidia_gpu_duty_cycle) < 0.7
+        for: 10m
+        annotations:
+          summary: 'GPU 利用率低于 70%'
+
+      - alert: ResourceFragmentation
+        expr: (1 - sum(allocated_resources) / sum(total_resources)) > 0.15
+        for: 15m
+        annotations:
+          summary: '资源碎片率超过 15%'
 ```
 
 ---
+
 layout: default
 title: 性能优化案例 2 - XXX Volcano 平台 (default)
+
 ---
 
 - 混合工作负载：70% 训练，30% 推理
@@ -3640,10 +3950,12 @@ title: 性能优化案例 2 - XXX Volcano 平台 (default)
 - 成本敏感：需要极致的成本优化
 
 ---
+
 layout: two-cols
 title: 性能优化案例 2 - Volcano 增强优化 (two-cols)
 leftTitle: 自定义 Action 开发
 rightTitle: 性能调优参数
+
 ---
 
 ::left::
@@ -3658,7 +3970,7 @@ func (ta *TidalAction) Execute(ssn *framework.Session) {
     // 获取当前时间段
     hour := time.Now().Hour()
     isBusinessHour := hour >= 9 && hour <= 18
-    
+
     // 动态调整资源分配
     for _, queue := range ssn.Queues {
         if isBusinessHour {
@@ -3711,8 +4023,10 @@ data:
 ```
 
 ---
+
 layout: default
 title: 性能优化案例 2 - 成本优化效果 (Spot 实例) (default)
+
 ---
 
 ```python
@@ -3721,39 +4035,43 @@ class SpotOptimizer:
     def __init__(self):
         self.spot_price_history = {}
         self.interruption_predictor = InterruptionModel()
-    
+
     def optimize_placement(self, job):
         """优化作业放置策略"""
         if job.fault_tolerant and job.priority < 100:
             # 低优先级容错任务使用 Spot
             spot_nodes = self.get_available_spot_nodes()
-            
+
             # 预测中断概率
             for node in spot_nodes:
                 risk = self.interruption_predictor.predict(node)
                 if risk < 0.1:  # 中断风险 < 10%
                     return self.place_on_spot(job, node)
-        
+
         # 否则使用按需实例
         return self.place_on_demand(job)
 ```
 
 ---
+
 layout: table
 title: 性能优化案例 2 - 成本节省分析 (table)
----
-
-| 实例类型 | 优化前占比 | 优化后占比 | 单价($/h) | 月成本节省 |
-|----------|-----------|-----------|-----------|------------|
-| **按需 A100** | 80% | 45% | 3.0 | $756K |
-| **Spot A100** | 10% | 35% | 0.9 | - |
-| **按需 V100** | 10% | 5% | 2.1 | $88K |
-| **Spot V100** | 0% | 15% | 0.6 | - |
-| **总计** | - | - | - | **$844K/月** |
 
 ---
+
+| 实例类型      | 优化前占比 | 优化后占比 | 单价($/h) | 月成本节省   |
+| ------------- | ---------- | ---------- | --------- | ------------ |
+| **按需 A100** | 80%        | 45%        | 3.0       | $756K        |
+| **Spot A100** | 10%        | 35%        | 0.9       | -            |
+| **按需 V100** | 10%        | 5%         | 2.1       | $88K         |
+| **Spot V100** | 0%         | 15%        | 0.6       | -            |
+| **总计**      | -          | -          | -         | **$844K/月** |
+
+---
+
 layout: boxes
 title: 性能优化总结 (boxes)
+
 ---
 
 ## **Kueue**
@@ -3762,6 +4080,7 @@ title: 性能优化总结 (boxes)
 - 使用 WorkloadPriorityClass 优化关键作业
 
 **优化细节**：
+
 - **动态借用策略**：基于时间窗口的自适应 lendingLimit
 - **优先级细分**：5 级优先级体系，抢占延迟 < 5s
 - **队列拓扑优化**：层级队列减少调度决策时间 40%
@@ -3772,14 +4091,17 @@ title: 性能优化总结 (boxes)
 - 使用 Gang Scheduling 减少资源死锁
 
 **优化技巧**：
+
 - **插件组合**：Gang + DRF + Binpack 最优配置
 - **调度周期调优**：大作业 1s，小作业 100ms
 - **缓存预热**：启动时加载历史调度数据
 
 ---
+
 layout: chapter
 part: 8
 title: 总结与展望 (chapter)
+
 ---
 
 <!--
@@ -3797,14 +4119,17 @@ title: 总结与展望 (chapter)
 -->
 
 ---
+
 layout: two-cols
 title: 核心总结 (two-cols)
 leftTitle: 调度器对比
 rightTitle: 资源优化对比
+
 ---
 
 ::left::
 **调度器对比**
+
 - **Kueue**: Kubernetes 原生增强，适合多租户和通用批处理
 - **Volcano**: 高性能计算优化，适合 AI/HPC 和复杂依赖
 - **选型关键**: 根据工作负载特性和集成需求选择
@@ -3812,6 +4137,7 @@ rightTitle: 资源优化对比
 ::right::
 
 **AI 资源优化成果**
+
 - **混部调度**: 实现训练推理统一调度，资源利用率提升 30-50%
 - **弹性伸缩**: 动态响应负载变化，降低成本 20-40%
 - **资源超卖**: 智能分配闲置资源，整体效率提升 25-35%
@@ -3832,15 +4158,18 @@ Volcano 选择了完全重构调度器的路线，这使得它在高性能计算
 -->
 
 ---
+
 layout: two-cols
 title: AI 资源优化的核心价值 (two-cols)
 leftTitle: 技术价值
 rightTitle: 业务价值
+
 ---
 
 ::left::
 
 **技术突破**
+
 - **协同调度架构**: DeepBoot 等系统实现训练推理无缝切换
 - **多维度弹性**: HPA/VPA/KEDA 构建全方位自动伸缩体系
 - **智能资源管理**: 基于 QoS 的动态超卖与优先级调度
@@ -3848,15 +4177,18 @@ rightTitle: 业务价值
 ::right::
 
 **成本优化**
+
 - **成本优化**: GPU 利用率从 40% 提升至 75%+
 - **性能保障**: 推理延迟 SLA 达成率 > 99.5%
 - **运维简化**: 自动化资源分配，人工干预减少 80%
 
 ---
+
 layout: two-cols
 title: 开源生态系统的成熟度 (two-cols)
 leftTitle: 第一梯队项目
 rightTitle: 新兴项目
+
 ---
 
 ::left::
@@ -3872,10 +4204,12 @@ rightTitle: 新兴项目
 - **MultiKueue**: 跨集群调度的未来趋势
 
 ---
+
 layout: two-cols
 title: 未来展望：技术演进 (two-cols)
 leftTitle: 短期趋势 (2025-2026)
 rightTitle: 中期趋势 (2027-2028)
+
 ---
 
 ::left::
@@ -3904,8 +4238,10 @@ rightTitle: 中期趋势 (2027-2028)
 -->
 
 ---
+
 layout: default
 title: 未来展望：架构演进 - 统一调度平面 (default)
+
 ---
 
 ```mermaid
@@ -3922,10 +4258,12 @@ graph LR
 3. **自适应策略**: 根据业务优先级动态调整调度策略
 
 ---
+
 layout: two-cols
 title: 未来展望：生态融合 (two-cols)
 leftTitle: 云原生 AI 平台
 rightTitle: 技术融合趋势
+
 ---
 
 ::left::
@@ -3942,10 +4280,12 @@ rightTitle: 技术融合趋势
 - **部署模式**: 从集中式到分布式，再到自组织
 
 ---
+
 layout: two-cols
 title: 行业影响与应用前景 (two-cols)
 leftTitle: 垂直行业应用
 rightTitle: 社会价值
+
 ---
 
 ::left::
@@ -3962,8 +4302,10 @@ rightTitle: 社会价值
 - **产业升级**: 推动传统行业数字化转型
 
 ---
+
 layout: boxes
 title: 技术挑战与解决方案 (boxes)
+
 ---
 
 ## 技术挑战
@@ -3979,26 +4321,33 @@ title: 技术挑战与解决方案 (boxes)
 - **最佳实践**: 建立行业最佳实践和参考架构
 
 ---
+
 layout: boxes
 title: 总结：AI 时代的资源调度新范式 (boxes)
+
 ---
 
 ## **核心观点**
+
 - **从单一到协同**: 训练推理一体化调度成为主流
 - **从静态到动态**: 智能弹性伸缩是未来标配
 - **从资源到服务**: 调度器演进为 AI 服务编排平台
 
 ## **行动建议**
+
 - **技术选型**: 基于业务场景选择合适的调度器组合
 - **渐进演进**: 从基础调度开始，逐步引入高级特性
 - **生态参与**: 积极参与开源社区，推动技术标准化
 
-## **未来愿景**: 
+## **未来愿景**:
+
 构建智能、高效、绿色的 AI 资源调度生态系统
 
 ---
+
 layout: center
 title: Q&A 与讨论 (center)
+
 ---
 
 - 您的集群批处理痛点是什么？
@@ -4019,8 +4368,10 @@ title: Q&A 与讨论 (center)
 -->
 
 ---
+
 layout: center
 title: 感谢聆听 (center)
+
 ---
 
 <!--
