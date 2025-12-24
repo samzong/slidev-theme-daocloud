@@ -1,0 +1,68 @@
+/**
+ * Mermaid 图表样式
+ * 解决：1) 文字溢出 2) 图表未自适应 slide 尺寸
+ */
+
+/* Mermaid 容器自适应 */
+.mermaid-container,
+.mermaid {
+  max-width: 100% !important;
+  max-height: 70vh !important;
+  overflow: hidden !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+}
+
+/* SVG 自适应缩放 */
+.mermaid svg {
+  max-width: 100% !important;
+  max-height: 65vh !important;
+  height: auto !important;
+  width: auto !important;
+}
+
+/* 防止 slide 内容滚动 */
+.slidev-layout .mermaid,
+.slidev-layout .mermaid-container {
+  overflow: visible !important;
+}
+
+/* 限制节点内文本 */
+.mermaid .nodeLabel,
+.mermaid .label,
+.mermaid .actor,
+.mermaid .messageText {
+  font-size: 10px !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+  max-width: 150px !important;
+}
+
+/* 状态图节点标签 */
+.mermaid .statediagram-state .state-title {
+  font-size: 11px !important;
+}
+
+/* 时序图 actor 标签 */
+.mermaid .actor {
+  font-size: 11px !important;
+}
+
+/* 流程图节点 */
+.mermaid .node rect,
+.mermaid .node circle,
+.mermaid .node polygon {
+  stroke-width: 1px !important;
+}
+
+/* Note 文本大小 */
+.mermaid .note {
+  font-size: 10px !important;
+}
+
+.mermaid .noteText {
+  font-size: 10px !important;
+  fill: #cccccc !important;
+}

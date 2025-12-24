@@ -1,5 +1,6 @@
-import './variables.css'
-import './layout.css'
-import './code.css'
-import './components.css'
-import './animations.css'
+import './variables.css';
+import './layout.css';
+import './code.css';
+import './components.css';
+import './animations.css';
+import './mermaid.css';
