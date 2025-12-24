@@ -591,20 +591,6 @@ title: Kueue 设计理念 (boxes)
 ```go
 // pkg/cache/clusterqueue.go
 func (c *ClusterQueue) borrowingLimit(rName corev1.ResourceName) *resource.Quantity {
-    if c.Spec.ResourceGroups == nil {
-        return nil
-    }
-    for _, rg := range c.Spec.ResourceGroups {
-        for _, flvr := range rg.Flavors {
-            for _, r := range flvr.Resources {
-                if r.Name == rName && r.LendingLimit != nil {
-                    return r.LendingLimit
-                }
-            }
-        }
-    }
-    return nil
-}
 ```
 
 <!--
