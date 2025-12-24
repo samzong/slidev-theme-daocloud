@@ -25,8 +25,8 @@
     "index.ts"
   ],
   "devDependencies": {
-    "@slidev/cli": "^0.48.0",
-    "@slidev/types": "^0.48.0",
+    "@slidev/cli": "^52.11.1",
+    "@slidev/types": "^52.11.1",
     "playwright-chromium": "^1.53.1"
   },
   "peerDependencies": {
