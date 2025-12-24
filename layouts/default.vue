@@ -29,12 +29,25 @@ const { layoutStyle } = useBackground();
 }
 
 .default-content {
-  padding: 120px 60px 60px 60px;
+  padding: 100px 60px 60px 60px;
   z-index: 10;
   position: relative;
   height: 100%;
   display: flex;
   flex-direction: column;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+/* mermaid 图表容器限制 */
+.default-content :deep(.mermaid) {
+  max-height: calc(100vh - 200px);
+  overflow: auto;
+}
+
+.default-content :deep(svg) {
+  max-width: 100%;
+  max-height: calc(100vh - 220px);
 }
 
 .default-content h1 {
