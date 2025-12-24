@@ -16,6 +16,11 @@ jobs:
         with:
           node-version: '20'
 
+      - name: Set Version from Tag
+        run: |
+          VERSION=${GITHUB_REF_NAME#v}
+          npm version $VERSION --no-git-tag-version
+
       - name: Build Package
         run: npm pack
 
