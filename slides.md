@@ -2,7 +2,7 @@
 theme: ./
 disableAnimations: true
 layout: cover
-title: 'Kueue & Volcano 调度实战'
+title: 'Kueue & Volcano 调度实战 (cover)'
 subtitle: '深入对比与应用'
 date: '2025-06-18'
 author: "船长"
@@ -20,7 +20,7 @@ fonts:
 ---
 layout: intro
 avatar: https://avatars.githubusercontent.com/u/13782141?v=4
-title: 船长 @samzong
+title: 船长 @samzong (intro)
 subtitle: 资深云原生 及 AI 平台产品架构与布道师
 tags:
   - "Cloud-Native"
@@ -61,7 +61,7 @@ layout: toc
 ---
 layout: chapter
 part: 1
-title: Kubernetes 原生调度
+title: Kubernetes 原生调度 (chapter)
 ---
 
 <!-- 演讲内容补充
@@ -80,7 +80,7 @@ title: Kubernetes 原生调度
 
 ---
 layout: image-right
-title: Kubernetes 原生调度的局限性
+title: Kubernetes 原生调度的局限性 (image-right)
 image: scheduling-framework-extensions.png
 ---
 
@@ -112,7 +112,7 @@ image: scheduling-framework-extensions.png
 
 ---
 layout: table
-title: 批处理调度的核心挑战与业界解决方案
+title: 批处理调度的核心挑战与业界解决方案 (table)
 ---
 
 | 核心挑战 | 问题描述 | Kueue 方案 | Volcano 方案 | 其他方案 |
@@ -139,7 +139,7 @@ title: 批处理调度的核心挑战与业界解决方案
 
 ---
 layout: timeline
-title: 批处理调度器的演进
+title: 批处理调度器的演进 (timeline)
 ---
 
 ## 2015-2017
@@ -185,7 +185,7 @@ Kueue 和 Volcano 成为主流批处理调度方案
 
 ---
 layout: boxes
-title: AI/ML 工作负载的管理要求
+title: AI/ML 工作负载的管理要求 (boxes)
 ---
 
 ## 大规模并行
@@ -239,7 +239,7 @@ title: AI/ML 工作负载的管理要求
 
 ---
 layout: default
-title: AI/ML 的 GPU 网络需求
+title: AI/ML 的 GPU 网络需求 (default)
 ---
 
 ```mermaid
@@ -276,7 +276,7 @@ graph TD
 
 ---
 layout: default
-title: AI/ML 的 GPU 资源调度算法
+title: AI/ML 的 GPU 资源调度算法 (default)
 ---
 
 ```go
@@ -321,7 +321,7 @@ func (s *Scheduler) findBestGPUPlacement(workload *Workload) (*Placement, error)
 ---
 layout: chapter
 part: 2
-title: Kueue 深度解析
+title: Kueue 深度解析 (chapter)
 ---
 
 <!-- 演讲内容补充
@@ -340,7 +340,7 @@ Kueue 是 Kubernetes 社区官方的批处理调度解决方案，由 Google 和
 
 ---
 layout: timeline
-title: Kueue 起源
+title: Kueue 起源 (timeline)
 ---
 
 ## 2021
@@ -380,7 +380,7 @@ Kueue 的起源可以追溯到 2021 年的 Kubernetes SIG-Batch 工作组。当�
 
 ---
 layout: image-right
-title: Kueue 核心架构
+title: Kueue 核心架构 (image-right)
 image: kueue.png
 ---
 
@@ -405,7 +405,7 @@ image: kueue.png
 
 ---
 layout: default
-title: Kueue 核心概念：Workload
+title: Kueue 核心概念：Workload (default)
 ---
 
 - **定义**: 代表一个完整的批处理作业
@@ -446,7 +446,7 @@ Workload 的生命周期包括五个阶段：提交、排队、准入、执行�
 
 ---
 layout: default
-title: Kueue 核心概念：LocalQueue
+title: Kueue 核心概念：LocalQueue (default)
 ---
 
 - **作用**: 租户或团队的作业队列
@@ -465,7 +465,7 @@ spec:
 
 ---
 layout: default
-title: Kueue 核心概念：ClusterQueue
+title: Kueue 核心概念：ClusterQueue (default)
 ---
 
 - **作用**: 定义集群级资源池和策略
@@ -492,7 +492,7 @@ spec:
 
 ---
 layout: default
-title: Kueue 核心概念：ResourceFlavor
+title: Kueue 核心概念：ResourceFlavor (default)
 ---
 
 - **作用**: 抽象异构资源类型
@@ -511,7 +511,7 @@ spec:
 
 ---
 layout: default
-title: Kueue 核心概念：TAS
+title: Kueue 核心概念：TAS (default)
 ---
 
 - **作用**: 拓扑感知调度
@@ -531,7 +531,7 @@ spec:
 
 ---
 layout: default
-title: Kueue 调度流程
+title: Kueue 调度流程 (default)
 ---
 
 **调度器核心代码分析**：scheduler.go:712 中的 `connectToServer` 函数
@@ -553,7 +553,7 @@ sequenceDiagram
 
 ---
 layout: boxes
-title: Kueue 设计理念
+title: Kueue 设计理念 (boxes)
 ---
 
 ## Job First
@@ -622,7 +622,7 @@ Kueue 的设计理念体现了四个核心原则，这些原则共同构成了�
 
 ---
 layout: default
-title: Kueue 设计理念深度解析 - Workload 生命周期状态机
+title: Kueue 设计理念深度解析 - Workload 生命周期状态机 (default)
 ---
 
 ```mermaid
@@ -647,7 +647,7 @@ stateDiagram-v2
 
 ---
 layout: default
-title: Kueue 设计理念深度解析 - 公平性算法
+title: Kueue 设计理念深度解析 - 公平性算法 (default)
 ---
 
 ```go
@@ -687,7 +687,7 @@ func (d *DRFScheduler) ComputeShares(queue *ClusterQueue) []DRFShare {
 
 ---
 layout: table
-title: Kueue 设计理念深度解析 - 性能优化
+title: Kueue 设计理念深度解析 - 性能优化 (table)
 ---
 
 | 优化项 | 实现方式 | 性能提升 |
@@ -699,7 +699,7 @@ title: Kueue 设计理念深度解析 - 性能优化
 
 ---
 layout: default
-title: Kueue 设计理念深度解析 - 与 kube-scheduler 的协作机制
+title: Kueue 设计理念深度解析 - 与 kube-scheduler 的协作机制 (default)
 ---
 
 ```yaml
@@ -716,7 +716,7 @@ spec:
 
 ---
 layout: boxes
-title: Kueue 核心组件
+title: Kueue 核心组件 (boxes)
 ---
 
 ## Controller
@@ -757,7 +757,7 @@ title: Kueue 核心组件
 
 ---
 layout: default
-title: Kueue 核心组件解析 - 组件间通信架构
+title: Kueue 核心组件解析 - 组件间通信架构 (default)
 ---
 
 ```mermaid
@@ -796,7 +796,7 @@ graph LR
 
 ---
 layout: default
-title: Kueue 核心组件解析 - 并发控制实现
+title: Kueue 核心组件解析 - 并发控制实现 (default)
 ---
 
 ```go
@@ -847,7 +847,7 @@ func (c *Controller) processNextItem(ctx context.Context) bool {
 
 ---
 layout: default
-title: Kueue 核心组件解析 - 资源预留与释放机制
+title: Kueue 核心组件解析 - 资源预留与释放机制 (default)
 ---
 
 ```go
@@ -881,7 +881,7 @@ func (s *Snapshot) Reserve(cq string, r Resources) error {
 
 ---
 layout: table
-title: Kueue 核心组件解析 - 性能监控指标
+title: Kueue 核心组件解析 - 性能监控指标 (table)
 ---
 
 | 指标名称 | 描述 | 告警阈值 |
@@ -894,7 +894,7 @@ title: Kueue 核心组件解析 - 性能监控指标
 
 ---
 layout: default
-title: Kueue 源码分析 - 核心模块划分
+title: Kueue 源码分析 - 核心模块划分 (default)
 ---
 
 ```mermaid
@@ -935,7 +935,7 @@ graph TB
 
 ---
 layout: default
-title: Kueue 源码分析 - 关键数据结构
+title: Kueue 源码分析 - 关键数据结构 (default)
 ---
 
 ```go
@@ -979,7 +979,7 @@ type Scheduler struct {
 
 ---
 layout: default
-title: Kueue 源码分析 - 调度核心算法
+title: Kueue 源码分析 - 调度核心算法 (default)
 ---
 
 ```go
@@ -1031,7 +1031,7 @@ func (fa *FlavorAssigner) Assign(log logr.Logger, wl *workload.Info, cq *cache.C
 
 ---
 layout: table
-title: Kueue 源码分析 - 性能优化
+title: Kueue 源码分析 - 性能优化 (table)
 ---
 
 | 优化技术 | 实现位置 | 效果 |
@@ -1043,7 +1043,7 @@ title: Kueue 源码分析 - 性能优化
 
 ---
 layout: default
-title: Kueue 特性：资源借用与回收
+title: Kueue 特性：资源借用与回收 (default)
 ---
 
 - **借用**: 当资源不足时，可临时借用其他队列资源
@@ -1066,7 +1066,7 @@ spec:
 
 ---
 layout: default
-title: Kueue 特性：公平性与优先级
+title: Kueue 特性：公平性与优先级 (default)
 ---
 
 - **公平性**: 基于资源使用量动态调整优先级
@@ -1083,7 +1083,7 @@ value: 1000
 
 ---
 layout: image-right
-title: Kueue 特性：MultiKueue (新)
+title: Kueue 特性：MultiKueue (新) (image-right)
 image: kueue-multikueue.png
 ---
 
@@ -1093,7 +1093,7 @@ image: kueue-multikueue.png
 
 ---
 layout: image-right
-title: Kueue 特性： TAS（拓扑感知调度） (新)
+title: Kueue 特性： TAS（拓扑感知调度） (新) (image-right)
 image: kueue-tas.png
 ---
 
@@ -1110,7 +1110,7 @@ TAS 调度算法分两个主要阶段运行：
 
 ---
 layout: boxes
-title: Kueue 优势
+title: Kueue 优势 (boxes)
 ---
 
 ## **原生集成**
@@ -1164,7 +1164,7 @@ Kueue 的四大优势构成了其在批处理调度领域的竞争优势。
 
 ---
 layout: boxes
-title: Kueue 适用场景
+title: Kueue 适用场景 (boxes)
 ---
 
 ## **AI/ML 训练**
@@ -1205,7 +1205,7 @@ title: Kueue 适用场景
 
 ---
 layout: default
-title: Kueue 性能测试 - 调度吞吐量测试
+title: Kueue 性能测试 - 调度吞吐量测试 (default)
 ---
 
 ```mermaid
@@ -1219,7 +1219,7 @@ graph LR
 
 ---
 layout: table
-title: Kueue 性能测试 - 性能基准测试结果
+title: Kueue 性能测试 - 性能基准测试结果 (table)
 ---
 
 | 指标 | Kueue | 原生 K8s | 提升 |
@@ -1231,7 +1231,7 @@ title: Kueue 性能测试 - 性能基准测试结果
 
 ---
 layout: default
-title: Kueue 生产高可用架构 - 高可用部署
+title: Kueue 生产高可用架构 - 高可用部署 (default)
 ---
 
 ```yaml
@@ -1289,7 +1289,7 @@ spec:
 
 ---
 layout: default
-title: Kueue 生产高可用架构 - 监控与可观测性
+title: Kueue 生产高可用架构 - 监控与可观测性 (default)
 ---
 
 Prometheus 集成
@@ -1317,7 +1317,7 @@ spec:
 
 ---
 layout: default
-title: Kueue 生产高可用架构 - 监控与可观测性
+title: Kueue 生产高可用架构 - 监控与可观测性 (default)
 ---
 
 Grafana Dashboard
@@ -1352,7 +1352,7 @@ Grafana Dashboard
 
 ---
 layout: default
-title: Kueue 生产高可用架构 - 安全加固
+title: Kueue 生产高可用架构 - 安全加固 (default)
 ---
 
 RBAC 配置
@@ -1387,7 +1387,7 @@ rules:
 
 ---
 layout: default
-title: Kueue 生产高可用架构 - 安全加固
+title: Kueue 生产高可用架构 - 安全加固 (default)
 ---
 
 NetworkPolicy
@@ -1429,7 +1429,7 @@ spec:
 
 ---
 layout: table
-title: Kueue 生产高可用架构 - 性能调优
+title: Kueue 生产高可用架构 - 性能调优 (table)
 ---
 
 | 组件 | 参数 | 生产推荐值 | 说明 |
@@ -1443,7 +1443,7 @@ title: Kueue 生产高可用架构 - 性能调优
 ---
 layout: chapter
 part: 3
-title: Volcano 深度解析
+title: Volcano 深度解析 (chapter)
 ---
 
 <!--
@@ -1459,7 +1459,7 @@ Volcano 最大的特点是插件化架构。它提供了丰富的调度插件，
 
 ---
 layout: timeline
-title: Volcano 起源
+title: Volcano 起源 (timeline)
 ---
 
 ## 2019
@@ -1495,7 +1495,7 @@ Volcano 的设计目标很明确：支持高性能计算和批处理工作负载
 
 ---
 layout: image-right
-title: Volcano 设计理念
+title: Volcano 设计理念 (image-right)
 image: volcano.png
 ---
 
@@ -1519,7 +1519,7 @@ Volcano 的设计理念体现了四个核心原则，这些原则构成了其独
 
 ---
 layout: default
-title: Volcano 核心概念：VolcanoJob
+title: Volcano 核心概念：VolcanoJob (default)
 ---
 
 - **定义**: 自定义作业资源
@@ -1559,7 +1559,7 @@ VolcanoJob 还支持作业依赖关系，可以定义作业间的 DAG 依赖。�
 
 ---
 layout: default
-title: Volcano 核心概念：PodGroup
+title: Volcano 核心概念：PodGroup (default)
 ---
 
 - **作用**: 将作业的 Pod 组织为一个调度单位
@@ -1576,7 +1576,7 @@ spec:
 
 ---
 layout: default
-title: Volcano 核心概念：Queue
+title: Volcano 核心概念：Queue (default)
 ---
 
 - **作用**: 作业排队和资源分配单位
@@ -1593,7 +1593,7 @@ spec:
 
 ---
 layout: default
-title: Volcano 核心概念：Queue （资源预留）
+title: Volcano 核心概念：Queue （资源预留） (default)
 ---
 
 ```yaml
@@ -1611,7 +1611,7 @@ spec:
 
 ---
 layout: boxes
-title: Volcano 核心组件 - CRD
+title: Volcano 核心组件 - CRD (boxes)
 image: volcano-arch.png
 ---
 
@@ -1655,7 +1655,7 @@ PodGroup 是 Gang 调度的基础。它将一组相关的 Pod 作为调度单元
 
 ---
 layout: boxes
-title: Volcano 核心组件 - Control
+title: Volcano 核心组件 - Control (boxes)
 image: volcano-arch.png
 ---
 
@@ -1688,7 +1688,7 @@ image: volcano-arch.png
 
 ---
 layout: boxes
-title: Volcano 核心组件 - Extension
+title: Volcano 核心组件 - Extension (boxes)
 image: volcano-arch.png
 ---
 
@@ -1714,7 +1714,7 @@ Prometheus 指标
 
 ---
 layout: default
-title: Volcano 调度流程
+title: Volcano 调度流程 (default)
 ---
 
 **调度器核心代码**：`vc-scheduler` 使用插件化架构，Gang 插件通过 `AddJobValidFn` 注册作业验证函数，确保只有满足条件的作业才能进入调度队列。
@@ -1735,7 +1735,7 @@ sequenceDiagram
 
 ---
 layout: default
-title: Volcano 插件架构解析
+title: Volcano 插件架构解析 (default)
 ---
 
 ```go
@@ -1770,7 +1770,7 @@ type Action interface {
 
 ---
 layout: default
-title: Volcano 插件架构解析 - Gang 插件
+title: Volcano 插件架构解析 - Gang 插件 (default)
 ---
 
 ```go
@@ -1806,7 +1806,7 @@ func (gp *gangPlugin) OnSessionOpen(ssn *framework.Session) {
 
 ---
 layout: default
-title: Volcano 插件架构解析 - Action 执行流程
+title: Volcano 插件架构解析 - Action 执行流程 (default)
 ---
 
 ```mermaid
@@ -1836,7 +1836,7 @@ sequenceDiagram
 
 ---
 layout: default
-title: Volcano 特性：Gang Scheduling
+title: Volcano 特性：Gang Scheduling (default)
 ---
 
 - **定义**: 组调度，确保作业满足最小 Pod 数才执行
@@ -1869,7 +1869,7 @@ validJobFn := func(obj interface{}) *api.ValidateResult {
 
 ---
 layout: default
-title: Volcano 特性：作业依赖
+title: Volcano 特性：作业依赖 (default)
 ---
 
 - **作用**: 定义作业间依赖关系
@@ -1888,7 +1888,7 @@ spec:
 
 ---
 layout: default
-title: Volcano 特性：AI/ML 生态集成
+title: Volcano 特性：AI/ML 生态集成 (default)
 ---
 
 - **支持**: TensorFlow, PyTorch, MPI
@@ -1906,7 +1906,7 @@ graph TD
 
 ---
 layout: default
-title: Volcano 特性 - 抢占机制
+title: Volcano 特性 - 抢占机制 (default)
 ---
 
 **Gang 插件中的抢占算法** - `gang.go:108-130`：
@@ -1939,7 +1939,7 @@ preemptableFn := func(preemptor *api.TaskInfo, preemptees []*api.TaskInfo) ([]*a
 
 ---
 layout: default
-title: Volcano 特性 - NUMA 感知调度
+title: Volcano 特性 - NUMA 感知调度 (default)
 ---
 
 ```go
@@ -1980,7 +1980,7 @@ func (np *NUMAPlugin) OnSessionOpen(ssn *framework.Session) {
 
 ---
 layout: default
-title: Volcano 特性 - GPU 拓扑感知调度
+title: Volcano 特性 - GPU 拓扑感知调度 (default)
 ---
 
 ```yaml
@@ -2011,7 +2011,7 @@ data:
 
 ---
 layout: default
-title: Volcano 特性 - 弹性队列与资源借用
+title: Volcano 特性 - 弹性队列与资源借用 (default)
 ---
 
 ```go
@@ -2046,7 +2046,7 @@ type ElasticPolicy struct {
 
 ---
 layout: default
-title: Volcano 特性 - 作业迁移与容错
+title: Volcano 特性 - 作业迁移与容错 (default)
 ---
 
 Live Migration 实现
@@ -2087,7 +2087,7 @@ func (cc *jobController) migrateTask(task *batch.Task, targetNode string) error 
 
 ---
 layout: default
-title: Volcano 特性 - 作业迁移与容错
+title: Volcano 特性 - 作业迁移与容错 (default)
 ---
 
 故障检测与自愈
@@ -2123,7 +2123,7 @@ spec:
 
 ---
 layout: default
-title: Volcano 特性 - 高级调度策略
+title: Volcano 特性 - 高级调度策略 (default)
 ---
 
 时间窗口调度
@@ -2153,7 +2153,7 @@ func (tw *TimeWindowPlugin) OnSessionOpen(ssn *framework.Session) {
 
 ---
 layout: default
-title: Volcano 特性 - 高级调度策略
+title: Volcano 特性 - 高级调度策略 (default)
 ---
 
 成本感知调度
@@ -2188,7 +2188,7 @@ func (ca *CostAwarePlugin) OnSessionOpen(ssn *framework.Session) {
 
 ---
 layout: boxes
-title: Volcano 优势
+title: Volcano 优势 (boxes)
 ---
 
 ## **高性能**
@@ -2233,7 +2233,7 @@ title: Volcano 优势
 
 ---
 layout: boxes
-title: Volcano 适用场景
+title: Volcano 适用场景 (boxes)
 ---
 
 ## **大规模 AI 训练**
@@ -2279,7 +2279,7 @@ title: Volcano 适用场景
 ---
 layout: chapter
 part: 4
-title: Kueue vs. Volcano
+title: Kueue vs. Volcano (chapter)
 ---
 
 <!-- 演讲内容补充
@@ -2298,7 +2298,7 @@ title: Kueue vs. Volcano
 
 ---
 layout: table
-title: 设计理念对比
+title: 设计理念对比 (table)
 ---
 
 | 维度          | Kueue                          | Volcano                       |
@@ -2320,7 +2320,7 @@ title: 设计理念对比
 
 ---
 layout: table
-title: 功能特性对比
+title: 功能特性对比 (table)
 ---
 
 | 特性          | Kueue                          | Volcano                       |
@@ -2351,7 +2351,7 @@ AI 优化方面，Kueue 提供通用的支持，主要通过 ResourceFlavor 管�
 
 ---
 layout: table
-title: 性能测试对比
+title: 性能测试对比 (table)
 ---
 
 | 项目 | 配置 |
@@ -2375,7 +2375,7 @@ title: 性能测试对比
 
 ---
 layout: default
-title: 性能测试对比 - 调度吞吐量对比
+title: 性能测试对比 - 调度吞吐量对比 (default)
 ---
 
 ```mermaid
@@ -2402,7 +2402,7 @@ Volcano 的表现最为出色：1580 作业/分钟，P99 延迟 0.9 秒。吞吐
 
 ---
 layout: table
-title: 性能测试对比 - 调度吞吐量测试结果
+title: 性能测试对比 - 调度吞吐量测试结果 (table)
 ---
 
 | 指标 | Native K8s | Kueue | Volcano | 测试说明 |
@@ -2416,7 +2416,7 @@ title: 性能测试对比 - 调度吞吐量测试结果
 
 ---
 layout: default
-title: 性能测试对比 - Gang 调度性能对比
+title: 性能测试对比 - Gang 调度性能对比 (default)
 ---
 
 ```yaml
@@ -2441,7 +2441,7 @@ spec:
 
 ---
 layout: table
-title: 性能测试对比 - Gang 调度测试结果
+title: 性能测试对比 - Gang 调度测试结果 (table)
 ---
 
 | 场景 | Native K8s | Kueue | Volcano |
@@ -2453,7 +2453,7 @@ title: 性能测试对比 - Gang 调度测试结果
 
 ---
 layout: default
-title: 压力测试对比 - 压测代码示例
+title: 压力测试对比 - 压测代码示例 (default)
 ---
 
 ```go
@@ -2484,7 +2484,7 @@ func StressTest(scheduler string, jobCount int) {
 
 ---
 layout: table
-title: 压力测试对比 - 极限测试结果
+title: 压力测试对比 - 极限测试结果 (table)
 ---
 
 | 测试规模 | Native K8s | Kueue | Volcano |
@@ -2497,7 +2497,7 @@ title: 压力测试对比 - 极限测试结果
 
 ---
 layout: two-cols
-title: 资源利用率对比
+title: 资源利用率对比 (two-cols)
 leftTitle: GPU 利用率追踪
 rightTitle: 可视化对比
 ---
@@ -2545,7 +2545,7 @@ graph LR
 
 ---
 layout: table
-title: 适用场景对比
+title: 适用场景对比 (table)
 ---
 
 | 场景                | Kueue          | Volcano        |
@@ -2570,7 +2570,7 @@ HPC 科学计算是 Volcano 的传统优势领域。它从设计之初就考虑�
 
 ---
 layout: table
-title: 特定场景下性能对比
+title: 特定场景下性能对比 (table)
 ---
 
 | 场景 | 最佳选择 | 原因 | 性能差距 |
@@ -2584,7 +2584,7 @@ title: 特定场景下性能对比
 
 ---
 layout: table
-title: 发展路线对比
+title: 发展路线对比 (table)
 ---
 
 |发展方向            |Kueue        |Volcano      |
@@ -2597,7 +2597,7 @@ title: 发展路线对比
 
 ---
 layout: two-cols
-title: 最终选型建议
+title: 最终选型建议 (two-cols)
 leftTitle: Kueue
 rightTitle: Volcano
 ---
@@ -2642,12 +2642,12 @@ rightTitle: Volcano
 ---
 layout: chapter
 part: 5
-title: GPU 资源优化策略
+title: GPU 资源优化策略 (chapter)
 ---
 
 ---
 layout: boxes
-title: GPU 资源优化的重要性
+title: GPU 资源优化的重要性 (boxes)
 ---
 
 **2025年，AI模型规模和数据量激增，资源优化成为关键**
@@ -2678,7 +2678,7 @@ title: GPU 资源优化的重要性
 
 ---
 layout: default
-title: 混部调度策略 - 架构设计
+title: 混部调度策略 - 架构设计 (default)
 ---
 
 ```mermaid
@@ -2715,7 +2715,7 @@ graph TD
 
 ---
 layout: default
-title: 混部调度策略 - 技术实现
+title: 混部调度策略 - 技术实现 (default)
 ---
 
 ```yaml
@@ -2760,7 +2760,7 @@ spec:
 
 ---
 layout: table
-title: 混部调度策略 - 性能数据对比
+title: 混部调度策略 - 性能数据对比 (table)
 ---
 
 | 指标 | 纯训练集群 | 纯推理集群 | 混部集群 | 提升 |
@@ -2772,7 +2772,7 @@ title: 混部调度策略 - 性能数据对比
 
 ---
 layout: default
-title: 混部调度策略 - 风险控制机制
+title: 混部调度策略 - 风险控制机制 (default)
 ---
 
 ```go
@@ -2807,7 +2807,7 @@ func (ms *MixedScheduler) Schedule(workload Workload) error {
 
 ---
 layout: default
-title: 弹性伸缩策略 - 多维度弹性伸缩架构
+title: 弹性伸缩策略 - 多维度弹性伸缩架构 (default)
 ---
 
 ```mermaid
@@ -2845,7 +2845,7 @@ graph LR
 
 ---
 layout: default
-title: 弹性伸缩策略 - HPA + VPA
+title: 弹性伸缩策略 - HPA + VPA (default)
 ---
 
 ```yaml
@@ -2917,7 +2917,7 @@ spec:
 
 ---
 layout: default
-title: 弹性伸缩策略 -KEDA 事件驱动伸缩
+title: 弹性伸缩策略 -KEDA 事件驱动伸缩 (default)
 ---
 
 ```yaml
@@ -2950,7 +2950,7 @@ spec:
 
 ---
 layout: table
-title: 弹性伸缩策略 -  弹性伸缩效果数据
+title: 弹性伸缩策略 -  弹性伸缩效果数据 (table)
 ---
 
 | 场景 | 传统固定资源 | 弹性伸缩 | 改善 |
@@ -2962,7 +2962,7 @@ title: 弹性伸缩策略 -  弹性伸缩效果数据
 
 ---
 layout: default
-title: 资源超卖
+title: 资源超卖 (default)
 ---
 
 ```go
@@ -3020,7 +3020,7 @@ func (om *OversubscriptionManager) predictPeakUsage(resource string) float64 {
 
 ---
 layout: default
-title: 资源超卖 - QoS 分级管理
+title: 资源超卖 - QoS 分级管理 (default)
 ---
 
 ```yaml
@@ -3067,7 +3067,7 @@ spec:
 
 ---
 layout: default
-title: 资源超卖 - 智能资源回收（示例）
+title: 资源超卖 - 智能资源回收（示例） (default)
 ---
 
 ```python
@@ -3111,7 +3111,7 @@ class IntelligentReclaimer:
 
 ---
 layout: table
-title: 资源超卖 - 示例场景数据
+title: 资源超卖 - 示例场景数据 (table)
 ---
 
 | 指标 | 无超卖 | 保守超卖(1.3x) | 激进超卖(2.0x) |
@@ -3124,12 +3124,12 @@ title: 资源超卖 - 示例场景数据
 ---
 layout: chapter
 part: 6
-title: 混合调度：训练与推理共存
+title: 混合调度：训练与推理共存 (chapter)
 ---
 
 ---
 layout: two-cols
-title: 训练与推理协同调度的挑战
+title: 训练与推理协同调度的挑战 (two-cols)
 leftTitle: 资源需求
 rightTitle: 技术挑战
 ---
@@ -3147,7 +3147,7 @@ rightTitle: 技术挑战
 
 ---
 layout: table
-title: 开源生态系统对比
+title: 开源生态系统对比 (table)
 ---
 
 | 项目 | 功能 | 适用场景 |
@@ -3159,7 +3159,7 @@ title: 开源生态系统对比
 
 ---
 layout: default
-title: 最佳实践与配置
+title: 最佳实践与配置 (default)
 ---
 
 **生产环境中的关键配置策略**
@@ -3204,7 +3204,7 @@ waitForPodsReady:
 ---
 layout: chapter
 part: 7
-title: 实战演练
+title: 实战演练 (chapter)
 ---
 
 <!--
@@ -3224,7 +3224,7 @@ title: 实战演练
 
 ---
 layout: default
-title: 环境准备
+title: 环境准备 (default)
 ---
 
 - **集群**: Kubernetes v1.27+
@@ -3269,7 +3269,7 @@ Volcano 的安装同样使用 Helm，但需要先添加官方的 chart 仓库。
 
 ---
 layout: default
-title: Kueue 实战：配置 ClusterQueue
+title: Kueue 实战：配置 ClusterQueue (default)
 ---
 
 ```yaml
@@ -3310,7 +3310,7 @@ resources 数组定义了具体的资源配额。nominalQuota 是基础配额，
 
 ---
 layout: default
-title: Kueue 实战：提交作业
+title: Kueue 实战：提交作业 (default)
 ---
 
 ```yaml
@@ -3347,7 +3347,7 @@ resources 部分的定义很重要，它决定了作业需要多少资源。这�
 
 ---
 layout: default
-title: Kueue 实战：监控调度
+title: Kueue 实战：监控调度 (default)
 ---
 
 - **查看队列状态**:
@@ -3369,7 +3369,7 @@ title: Kueue 实战：监控调度
 
 ---
 layout: two-cols
-title: Kueue 实战：故障排查
+title: Kueue 实战：故障排查 (two-cols)
 leftTitle: Job 调度问题
 rightTitle: 资源问题
 ---
@@ -3387,7 +3387,7 @@ rightTitle: 资源问题
 
 ---
 layout: default
-title: Volcano 实战：配置 Queue
+title: Volcano 实战：配置 Queue (default)
 ---
 
 ```yaml
@@ -3405,7 +3405,7 @@ spec:
 
 ---
 layout: default
-title: Volcano 实战：提交 VolcanoJob
+title: Volcano 实战：提交 VolcanoJob (default)
 ---
 
 ```yaml
@@ -3431,7 +3431,7 @@ spec:
 
 ---
 layout: default
-title: Volcano 实战：监控调度
+title: Volcano 实战：监控调度 (default)
 ---
 
 - **查看队列**:
@@ -3453,7 +3453,7 @@ title: Volcano 实战：监控调度
 
 ---
 layout: two-cols
-title: Volcano 实战：故障排查
+title: Volcano 实战：故障排查 (two-cols)
 leftTitle: Job 调度问题
 rightTitle: 资源问题
 ---
@@ -3470,12 +3470,12 @@ rightTitle: 资源问题
 
 ---
 layout: center
-title: 案例介绍
+title: 案例介绍 (center)
 ---
 
 ---
 layout: two-cols
-title: 性能优化案例 1 - XXX AI 平台
+title: 性能优化案例 1 - XXX AI 平台 (two-cols)
 leftTitle: 背景
 rightTitle: 挑战
 ---
@@ -3498,7 +3498,7 @@ rightTitle: 挑战
 
 ---
 layout: default
-title: 性能优化案例 1 - Kueue 配置优化
+title: 性能优化案例 1 - Kueue 配置优化 (default)
 ---
 
 ```yaml
@@ -3539,7 +3539,7 @@ spec:
 
 ---
 layout: default
-title: 性能优化案例 1 - Volcano 调度策略优化
+title: 性能优化案例 1 - Volcano 调度策略优化 (default)
 ---
 
 ```go
@@ -3582,7 +3582,7 @@ func (gap *GPUAffinityPlugin) OnSessionOpen(ssn *framework.Session) {
 
 ---
 layout: default
-title: 性能优化案例 1 - 优化效果数据
+title: 性能优化案例 1 - 优化效果数据 (default)
 ---
 
 ### 资源利用率提升
@@ -3602,7 +3602,7 @@ graph LR
 
 ---
 layout: table
-title: 性能优化案例 1 - 关键指标改善
+title: 性能优化案例 1 - 关键指标改善 (table)
 ---
 
 | 指标 | 优化前 | 优化后 | 改善 |
@@ -3616,7 +3616,7 @@ title: 性能优化案例 1 - 关键指标改善
 
 ---
 layout: default
-title: 性能优化案例 1 - 监控与告警配置
+title: 性能优化案例 1 - 监控与告警配置 (default)
 ---
 
 ```yaml
@@ -3646,7 +3646,7 @@ groups:
 
 ---
 layout: default
-title: 性能优化案例 2 - XXX Volcano 平台
+title: 性能优化案例 2 - XXX Volcano 平台 (default)
 ---
 
 - 混合工作负载：70% 训练，30% 推理
@@ -3655,7 +3655,7 @@ title: 性能优化案例 2 - XXX Volcano 平台
 
 ---
 layout: two-cols
-title: 性能优化案例 2 - Volcano 增强优化
+title: 性能优化案例 2 - Volcano 增强优化 (two-cols)
 leftTitle: 自定义 Action 开发
 rightTitle: 性能调优参数
 ---
@@ -3726,7 +3726,7 @@ data:
 
 ---
 layout: default
-title: 性能优化案例 2 - 成本优化效果 (Spot 实例)
+title: 性能优化案例 2 - 成本优化效果 (Spot 实例) (default)
 ---
 
 ```python
@@ -3754,7 +3754,7 @@ class SpotOptimizer:
 
 ---
 layout: table
-title: 性能优化案例 2 - 成本节省分析
+title: 性能优化案例 2 - 成本节省分析 (table)
 ---
 
 | 实例类型 | 优化前占比 | 优化后占比 | 单价($/h) | 月成本节省 |
@@ -3767,7 +3767,7 @@ title: 性能优化案例 2 - 成本节省分析
 
 ---
 layout: boxes
-title: 性能优化总结
+title: 性能优化总结 (boxes)
 ---
 
 ## **Kueue**
@@ -3793,7 +3793,7 @@ title: 性能优化总结
 ---
 layout: chapter
 part: 8
-title: 总结与展望
+title: 总结与展望 (chapter)
 ---
 
 <!--
@@ -3812,7 +3812,7 @@ title: 总结与展望
 
 ---
 layout: two-cols
-title: 核心总结
+title: 核心总结 (two-cols)
 leftTitle: 调度器对比
 rightTitle: 资源优化对比
 ---
@@ -3847,7 +3847,7 @@ Volcano 选择了完全重构调度器的路线，这使得它在高性能计算
 
 ---
 layout: two-cols
-title: AI 资源优化的核心价值
+title: AI 资源优化的核心价值 (two-cols)
 leftTitle: 技术价值
 rightTitle: 业务价值
 ---
@@ -3868,7 +3868,7 @@ rightTitle: 业务价值
 
 ---
 layout: two-cols
-title: 开源生态系统的成熟度
+title: 开源生态系统的成熟度 (two-cols)
 leftTitle: 第一梯队项目
 rightTitle: 新兴项目
 ---
@@ -3887,7 +3887,7 @@ rightTitle: 新兴项目
 
 ---
 layout: two-cols
-title: 未来展望：技术演进
+title: 未来展望：技术演进 (two-cols)
 leftTitle: 短期趋势 (2025-2026)
 rightTitle: 中期趋势 (2027-2028)
 ---
@@ -3919,7 +3919,7 @@ rightTitle: 中期趋势 (2027-2028)
 
 ---
 layout: default
-title: 未来展望：架构演进 - 统一调度平面
+title: 未来展望：架构演进 - 统一调度平面 (default)
 ---
 
 ```mermaid
@@ -3937,7 +3937,7 @@ graph TD
 
 ---
 layout: two-cols
-title: 未来展望：生态融合
+title: 未来展望：生态融合 (two-cols)
 leftTitle: 云原生 AI 平台
 rightTitle: 技术融合趋势
 ---
@@ -3957,7 +3957,7 @@ rightTitle: 技术融合趋势
 
 ---
 layout: two-cols
-title: 行业影响与应用前景
+title: 行业影响与应用前景 (two-cols)
 leftTitle: 垂直行业应用
 rightTitle: 社会价值
 ---
@@ -3977,7 +3977,7 @@ rightTitle: 社会价值
 
 ---
 layout: boxes
-title: 技术挑战与解决方案
+title: 技术挑战与解决方案 (boxes)
 ---
 
 ## 技术挑战
@@ -3994,7 +3994,7 @@ title: 技术挑战与解决方案
 
 ---
 layout: boxes
-title: 总结：AI 时代的资源调度新范式
+title: 总结：AI 时代的资源调度新范式 (boxes)
 ---
 
 ## **核心观点**
@@ -4012,7 +4012,7 @@ title: 总结：AI 时代的资源调度新范式
 
 ---
 layout: center
-title: Q&A 与讨论
+title: Q&A 与讨论 (center)
 ---
 
 - 您的集群批处理痛点是什么？
@@ -4034,7 +4034,7 @@ title: Q&A 与讨论
 
 ---
 layout: center
-title: 感谢聆听
+title: 感谢聆听 (center)
 ---
 
 <!--
